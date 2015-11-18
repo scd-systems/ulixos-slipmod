@@ -1,0 +1,3139 @@
+%% ACHTUNG:
+%%
+%%         	!!! Nur die ".nw" Datei editieren !!!
+%%
+%%			Die Tex ist das Ausgabeprodukt.
+%%
+
+\subsection{Noweb}
+Das Literate-Programming wurde von Donald E. Knuth entwickelt.
+Dabei handelt es sich um eine Art der Programmierung, bei der die gleichzeitige Dokumentation und Programmierung im Vordergrund stehen. 
+Dafür entwickelte D.E.Knuth das WEB System, welches es ermöglicht die Programmierung und die Dokumentation in einer Datei zu handhaben. 
+Diese WEB Datei dient als Ursprungsdatei für den Quellcode und der Dokumentation.
+Das WEB System besteht hauptsächlich aus zwei Programmen \cite{knu83}.
+Ein Programm dient zum Extrahieren des Quellcodes und ein weiteres Programm zum Erstellen der Dokumentation.
+In Abbildung \ref{Funktionsweise von noweb} ist der Prozess dargestellt wie das WEB-System funktioniert.
+Das ursprüngliche WEB-System kann nur Pascal-Code extrahieren.
+Für die Programmiersprache C entwickelte Knuth das CWEB. 
+Aus dem Umstand, dass man für jede Programmsprache einen extra Parser benötigen würde, entwickelte Norman Ramsey die Software \DQ{noweb} .
+Mit \DQ{noweb} kann jede Programmiersprachensyntax extrahiert werden. Ein weiterer Umstand für die Entwicklung von \DQ{noweb} ist, dass die Dokumentationserstellung des Parsers mehrere Formate unterstützt. Mit WEB und CWEB ist als Format nur \TeX{} möglich, wohingegen \DQ{noweb} die Formate HTML, \TeX{} und \LaTeX{} unterstützten.
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/noweb-funktionsweise-flussdiagram.png}
+        }
+        \caption[Funktionsweise von noweb]{Funktionsweise von noweb}
+        \label{Funktionsweise von noweb}
+\end{figure}
+
+Ein kleines Beispiel soll die Vorzüge von Literate-Programming veranschaulichen.
+
+Im Quelldokument wird der Programmcode als Chunk innerhalb der Dokumentation eingebunden.
+Dem \DQ{noweb} Parser für die Code-Extrahierung aus dem Quelldokument ist es dabei egal wann und wo die Chunks verwendet werden.
+Der Parser fügt die Codefragmente der einzelnen Chunks wieder zusammen.
+Dadurch ist es  möglich unterschiedliche Programmcodes hintereinander zu setzten.
+In dem folgenden Beispiel wird der Programmcode für die Datei \DQ{beispiel.c} vollständig vom Parser wieder zusammengesetzt.
+Zwischen den einzelnen Chunks liegt die Dokumentation.
+
+<<Implementierung von einem Beispiel>>=
+<<beispiel.c: Variablen>>
+<<beispiel.c: Ausgabe>>
+print();
+@ Dokumentation der Variablen
+
+<<beispiel.c: Variablen>>=
+int x;
+int y;
+@ Dokumentation der Funktion print.
+
+<<beispiel.c: Ausgabe>>=
+void print(){
+	printf("Ausgabe in Funktion print...\n");
+}
+@
+
+Die Extrahierung der einzelnen Chunks erfolgt durch das Programm \DQ{notangle}.
+Der sogenannte root-Chunk hat im Beispiel den Namen [[Implementierung von einem Beispiel]].
+Dieser root-Chunk wird dem Programm \DQ{notangle} als Parameter übergeben. Das Programm \DQ{notangle} fängt beim root-Chunk an und setzt alle weiteren Chunks die inkludiert werden wiederum zusammen mit dem Befehl: \glqq[[notangle -L -R \glqqImplementierung von einem Beispiel\grqq Quelldatei.nw > beispiel.c]]\grqq.
+Das Hauptaugenmerk der Literate-Programming-Systeme liegt vorrangig im Dokumentieren, erst danach kann programmiert werden.
+
+\subsection{UART}
+
+Für die Datenübertragung über die serielle Schnittstelle gibt es den Universal Asynchronous Receiver/Transmitter.
+Der \Abbrev{UART}{{U}niversal {A}synchronous {R}eceiver {T}ransmitter} stellt eine Schnittstelle für die digitale, serielle Übertragung bereit. Der UART unterstützt die seriellen Übertragungsstandards RS-232 und EIA-485 \cite{nsc95}.
+Der RS232 ist ein Standard für die asynchrone Übertragung von Daten über eine \DQ{single signal}-Leitung \cite{coo98}.
+Der UART stellt eine parallele Schnittstelle zur CPU bereit und konvertiert von parallel auf seriell und umgekehrt \cite{asaas04}.
+Für jede serielle Schnittstelle einer Maschine, ob virtuell oder real, ist jeweils ein UART zuständig.
+Jeder UART ist einzeln programmierbar und kann jederzeit vom System abgefragt werden.
+Dies ist notwendig um die verschiedenen Parameter für die serielle Verbindung einzustellen.
+Dazu zählen Parity Bit, Baudrate, Bit Zeichenfolge (von 5 bis 8 Bits) und die Start- und Stop-Bit-Einstellung.
+Der UART enthält auch einen programmierbaren Baudrate-Generator.
+Baud bezeichnet die Anzahl der Bits die pro Sekunden über die Leitung versendet werden.
+Dieser Baudrate-Generator ist notwendig um die korrekte Anzahl an Bits pro Sekunde zu gewährleisten.
+Der UART enthält dafür einen internen Taktgeber oder auch Clock genannt \cite{nsc95}. 
+Um die gewünschte Baudrate zu erhalten, wird die Taktfrequenz durch den entsprechenden Faktor geteilt.
+Beide Kommunikationspartner stellen dann die gleichen Baudraten ein.
+Der UART überträgt die Daten immer asynchron über die serielle Schnittstelle \cite{asaas04}. 
+Es gibt deshalb kein Taktsignal, welches übertragen wird, für die Synchronisierung mit der Gegenstelle.
+Stattdessen wird ein Start- und Stop-Bit für die Synchronisierung der beiden Kommunikationspartner verwendet.
+Programmieren lässt sich der UART über Register. Diese Register sind über Adressen konfigurierbar.
+Die Adressen der seriellen Ports sind beim PC häufig als COM1 bis COM4 bezeichnet und belegen die I/O Port Adressen 0x3F8, 0x2F8, 0x3E8 und 0x2E8 der Interrupt Ports 3 und 4.
+Die Schnittstellen COM1 und COM3 sowie COM2 und COM4 teilen sich jeweils einen Interrupt-Port am \DQ{Programmable Interrupt Controller}.
+Unter Unix werden die seriellen Ports als Gerätedateien unter /dev als Namen ttyuN oder ttyN erzeugt (N ist dabei die Nummer des Ports). 
+In Intel basierten x86 Systemen ist der UART ein fest eingebauter Chip auf dem Mainboard. Der bekannteste Baustein der UART Serie ist der PC16550D. Bei virtuellen Maschinen, wie z.B.: qemu, ist der UART über den Hypervisor \cite{qemu14} emuliert.
+
+%Quellen:
+%http://babbage.cs.qc.edu/courses/cs343/UART/
+%http://www.freebsd.org/doc/en_US.ISO8859-1/articles/serial-uart/
+%http://en.wikibooks.org/wiki/Serial_Programming
+%http://wiki.osdev.org/Serial_ports
+%http://www.mikrocontroller.net/articles/UART
+%http://www.mikrocontroller.net/articles/RS-232
+%http://www.hsg-kl.de/faecher/inf/netze/material/bitfuerbit.html
+
+\subsection{SLIP}
+
+
+Die Übertragung von IP Paketen über die serielle Schnittstelle ist im RFC 1055 unter dem Namen: \DQ{Serial Line Internet Protokoll} \cite{rfc1055} definiert.
+\Abbrev{SLIP}{{S}erial {L}ine {I}nternet {P}rotocol} ist sehr leicht zu implementieren.
+Das SLIP arbeitet auf der Sicherungsschicht im OSI-Schichtenmodel und braucht keine Netzwerkkarte. 
+Das Protokoll braucht nur eine serielle Leitung. Bestehend aus Anschluss und Leitung. Die Datenübertragung der einzelnen Bytes des IP- Protokolls erfolgt durch den Versand und Empfang über die serielle Leitung. Alle Bytes werden unverändert übertragen. 
+Jedes IP-Paket das über SLIP übertragen wird, beginnt mit einem Start-Byte und wird am Ende mit einem End-Byte abgeschlossen. Das Start- und das End-Byte ist jeweils definiert mit dem [[END]]-Zeichen (Dezimal 192).
+SLIP besitzt keine Fehlererkennung oder Kompressionsmöglichkeiten. Es gibt eine CSLIP Variante, welche eine Kompression der Daten ermöglicht, und somit die Übertragungsraten erhöht.
+Weil es im IP-Protokoll vorkommen kann, dass das [[END]]-Zeichen übertragen wird welches als Information innerhalb des IP-Protokolls gebraucht wird, stellt SLIP vor dem Versand des Zeichens sicher, dass der Wert verändert wird.
+In solch einem Fall werden zwei Zeichen gesendet. Zuerst ein [[ESC]]-Zeichen (Dezimal 219) gefolgt von einem [[ESC_END]] (Dezimal 220). Bei vorkommen des [[ESC]]-Zeichens (Dezimal 219) wird dieses ersetzt durch Dezimal 219 und 220.
+Somit wird sicher gestellt das im IP-Protokoll selbst alle Zahlen von 0 bis 255 übertragen werden können ohne das die Übertragung durch ein [[END]]-Zeichen unterbrochen wird.
+Ein einfaches Beispiel wäre die Übertragung einer IP-Adresse wie zum Beispiel 192.168.10.1.
+In dem Fall würde ohne die Substitution der Zahl 192 die Übertragung beendet werden.
+Da SLIP kein offizieller Standard ist, gibt es auch keine eindeutig definierte maximale Paketlänge. 
+
+\subsection{IP-Protokoll}
+
+Das Internet-Protokoll arbeitet innerhalb der Sicherungsschicht des OSI-Models und ist im RFC 791 definiert \cite{rfc791}.
+Aktuell werden zwei \Abbrev{IP}{{I}nternet {P}rotokoll}-Versionen im Internet verwendet.
+Dazu zählen IP-Version 4 und IP-Version 6.
+Die IP-Version 6 ist im RFC 2460 definiert \cite{rfc2460}.
+Die Abbildung \ref{IPv4-Header} zeigt den IP-Header der Version 4.
+Die einzelnen Felder des \Abbrev{IPv4}{{I}nternet {P}rotokoll {v}ersion {4}}-Protokolls sollen kurz erklärt werden.
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/ipv4_header.png}
+        }
+        \caption[IPv4-Header]{IPv4-Header nach RFC 791}
+        \label{IPv4-Header}
+\end{figure}
+
+Die IPv4-Protokoll-Header-Felder im Detail:
+\begin{itemize}
+\item Version:
+Die IP-Header-Version gibt an, welches Format verwendet werden soll.
+Für IPv4 wird einfach eine 4 eingetragen, für \Abbrev{IPv6}{{I}nternet {P}rotokoll {v}ersion {6}} ist es eine 6.
+Neben IPv4 und IPv6 gibt es noch weitere Formate, wie TP/IX oder TUBA. 
+Es können insgesamt bis zu 16 Formate definiert werden, weil das Versionsfeld 4 Bit lang ist.
+\item IHL: 
+Das Feld \DQ{Internet Header Length} oder auch \Abbrev{IHL}{{I}nternet {H}eader {L}ength} ist 4 Bit lang und gibt an wie groß der IP-Header des verwendetet IP-Paketes ist.
+Der Wert für den IHL berechnet sich aus dem vielfachen der genutzten 32 Bit des IP-Headers.
+Je 32 Bit des IP-Headers werden um eins addiert zum IHL Wert.
+Die minimal Länge von IHL beträgt vier. Die Felder Options \& Padding können weggelassen werden, diese sind optional.
+\item TOS: 
+Mit dem Type of Service oder \Abbrev{TOS}{{T}ype {O}f {S}ervice} kann dem IP-Paket eine Priorität gesetzt werden.
+Damit können IP-Pakete bei sehr hohem Paketaufkommen unterschiedlich behandelt werden.
+TOS ist im RFC 1349 \cite{rfc1349} definiert.
+\item \Abbrev{TL}{{T}otal {L}ength}:
+Das Feld \DQ{Total Length} (TL) ist 16 Bit breit und gibt die Größe des gesamten IP-Pakets inklusive des IP-Headers in Byte an.
+Maximal kann ein IP-Paket 64 Kilobyte groß sein.
+\item ID:
+Mit dem Feld \DQ{Identification} wird dem Zielsystem, welches die Daten empfängt, mitgeteilt, ob die Daten fragmentiert sind.
+Dazu werden Sequenznummern verwendet, um die richtige Paketreihenfolge zu gewährleisten.
+\item Flags:
+Das Feld \DQ{Flags} ist 3 Bit breit und gibt an, ob das IP-Paket selbst fragmentiert wurde, oder ob weitere fragmentierte IP-Pakete folgen.
+\item Fragment Offset:
+Das Feld \DQ{Fragment-Offset} dient der Defragmentierung von fragmentierten IP-Paketen.
+\item Time to Live:
+Das Feld \DQ{Time To Live} enthält einen Zählerwert, der dazu dient die maximale Laufzeit eines IP-Paketes zu begrenzen.
+Dieser Wert wird vom Sender mit einer Zahl belegt. Meist wird der \Abbrev{TTL}{{T}ime {T}o {L}ive} Wert beim versenden des IP-Paketes auf 64 oder 128 gesetzt, je nach Betriebssystem.
+Jeder Router, der das IP-Paket weiterleitet, verringert diesen Wert um eins.
+Wenn der TTL-Wert 0 ist, so wird das IP-Paket vom jeweiligem System, welches das IP-Paket gerade erhalten hat, verworfen.
+\item Protocol:
+Das Feld \DQ{Protocol} gibt an, um welches Datenpaket es sich handelt, welches übertragen wird.
+Für die Übertragung eines ICMP-Paketes, wird der Wert von Protocol auf 1 gestellt.
+Im RFC 1700 sind die Nummern und Protokolle ausführlich definiert \cite{rfc1700}.
+\item Header Checksum:
+Das Feld \DQ{Header Checksum} dient zur Überprüfung des übertragenen IP-Headers.
+Das Feld enthält eine Prüfsumme, welche vom Sender erzeugt und vom Empfänger überprüft wird.
+Die Prüfsumme wird meistens mit dem \DQ{Internet-Checksum-verfahren} \cite{rfc1071} berechnet.
+\item Source Address:
+Das Feld \DQ{Source Address} enthält die IP-Adresse vom Absender.
+Die Source-Address wird als 32 Bit Dezimalzahlenwert hinterlegt.
+\item Destination Address:
+Das Feld \DQ{Destination Address} enthält die IP-Adresse vom Zielsystem und wird ebenfalls als 32 Bit Dezimalzahlenwert hinterlegt.
+\item Options:
+Das Feld \DQ{Options} enthält Sonderinformationen die nicht genauer betrachtet werden.
+\item Padding:
+Das Feld \DQ{Padding} dient als Lückenfüller, um die Größe des IP-Headers exakt an den IHL Wert anzupassen.
+Dies kann zum Beispiel der Fall sein, wenn das Feld \DQ{Options} verwendet wird.
+\end{itemize}
+
+%Quellen dazu:
+%http://koeln.ccc.de/archiv/drt/ip-header.html
+%http://relaxing-moments.net/Netzwerktechnik/output/slides/ch10s03s02.html
+
+\subsection{IP-Header für SLIP}
+
+Für die SLIP-Umsetzung bedarf es jedoch nicht des gesamten IP-Headers. Einige Felder sind nicht notwendig und werden daher mit Nullen gefüllt. Diese nicht benötigten Felder des IP Headers sollen kurz erklärt werden.
+\begin{itemize}
+\item Version und IHL:
+Die Felder für Version und IP-Header Länge werden benötigt. 
+\item TOS:
+Das Feld Type of Service wird nicht benötigt, weil keine Priorisierung der IP-Paketen zwischen zwei Rechnern notwendig ist.
+Eine Implementierung von TOS erfordert zudem einiges mehr an Logik und ist für den minimalen IP Header nicht notwendig.
+\item TL:
+Das Feld \DQ{Total Length} wird benötigt für die Berechnung der Paketlänge.
+\item Flags und Fragment Offset:
+Die Felder Identification, Flags und Fragment Offset werden ebenso wenig implementiert.
+Diese Felder dienen zur Fragmentierung von IP-Paketen, und werden nicht benötigt.
+\item TTL:
+Das TTL Feld ist auch nicht notwendig, weil die Pakete nur zwischen zwei Maschinen übertragen werden.
+\item Protocol:
+Das Feld \DQ{Protocol} ist notwendig und wird mit der Protokollnummer vom ICMP-Protokoll befüllt. 
+Weitere Protokollnummern wie für UDP und TCP können in späteren Versionen implementiert werden.
+\item Header Checksum
+Das Feld \DQ{Header Checksum} wird benötigt.
+\item Source/Destination Address:
+Die Felder für die Quell und Ziel IP-Adressen werden benötigt.
+\item Options und Padding:
+Die Felder Options und Padding entfallen ebenfalls.
+\end{itemize}
+
+Alle benötigten Felder des IP-Headers sind in der Tabelle \ref{Minimaler IP-Header} nochmals aufgeschlüsselt.
+
+\begin{figure}[H]
+        \centering
+\begin{tabular}{|l|l|}
+\hline 
+\textbf{IP Header Feld} & \textbf{Notwendig für SLIP} \\ 
+\hline 
+IP Version & Ja \\ 
+\hline 
+IHL & Ja \\
+\hline 
+TOS & Nein \\ 
+\hline 
+Total Length & Ja \\ 
+\hline 
+Identification & Nein \\ 
+\hline 
+Flags & Nein \\ 
+\hline 
+Fragment Offset & Nein \\ 
+\hline 
+TTL & Nein \\ 
+\hline 
+Protocol & Ja \\ 
+\hline 
+Header Checksum & Ja \\ 
+\hline 
+Source Address & Ja \\ 
+\hline 
+Destination Address & Ja \\ 
+\hline 
+Options & Nein \\ 
+\hline 
+Padding & Nein \\ 
+\hline 
+\end{tabular} 
+        \caption[Minimaler IP-Header für SLIP]{Minimaler IP-Header für SLIP}
+        \label{Minimaler IP-Header}
+\end{figure}
+
+\subsection{ICMP}
+
+Das Internet-Control-Message-Protocol (\Abbrev{ICMP}{{I}nternet {C}ontrol {M}essage {P}rotocol}) dient zur Übertragung einfacher Informationen zwischen zwei Computersystemen in einem Netzwerk. 
+Die Übertragung des ICMP-Paketes wird über IP ermöglicht.
+Das ICMP-Paket besteht im wesentlichen aus einem einfachen Header gefolgt von mehreren Datenfeldern \cite{rfc792}.
+Der Aufbau des ICMP-Headers ist in Abbildung \ref{ICMP-Header} zu sehen. 
+Die ersten 32 Bit des ICMP-Paketes enthalten den gesamten Header des Protokolls.
+
+\begin{itemize}
+\item Type:
+Das Feld Type ist 1 Byte breit, und gibt an um welchen ICMP Pakettyp es sich handelt
+\item Code:
+Das Feld Code ist ebenfalls 1 Byte breit, und enthält den Code Wert zum jeweiligen ICMP Pakettyp.
+\item Checksum:
+Das Checksum Feld ist 16 Bit breit und speichert die Prüfsumme des ICMP Paketes.
+\item Data:
+Direkt nach den ersten 32 Bit des ICMP-Headers folgen die Datenfelder.
+Die Felder Data können Informationen enthalten.
+\end{itemize}
+
+Zu jedem Type gibt es verschiedene Codewerte. 
+Eine genaue Liste aller Type- und Code-werte kann anhand des RFC's genommen werden.
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/icmp_header.png}
+        }
+        \caption[ICMP-Header]{ICMP-Header nach RFC 792}
+        \label{ICMP-Header}
+\end{figure}
+
+\subsection{Übersetzung der noweb Quelldatei}
+
+Zum erstellen eines lauffähigen Ulix-i386 Systems, muss der Quellcode aus der \DQ{noweb}-Quelldatei extrahiert und anschließend kompiliert werden. Die nachfolgenden Schritte erklären die Extrahierung des C-Quellcodes aus der \DQ{noweb} Quelldatei und das anschließende Erstellen des Ulix-i386 mit der SLIP-Modul Implementierung.
+
+\subsubsection{Extrahieren des C Quellcodes}
+
+Der C-Quellcode und die Dokumentation des Quellcodes aus der Arbeit befindet sich in der \DQ{noweb} Quelldatei.
+Aus dieser \DQ{noweb}-Datei wird der gesamte C-Quellcode extrahiert.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Extrahieren des Quellcodes},label=Extrahieren des Quellcodes}
+\begin{lstlisting}[frame=single] 
+notangle -L -Rslip-mod.c bachelorarbeit.nw > slip-mod.c
+notangle -L -Rslip-mod.h bachelorarbeit.nw > slip-mod.h
+notangle -L -Ripv4-tools.c bachelorarbeit.nw > ipv4-tools.c
+notangle -L -Ripv4-tools.h bachelorarbeit.nw > ipv4-tools.h
+\end{lstlisting}
+\end{figure}
+
+In Listing \ref{Extrahieren des Quellcodes} werden beide Teile des Quellcodes aus der Implementierung extrahiert.
+Einmal das Kernelmodul und zum anderen die Userland-Funktionen.
+Der Paramter \DQ{-R} vom Programm \DQ{notangle} wird dem zu extrahierende Chunk übergeben.
+Der Parameter \DQ{-L} fügt für jeden Chunkabschnitt, der extrahiert wird, im Quellcode eine Kommentarzeile ein, mit der Beschriftung der Zeile aus der \DQ{noweb}-Datei.
+
+Bevor der extrahierte Quellcode kompiliert werden kann, müssen ein paar kleine Änderungen in der \DQ{sh.c} vorgenommen werden.
+Die \DQ{sh.c} ist die implementierte Shell vom Ulix-i386 System. Die Shell dient als Kommandointerpreter.
+Mit der Shell können Befehle an das Ulix-i386 System gesendet werden, und Textausgaben auf der Kommandozeile angezeigt werden.
+
+<<sh.c: Einfügen der ipv4-tools.h (Zeile 2)>>=
+#include "ipv4-tools.h"
+@
+
+Die [[ipv4-tools.h]] muss eingebunden werden in die [[sh.c]], damit die Funktionen [[get_hostname]], [[set_hostname]], [[ipd]] und [[cmd_ping]] verfügbar sind. Die [[SHELL_COMMANDS]] Variable in der [[sh.c]] wird erweitert mit den neu verfügbaren Kommandos.
+
+<<sh.c: Erweiterung der [[SHELL_COMMANDS]] (Zeile 3)>>=
+#define SHELL_COMMANDS "help, ps, fork, ls, cat, 
+		head, cp, diff, sh, hexdump, kill, loop, 
+		test, brk, cd, ln, rm, pwd, touch, read, 
+		edit, exit, hostname, ping, ipd"
+@
+
+In der [[sh.c]] fehlen noch die Aufrufe der einzelnen Funktionen bei Eingabe der Shell-Befehle.
+Dazu sind drei weitere Verzweigungen in der [[run_command]] Funktion innerhalb der [[sh.c]] notwendig.
+
+<<sh.c: Erweiterung der [[run_command]] Funktion (Zeile 790)>>=
+  else if ( strcmp ((char*)cmd, "hostname") ) {
+	if(argc > 1){
+		set_hostname(argv[1]);
+	}
+    char arr[MAXLEN_HOSTNAME];
+    get_hostname(&arr);
+    printf ("Hostname: %s\n", arr); 
+  }
+  else if ( strcmp ((char*)cmd, "ping") ) {
+	cmd_ping(argv[1]);
+  }
+  else if ( strcmp ((char*)cmd, "ipd") ) {
+	ipd();
+  }
+@
+
+Eine Anpassung an der [[ulix.c]] ist zusätzlich zur [[sh.c]] notwendig.
+Die [[ulix.c]] ist der Kernel vom Ulix-i386-System.
+Dieser muss angepasst werden, damit bei eintreffen eines Interrupts, durch den UART der seriellen Schnittstelle 2, eine Funktion im SLIP Modul aufgerufen wird. Der Kernel ruft im Normalfall bei eintreffen eines Interrupts am seriellen Port 2 die Funktion [[serial_hard_disk_handler]]  auf. Dieser Aufruft der Funktion muss angepasst werden auf die \DQ{slip-mod Funktion} [[slip_isr]].
+
+<<ulix.c: Anpassung des IRQ Handlers für den COM2 Port (Zeile 8190)>>=
+irq_install_handler (IRQ_COM1, serial_hard_disk_handler);
+extern void slip_isr();
+irq_install_handler (IRQ_COM2, slip_isr);
+@
+
+\subsubsection{Erzeugung des Ulix-i386-OS-Code}
+
+Um aus dem extrahierten Quellcode ein lauffähiges Programm zu erzeugen, muss der Quellcode kompiliert und anschließend noch gelinkt werden.
+Zuerst wird die [[ipv4-tools.c]] wie in Listing \ref{Kompilieren der Userland Programme} kompiliert und dann wie in Listing \ref{Linken von ipv4-tools} gelinkt.
+
+\begin{figure}[H]
+\lstset{breaklines=true,captionpos=b,caption={Kompilieren der Userland Programme},label=Kompilieren der Userland Programme}
+\begin{lstlisting}[frame=single] 
+gcc -m32 -nostdlib -ffreestanding -fforce-addr -fomit-frame-pointer -fno-function-cse -nostartfiles -momit-leaf-frame-pointer -c ipv4-tools.c
+\end{lstlisting}
+\end{figure}
+
+Nach erfolgreicher Ausführung des \DQ{gcc} Aufrufes, hat der Compiler eine Objekt-Datei names \DQ{ipv4-tools.o} erzeugt.
+In dieser Datei befindet sich der Objekt-Code, welcher jetzt noch mit der \DQ{ulixlib} und der \DQ{sh} verlinkt werden muss.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Linken von ipv4-tools},label=Linken von ipv4-tools}
+\begin{lstlisting}[frame=single] 
+ld -m elf_i386_fbsd -static -s --pie -T process.ld --entry 0 -o sh sh.o ulixlib.o ipv4-tools.o
+\end{lstlisting}
+\end{figure}
+
+Als nächstes wird das SLIP-Kernelmodul kompiliert und danach der \DQ{ulix} Kernel.
+Die Abfolge ist in Listing \ref{Kompilieren des Kernelmoduls} beschrieben.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Kompilieren des Kernelmoduls},label=Kompilieren des Kernelmoduls}
+\begin{lstlisting}[frame=single] 
+gcc -O0 -m32 -fno-stack-protector -std=c99 -g -O0 -nostdlib -nostdinc -fno-builtin -I./include -c -o slip-mod.o slip-mod.c
+gcc -O0 -m32 -fno-stack-protector -std=c99 -g -O0 -nostdlib -nostdinc -fno-builtin -I./include -c -o ulix.o -aux-info ulix.aux ulix.c
+\end{lstlisting}
+\end{figure}
+
+Nach dem erzeugen der Objekt Dateien vom [[slip-mod]] und [[ulix]] Kernels, werden diese nur noch verlinkt.
+Der linker Befehl mit allen notwendigen Parametern ist in Listing \ref{Linken von slip-mod in den Ulix-Kernel} beschrieben.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Linken von slip-mod in den Ulix-Kernel},label=Linken von slip-mod in den Ulix-Kernel}
+\begin{lstlisting}[frame=single] 
+ld -m elf_i386_fbsd -T ulix.ld -o ulix.bin *.o
+\end{lstlisting}
+\end{figure}
+
+
+Kopieren der Dateien aus dem lib Directory auf die Ulix virtual disk.
+\begin{figure}
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Kopieren von default Dateien in das Filesystem},label=Kopieren von default Dateien in das Filesystem}
+\begin{lstlisting}[frame=single] 
+                ../bin/mfstool unlink ../bin-build/minixdata.img /etc/myhostname
+                ../bin/mfstool unlink ../bin-build/minixdata.img /etc/hosts
+                ../bin/mfstool unlink ../bin-build/minixdata.img ./sh
+                ../bin/mfstool add ../bin-build/minixdata.img ./sh /sh
+                ../bin/mfstool add ../bin-build/minixdata.img ./etc_myhostname /etc/myhostname
+                ../bin/mfstool add ../bin-build/minixdata.img ./etc_hosts /etc/hosts
+\end{lstlisting}
+\end{figure}
+
+
+\subsubsection{Erzeugung der Dokumentation}
+
+Um aus der \DQ{noweb}-Quelldatei eine Dokumentation in Form einer PDF Datei zu erhalten sind zwei Schritte notwendig.
+Zuerst wird mit dem Programm \DQ{noweave} die \DQ{noweb}-Quelldatei konvertiert in eine \LaTeX{} Datei.
+Aus der erzeugten \LaTeX{} Datei kann nun das PDF erzeugt werden.
+In Listing \ref{Erzeugen der Dokumentation} ist die Befehlsabfolge beschrieben.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Erzeugen der Dokumentation},label=Erzeugen der Dokumentation}
+\begin{lstlisting}[frame=single] 
+noweave -autodefs c -index -delay slip-mod.nw > slip-mod.tex
+pdflatex slip-mod.tex
+makeindex slip-mod.nlo -s ./nomencl.ist -o slip-mod.nls -t slip-mod.nlg
+pdflatex slip-mod.tex
+pdflatex slip-mod.tex
+\end{lstlisting}
+\end{figure}
+
+Für die Erzeugung des Abkürzungsverzeichnisses wird die \DQ{nomencl.ist} Datei benötigt.
+Diese muss im selben Verzeichnis liegen wie die \LaTeX{} Datei \DQ{bachelorarbeit.tex}.
+Für die Formatierung des eingebetteten Quellcodes aus der \DQ{noweb}-Quelldatei, wird die \DQ{noweb.sty} noch benötigt.
+Auch diese Datei muss im selben Verzeichnis wie die \DQ{bachelorarbeit.tex} liegen.
+Die doppelte Ausführung von \DQ{pdflatex} ist notwendig und liegt an der Verarbeitungsweise von \LaTeX{}.
+In der Dokumentation von \LaTeX{} \cite{lat14} kann dies nachgelesen werden.
+Nach erfolgreicher Ausführung liegt die Dokumentation als fertiges PDF vor.
+Das PDF besteht aus der Dokumentation und dem Quellcode.
+
+\newpage
+\section{Implementierung}
+
+Das SLIP-Modul für das Ulix-i386-OS enthält zwei Komponenten.
+Zum einen das Kernelmodul, bestehend aus der [[slip-mod.h]] und der [[slip-mod.c]].
+Und zum Anderen aus dem Userland-Komponenten bestehend aus [[ipv4-tools.h]] und [[ipv4-tools.c]].
+Die Header-Dateien [[slip-mod.h]] und [[ipv4-tools.h]] enthalten die Definitionen und Typdeklarationen.
+Die Funktionen befinden sich in den Dateien [[slip-mod.c]] und [[ipv4-tools.c]].
+
+Das SLIP-Kernelmodul hat mehrere Aufgaben.
+Zum Einen werden die IP-Paket-Informationen empfangen und versendet. Und zum Anderen werden die Pakete in einem Puffer für die weitere Verarbeitung im Userland zwischen gespeichert.
+Das Kernelmodul wurde sehr klein gehalten, um nur die grundlegenden Funktionen zu gewährleisten.
+Die [[ipv4-tools.c]] enthält die ganze Logik und Algorithmen für die Verarbeitung der IP- und ICMP-Pakete.
+Für die Erstellung eines gültigen IP- oder ICMP-Paket müssen einige Funktionen in der [[ipv4-tools.c]] implementiert werden.
+Dazu zählt zum Beispiel die Erzeugung der richtigen Informationen zu den IP-Header Feldern mit der richtigen Byte-Order-Reihenfolge.
+Für die IP-Adressen muss eine Konvertierung von String auf Dezimal und umgekehrt implementiert werden.
+Die Prüfsumme der IP- und ICMP-Header werden berechnet und die IP-Felder TTL und IHL werden gesetzt.
+
+Die meisten Funktionen enthalten keine Fehlerprüfungen für die übergebenen Parameterwerte.
+Eine Fehlerprüfung wurde bewusst weggelassen, weil diese den Quellcode weiter aufgebläht und die Übersichtlichkeit verringert hätte.
+
+\subsection{SLIP-Kernelmodul}
+
+Die Initialisierung des Kernelmoduls erfolgt über die Funktion [[initialize_module]].
+Diese wird vom Ulix-Kernel beim Starten des Systems aufgerufen.
+In der Version 0.8 von Ulix-i386 passiert dies in der Funktion [[main]].
+Zuerst soll ein kurzer Überblick über die Reihenfolge der Implementierungen des Kernelmoduls etwas mehr Übersicht schaffen.
+Die nachfolgenden Funktionen der [[slip-mod.c]] sind notwendig, damit die Übertragung der Informationen aus den Highlevel-Funktionen des Userlands überhaupt funktionieren.
+
+\subsubsection{Aufbau der slip-mod.h}
+
+In der [[slip-mod.h]] werden Makros, Variablen die CPU Register-Struktur und alle notwendigen Funktionen deklariert und in die [[slip-mod.c]] eingebunden. Somit sind alle Funktionen, Variablen und Makros definiert, und müssen in der [[slip-mod.c]] nicht nochmal definiert werden.
+
+<<slip-mod.h>>=
+#ifndef __SLIP_MOD__
+#define __SLIP_MOD__
+<<SLIP [[Kernelmodul-Definitionen]]>>
+<<SLIP [[Kernelmodul-Variablen]]>>
+<<CPU Registerstruktur>>
+<<SLIP [[Kernelmodul-Funktionendeklarationen]]>>
+#endif
+@
+
+Die Definitionen der Funktionen aus der Datei [[slip-mod.h]] im Detail.
+
+<<SLIP [[Kernelmodul-Definitionen]]>>=
+#define MAJOR_VERSION			 1
+#define MINOR_VERSION			 1
+#define PATCH_VERSION			 0
+#define NULL ((void*)0)
+#define u_char unsigned char
+#define u_short unsigned short
+#define u_int unsigned int
+#define IO_PIC1               0x20
+#define IO_PIC2               0xA0
+#define COM1                 0x3f8
+#define COM2                 0x2f8
+static int uart;
+static int uart2;
+#define IRQ_COM1                 4
+#define IRQ_COM2                 3
+u_short int USED_COM_PORT;
+#define MAX_IPV4_MBUF           40
+#define MAX_IPV4_MBUF_SIZE       8
+#define SYS_recvmsg             27
+#define SYS_sendmsg             28
+#define SYS_mbufsize            29
+#define SYS_delmbuf             30
+#define SYS_gettick             31
+#define DEBUG
+#define END                   0300  /* Dezimal 192 */
+#define ESC                   0333  /* Dezimal 219 */
+#define ESC_END               0334  /* Dezimal 220 */
+#define ESC_ESC               0335  /* Dezimal 221 */
+@
+
+Zu erst wird das Makro [[__SLIP_MOD__]] definiert falls es noch nicht definiert wurde.
+Dies verhindert ein nochmaliges Laden der Headerdatei beim Kompilieren. Dadurch kann die [[slip-mod.h]] mehrmals inkludiert werden, ohne dass der Compiler meckert.
+Um den Schreibaufwand beim weiteren Programmieren zu optimieren und auch gleich die Datentypen richtig fest zu legen, werden ein paar eigene Datentypen definiert. Diese neuen Datentypen stellen nur eine kurze Schreibweise der ursprünglichen Datentypen dar.
+Das Makro [[NULL]] gibt es bisher noch nicht in der Ulix-i386 Version 0.8..
+Es folgen die UART und Interrupt-Adressen, die notwendig sind, um den UART zu programmieren.
+Der [[IO_PIC1]] gibt die Adresse vom Master-Programmable-Interrupt-Controler (kurz \Abbrev{PIC}{{P}rogrammable {I}nterrupt {C}ontroler}) an.
+Die IO Addresse vom Slave-PIC ist im [[IO_PIC2]] gespeichert.
+Die Makros [[COM1]] und [[COM2]] definieren die Basisadressen für die seriellen Schnittstellen des UART.
+Die Makros [[uart]] und [[uart2]] legen fest, welcher serielle Port verfügbar ist oder nicht.
+Sollte der serielle Port bereit und verfügbar sein, so wird der Wert auf 1 gesetzt.
+Mit [[IRQ_COM1]], [[IRQ_COM2]] werden die Interruptnummern definiert auf denen die seriellen Schnittstellen verbunden sind am Master PIC.
+Das Makro [[IRQ_SLAVE]] definiert die Interruptnummer vom Slave-PIC.
+Der Slave-PIC ist am Master-PIC mit Interrupt-Schnittstelle 2 verbunden.
+Der [[USED_COM_PORT]] gibt an, welche serielle Schnittstelle das SLIP Modul zum übertragen der Daten nutzen soll.
+Der IPv4-Buffer besteht aus einem zweidimensionalen Array namens [[ipv4_mbuf]].
+Der erste Feldindex gibt das IP-Paket an, der zweite das einzelne Byte vom IP-Paket.
+Für die Interaktion mit dem Userland werden die Syscallnummern definiert.
+Die Syscalls des Ulix-i386 Version 0.8 sind in der [[ulixlib.c]] definiert.
+Die Nummern 27 bis 31 wurde frei gewählt und überschneiden sich mit keinem vorhandenen Syscall.
+Um eine erweiterte Ausgabe auf der Konsole zu erhalten, gibt es das [[DEBUG]] Makro. 
+Einige Makros für das Übertragen von speziellen Zeichen werden noch definiert.
+Makro [[END]] definiert das Byte für den Start und das Ende einer SLIP Übertragung.
+Das Makro [[ESC]] wird vollständigkeitshalber definiert. Es kommt aber nicht mehr zur Anwendung.
+Makro [[ESC_END]] und [[ESC_ESC]] sind Ersetzungsbytes für das Vorkommen einzelner [[ESC]] oder [[END]] Bytes während der Übertragung.
+
+Es folgen die definierten Funktionen des Kernelmodules. 
+
+<<SLIP [[Kernelmodul-Funktionendeklarationen]]>>=
+extern u_char inportb (u_short);
+extern void outportb (u_short, u_char);
+extern insert_syscall (int , void*);
+extern u_int system_ticks;
+void initialize_module();
+void slip_init(u_short int COM);
+int check_uart();
+int uart_putc(int c);
+int uart_getc(); 
+void syscall_sendmsg(struct regs *r);
+void syscall_recvmsg();
+void syscall_delmbuf();
+void syscall_gettick();
+void syscall_mbufindex(struct regs *r);
+int slip_send(u_char *msg, int len);
+void slip_recv(char *msg, int len);
+short delmbuf(short index);
+unsigned short get_sizeof_mbuf();
+void slip_isr();
+@
+
+Für die Übermittlung der Informationen aus dem UART können die im Ulix-i386 vorhandenen Funktionen [[inportb]] und [[outportb]] verwendet werden. Die [[inportb]] Funktion gibt die aktuellen Daten der jeweiligen IO Adresse aus dem UART zurück.
+Die [[outportb]] Funktion wird gebraucht um Daten an den UART zu senden.
+Der UART wiederum versendet die Daten über die serielle Schnittstelle.
+Um die Funktionen [[inportb]] und [[outportb]] vom Ulix-i386 Kernel zu nutzen, müssen diese Funktionen als extern definiert werden.
+Eine wichtige Funktion für den Betrieb des SLIP-Moduls ist die [[insert_syscall]], welche dazu dient, eine Syscallnummer mit einer Funktion zu verknüpfen. Als Parameter wird die Syscallnummer und die Speicheradresse der Funktion übergeben.
+Für die Zeitmessung vom Versenden und Empfangen von ICMP-Paketen wird die [[system_ticks]]-Variable aus dem Kernel gebraucht.
+
+%Als weitere Variable zur Steuerung des PIC dient die [[irqmask]]. Diese Variable setzt die Binärmaske für die Interrupts. Dies ist notwendig, um überhaupt Interrupts vom jeweilige COM Port durchzulassen zur CPU.
+%Die Logische UND Berechnung aktiviert den zweiten PIC.
+%Der PIC besteht im Prinzip aus zwei 8 Bit PIC's. Die CPU hat aber nur ein Kanal für die Interrupt Annahme. 
+%SLIP Kernelmodul Variablen=
+%static ushort irqmask = 0xFFFF & ~(1\<\<IRQ_SLAVE);
+Es werden die Initialisierungsfunktionen deklariert [[initialize_module]] und [[slip_init]], die Funktionen für den UART zugriff [[check_uart]], [[uart_putc]], [[uart_getc]] und die Syscallfunktionen [[syscall_sendmsg]], [[syscall_recvmsg]], [[syscall_delmbuf]], [[syscall_gettick]] und [[syscall_mbufindex]].
+Jede dieser Syscallfunktionen ruft selbst wiederum eine weitere Funktionen auf.
+Diese heißen [[slip_send]], [[slip_recv]], [[delmbuf]] und [[get_sizeof_mbuf]].
+Die [[slip_isr]] Funktion wird aufgerufen sobald ein Interrupt am IRQ Port 4 anliegt.
+
+<<SLIP [[Kernelmodul-Variablen]]>>=
+u_char ipv4_mbuf[MAX_IPV4_MBUF_SIZE][MAX_IPV4_MBUF];
+u_short receive;
+u_short ipv4_mbuf_byte;
+u_short ipv4_mbuf_index;
+u_char esc_receive;
+@
+
+Der IP-Buffer wird initialisiert mit maximal 8 IP-Paketen mit der Variable [[MAX_IPV4_MBUF_SIZE]], und jeweils 40 Bytes mit der Variable [[MAX_IPV4_MBUF]].
+Das reicht aus um einfache ICMP-Nachrichten mit kurzen Daten zu empfangen.
+Die Variable [[receive]] dient zum zählen der empfangenen Bytes.
+Diese Variable wird verwendet um zu ermitteln ob ein übertragenes [[END]]-Zeichen zu einem neuen IP-Paket gehört oder das IP-Paket fertig übertragen wurde. Die Variable [[ipv4_mbuf_byte]] ist der Array-Index vom aktuellem IP-Paket.
+Die Variable [[ipv4_mbuf_index]] gibt die aktuelle Schreibposition des Bytes vom IP-Paket an.
+Die Variable [[esc_receive]] wird gesetzt, wenn ein [[ESC]] Zeichen empfangen wird.
+
+\subsubsection{Aufbau der slip-mod.c}
+
+In der [[slip-mod.c]] werden die Funktionen implementiert die für den Empfang und den Versand von IP- oder ICMP-Pakten notwendig sind.
+Als Erstes wird die Lizenz als Kommentar eingebunden und anschließend die [[slip-mod.h]].
+Danach folgen die einzelnen Implementierungen der Funktionen.
+
+<<slip-mod.c>>=
+<<license>>
+
+#include "slip-mod.h"
+
+<<Implementierung von [[initialize_module]]>>
+<<Implementierung von [[slip_init]]>>
+<<Implementierung von [[check_uart]]>>
+<<Implementierung von [[slip_isr]]>>
+<<Implementierung von [[slip_send]]>>
+<<Implementierung von [[slip_recv]]>>
+<<Implementierung von [[uart_putc]]>>
+<<Implementierung von [[uart_getc]]>>
+<<Implementierung von [[syscall_recvmsg]]>>
+<<Implementierung von [[syscall_sendmsg]]>>
+<<Implementierung von [[syscall_mbufsize]]>>
+<<Implementierung von [[syscall_delmbuf]]>>
+<<Implementierung von [[syscall_gettick]]>>
+<<Implementierung von delmbuf>>
+@
+
+\subsubsection{Initialisierung der seriellen Schnittstelle}
+
+Der Ulix-Kernel ruft nach dem Programmstart die Funktion [[initialize_module]] auf, welche als extern definiert ist.
+Somit wird die Funktion [[initialize_module]] des SLIP-Modul aufgerufen.
+Bei der Initialisierung durch [[initialize_module]] werden einige weitere Funktionen aufgerufen.
+Zuerst wird der UART und die IRQ Maskierung aktiviert innerhalb der [[slip_init]] Funktion.
+Die Funktion [[slip_init]] wird dem zu benutzenden COM-Port übergeben.
+In diesem Fall wird der [[COM2]] verwendet. Der [[COM1]] dient als Debugausgabe des Kernels auf der seriellen Konsole.
+
+<<Implementierung von [[initialize_module]]>>=
+void initialize_module () {
+  slip_init(COM2);
+  <<[[initialize_module]]: Variablen>>
+  <<[[initialize_module]]: Syscalls>>
+  return;
+}
+@
+
+In der [[slip_init]] wird der zu benutzende COM-Port festgelegt.
+Dafür dient die [[USED_COM_PORT]] Variable. 
+Danach folgt die Konfiguration des UART über mehrere Schritte.
+
+<<Implementierung von [[slip_init]]>>=
+void slip_init(u_short int COM) {
+  char *COM_NAME;
+  switch (COM) {
+    case COM1:	
+      COM_NAME = "COM1";
+      USED_COM_PORT = COM1;
+      break;
+    case COM2:
+      COM_NAME = "COM2";
+      USED_COM_PORT = COM2;
+      break;
+    default:	
+      COM_NAME = "unknown";
+      USED_COM_PORT = NULL;	
+      break;
+  }
+  <<[[slip_init]]: Aktivieren des UART>>
+  <<[[slip_init]]: Setzten des DLAB>>
+  <<[[slip_init]]: Einstellen der Baudrate>>
+  <<[[slip_init]]: UART Interrupt Versand aktivieren>>
+  <<[[slip_init]]: Bitrate setzen>>
+  <<[[slip_init]]: Data Terminal Ready>>
+  <<[[slip_init]]: UART Rückmeldung zur CPU>>
+  <<[[slip_init]]: Prüfen des UART Ports>>
+  <<[[slip_init]]: Speichern des Port Status>>
+  <<[[slip_init]]: UART Konfigurationsabschluss>>
+}
+@	
+
+\subsubsection{Konfiguration des UART}
+	
+Die Konfiguration des UART erfolgt über einfache Wertezuweisung der UART Register.
+Die Reihenfolge der Initialisierung wurde vom xv6 \cite{xv14} Betriebssystem weitgehend übernommen.
+
+Die zu ändernden Werte, werden als Parameter an die Funktion [[outportb]] übergeben.
+
+Die Basisadresse von [[COM]] addiert mit 2 stellt den Zugriff zum First-In-First-Out-Buffer-Control-Register \cite{nsc95} sicher. Mit dem Wert 0 wird der \Abbrev{FIFO}{{F}irst {I}n {F}irst {O}ut} vom UART aktiviert.
+
+<<[[slip_init]]: Aktivieren des UART>>=	
+  outportb(COM+2, 0);
+@
+
+Über das Offset +3 mit dem Hexadezimal-Wert 0x80 wird das Divisor-Latch-Access-Bit (kurz \Abbrev{DLAB}{{D}ivisor {L}atch {A}ccess {B}it}) im Line-Control-Register gesetzt.
+Dies ist notwendig um die Baudrate einzustellen. 
+
+<<[[slip_init]]: Setzten des DLAB>>=	
+  outportb(COM+3, 0x80);
+@
+
+Die Einstellung der Baudrate erfolgt über das Divisor-Latch-Byte.
+Bei dem Divisor-Latch-Byte handelt es sich um den Konfigurationswert der Baudrate, die verwendet werden soll.
+Der Wert errechnet sich aus der Formel $Divisor Latch Byte Value = \frac{115200}{Baudrate}$.
+Eine Liste aller Werte für die Baudraten ist im PC16550D \cite{nsc95} beschrieben.
+
+<<[[slip_init]]: Einstellen der Baudrate>>=	
+  outportb(COM+0, 115200/9600);
+@
+
+Sobald Daten am UART empfangen werden, soll ein Interrupt ausgelöst werden.
+Dazu wird im Interrupt-Enable-Register der Interrupt aktiviert.
+
+<<[[slip_init]]: UART Interrupt Versand aktivieren>>=	
+  outportb(COM+1, 0);
+@
+
+Die Daten-Bitrate wird auf 8 Bit im Line-Control-Register eingestellt.
+
+<<[[slip_init]]: Bitrate setzen>>=
+  outportb(COM+3, 0x03);
+@
+
+Im Modem Control Register wird nun das Data Terminal Ready auf 0 gesetzt.
+
+<<[[slip_init]]: Data Terminal Ready>>=	
+  outportb(COM+4, 0);
+@
+
+Im Interrupt-Enable-Register wird der Enable-Transmitter-Holding Register-Empty-Interrupt gesetzt.
+Damit gibt der UART der CPU eine Rückmeldung nachdem die Daten vom UART gesendet wurden.
+
+<<[[slip_init]]: UART Rückmeldung zur CPU>>=	
+  outportb(COM+1, 0x01);
+@
+
+Es muss auch geprüft werden, ob der serielle Port überhaupt verfügbar ist. 
+Dazu wird das Line-Status-Register abgefragt.
+Sollte der Wert 0xFF ergeben, so ist der Port nicht verfügbar.
+
+<<[[slip_init]]: Prüfen des UART Ports>>=	
+  if(inportb(COM+5) == 0xFF) {
+    printf("SLIP: Serial Port could not enabled, \
+no IRQ free\n");
+    return;
+  }	
+@
+
+Wenn der serielle Port-[[COM]] verfügbar ist, so wird die jeweilige [[uart]] Variable auf 1 gesetzt.
+Die Variable [[uart]] ist für [[COM1]] und [[uart2]] für [[COM2]].
+
+<<[[slip_init]]: Speichern des Port Status>>=	
+  switch (COM) {
+    case COM1:	
+      uart = 1; 
+      break;
+    case COM2:
+      uart2 = 1;
+      break;
+  }
+@
+
+Als Letztes wird der Receive-Buffer eingelesen, jedoch ohne die Informationen zu verarbeiten.
+Ebenfalls wird das Interrupt-Identification-Register abgefragt.
+Wenn alles erfolgreich Initialisiert wurde, wird eine Ausgabe auf der Konsole erzeugt.
+
+<<[[slip_init]]: UART Konfigurationsabschluss>>=	
+  inportb(COM+0);
+  inportb(COM+2);
+  printf("SLIP: Serial console port %s initialized\n", 
+          COM_NAME);
+@
+
+Ein paar Variablen werden in der Funktion [[initialize_module]] mit Startwerten initialisiert.
+
+<<[[initialize_module]]: Variablen>>=	
+  receive = -1;	
+  ipv4_mbuf_byte = 0;
+  ipv4_mbuf_index = 0;
+  esc_receive = 0;
+@
+
+\subsubsection{Senden von Bytes über den UART}
+
+Mit der [[check_uart]] Funktion wird geprüft, ob der genutzte COM-Port überhaupt aktiviert und bereit ist.
+Dazu wird die [[uart]] Variable je COM-Port ausgewertet. 
+
+<<Implementierung von [[check_uart]]>>=
+int check_uart() {
+  switch (USED_COM_PORT) {
+    case COM1:
+      if(uart)
+        return 0;
+    break;
+    case COM2:
+      if(uart2)
+        return 0;	
+    break;
+    default:
+    break;
+	}
+  return -1;
+}
+@
+
+Das Versenden der einzelnen Bytes über die serielle Schnittstelle erfolgt über die [[uart_putc]] Funktion.
+Der Übergabeparameter [[c]] ist das jeweilige Byte welches versendet werden soll.
+Vor dem Versand wird geprüft, ob der [[uart]] schon aktiviert wurde. Falls das nicht der Fall ist, wird ein Hinweis ausgegeben.
+Wenn der Port aktiviert ist, wird die [[PIC_DATA_PORT]] Variable gesetzt.
+Je nach COM-Port ist diese entweder [[IO_PIC1]] oder [[IO_PIC2]].
+Die Variable [[PIC_DATA_PORT]] enthält die IO Adresse des jeweiligen COM Ports.
+Die [[for]] Schleife erzeugt eine kleine Verzögerung sobald das Line-Status-Register vom UART nicht bereit sein sollte, oder der Ports nicht aktiv ist. Dies kann der Fall sein, wenn der UART gerade Daten versendet.
+
+<<Implementierung von [[uart_putc]]>>=
+int uart_putc (int c) {
+  int i, PIC_DATA_PORT;
+  if (check_uart() == -1) {
+    printf("SLIP: Could not get stream from uart\n");
+  }
+    
+  if(USED_COM_PORT == COM1) {
+    PIC_DATA_PORT = IO_PIC1;
+  }    
+  if(USED_COM_PORT == COM2) {
+    PIC_DATA_PORT = IO_PIC2;
+  }    
+    
+  for(i = 0; i < 128 && !(inportb(USED_COM_PORT+5) & 
+  	  PIC_DATA_PORT); i++)
+    microdelay(10);    
+  outportb(USED_COM_PORT+0, c);
+}
+@
+
+\subsubsection{Empfang von Bytes aus dem UART-Puffer}
+
+Das auslesen der einzelnen Bytes vom UART Puffer geschieht in der Funktion [[uart_getc]].
+Zuerst wird der [[uart]] geprüft ob der COM-Port aktiv und bereit ist.
+Wenn der Port aktiv ist, wird noch geprüft ob der Port gesperrt ist.
+Dazu wird das Line-Status-Register abgefragt und falls der Port aktiv und nicht gesperrt ist, wird das Byte aus dem Puffer direkt ausgelesen und direkt zurückgegeben.
+
+<<Implementierung von [[uart_getc]]>>=
+int uart_getc () { 
+  if (check_uart() == -1) {
+    printf("SLIP: Could not get stream from uart\n");
+    return -1;
+  }
+  if(!(inportb(USED_COM_PORT+5) & 0x01))
+    return -1;
+  return inportb(USED_COM_PORT+0);
+}
+@
+
+%%%%/* Alternativ Polling Code
+%%%% 
+%%%%int read_from_serial(){	
+%%%%	char c;
+%%%%
+%%%%	// TEST
+%%%%  	outportb(COM2 + 1 , 0);     // Turn off interrupts 
+%%%%
+%%%%	// PORT - Communication Settings
+%%%%	outportb(COM2 + 3 , 0x80);  // SET DLAB ON
+%%%%	outportb(COM2 + 0 , 0x0C);  // Set Baud rate - Divisor Latch Low Byte 
+%%%%	outportb(COM2 + 1 , 0x00);  // Set Baud rate - Divisor Latch High Byte 
+%%%%	outportb(COM2 + 3 , 0x03);  // 8 Bits, No Parity, 1 Stop Bit           
+%%%%	outportb(COM2 + 2 , 0xC7);  // Configure FIFO Control Register          
+%%%%	outportb(COM2 + 4 , 0x0B);  // Turn on DTR, RTS, and OUT2             
+%%%%  
+%%%%	do {
+%%%%		c = uart2getc2();
+%%%%		if (c != -1) {
+%%%%			printf ("%c \n", c);	
+%%%%		}
+%%%%	} while (c!=27);
+%%%%}
+%%%%*/
+
+\subsubsection{Syscalls}
+
+Der Syscall-Handler vom Ulix-Kernel erwartet einen korrekten Datentyp um die Informationen aus den CPU-Registern auszuwerten.
+Dieser Datentyp ist in Form einer Struktur [[regs]] umgesetzt worden.
+Die Struktur wurde vom Ulix-System übernommen und implementiert.
+
+<<CPU Registerstruktur>>=
+struct regs {
+  u_int gs, fs, es, ds;
+  u_int edi, esi, ebp, esp, ebx, edx, ecx, eax;
+  u_int int_no, err_code;
+  u_int eip, cs, eflags, useresp, ss;
+};
+@
+
+Jeder Syscall wird beim Laden des SLIP-Moduls mit einer Nummer und einer Funktion verknüpft.
+Die jeweilige Syscallnummer ist in der [[slip-mod.h]] schon deklariert.
+%Die Nummern von [[SYS_recvmsg]] und [[SYS_sendmsg]] sind zum Empfangen und Versenden von Daten aus dem Userland zum Kernel.
+%Die Nummer von [[SYS_mbufsize]] dient zur Ermittlung der Größe des IP-Buffers [[ipv4_mbuf]].
+%Mit der Nummer von [[SYS_delmbuf]] können einzelne Datenfelder aus dem IP-Buffer gelöscht werden.
+%Für die Ermittlung der Systemticks die vergangen sind seit dem Ulix-Kernel start dient die Nummer von [[SYS_gettick]].
+
+<<[[initialize_module]]: Syscalls>>=	
+  insert_syscall(SYS_recvmsg, syscall_recvmsg);
+  insert_syscall(SYS_sendmsg, syscall_sendmsg);
+  insert_syscall(SYS_mbufsize, syscall_mbufindex);
+  insert_syscall(SYS_delmbuf, syscall_delmbuf);
+  insert_syscall(SYS_gettick, syscall_gettick);
+@
+
+Die Funktion [[syscall_recvmsg]] holt die Daten aus dem [[ipv4_mbuf]] Array.
+Dazu kopiert [[syscall_recvmsg]] das angeforderte IP-Paket aus dem [[ipv4_mbuf]] in ein Array, welches der Funktion übergeben wird.
+
+<<Implementierung von [[syscall_recvmsg]]>>=	
+void syscall_recvmsg(struct regs *r){
+  if(r->ecx == ipv4_mbuf_index){
+    r->eax = -1;
+    return;
+  } else {
+    memcpy(r->ebx, &ipv4_mbuf[r->ecx][0], r->edx);
+	r->eax = 0;
+    return;
+  }
+}
+@
+
+Im CPU-Register [[ebx]] ist die Speicheradresse des zu befüllenden Arrays gespeichert.
+Das CPU-Register [[ecx]] gibt den Index für das IP-Paket vom[[ipv4_mbuf]] an. 
+Das CPU-Register [[edx]] enthält die Anzahl der zu kopierenden Bytes des IP-Pakets.
+Der [[ipv4_mbuf_index]] enthält den aktuellen Index des IP-Pakets vom [[ipv4_mbuf]] Arrays, welches aktuell vom SLIP-Kernelmodul genutzt wird um ankommende Daten vom UART zu speichern. Auf diesem Index darf erst wieder gelesen werden, sobald das IP-Paket fertig im [[ipv4_mbuf]] Array gespeichert wurde. Sollte der Index, aus der Anfrage vom Userland, mit dem aktuell im Kernel gesperrten Index übereinstimmen, so wird der Syscall abgebrochen.
+Es werden damit Fehler beim Auswerten der IP-Daten verhindert, falls das jeweilige IP-Paket noch nicht fertig gespeichert wurde. 
+%Der [[ipv4_mbuf_index]] wird nur dann erhöht, wenn ein IP-Paket vollständig übertragen wurde.
+
+Die Funktion [[syscall_sendmsg]] überträgt die Daten vom Userland zum Kernel, welche dann vom UART an die serielle Schnittstelle versendet werden.
+
+<<Implementierung von [[syscall_sendmsg]]>>=
+void syscall_sendmsg(struct regs *r){
+  r->eax = slip_send ((char*) r->ebx, (int) r->ecx);
+  return;
+}
+@
+
+Das CPU-Register [[ebx]] enthält den Zeiger auf das Array, welches Übertragen werden soll.
+Das CPU-Register [[ecx]] enthält die Anzahl der zu übertragenden Datenfelder.
+%Beide Register werden an die [[slip_send]] übertragen.
+
+Die Funktion [[slip_send]] überträgt die übergebenen Daten vom Userland an den UART.
+
+<<Implementierung von [[slip_send]]>>=
+int slip_send(u_char *msg, int len){
+  uart_putc(END);
+  while(len--){
+    switch (*msg) {
+      case END:
+        uart_putc(ESC);
+        uart_putc(ESC_END);
+      break;
+      case ESC:
+        uart_putc(ESC);
+        uart_putc(ESC_ESC);
+      break;
+      default:
+        uart_putc(*msg);
+      break;
+    }
+    msg++;	
+  }
+  uart_putc(END);	
+  return 0;
+}
+@
+
+Die Funktion [[uart_putc]] sendet die einzelnen Bytes an den UART.
+Die Funktion [[slip_send]] wurde aus dem RFC 1055 übernommen und leicht angepasst.
+
+%%%
+%%% RFC 1055 - SLIP umsetzten
+%%% http://tools.ietf.org/html/rfc1055
+%%%
+%%// 0### 	--> OKTAL
+%%// 0x### 	--> HEX
+
+Jedes SLIP-Datenpaket beginnt mit dem [[END]]-Zeichen gefolgt von den Daten.
+Der Datenstrom endet auch wieder mit einem [[END]]-Zeichen.
+%[[END]] stellt die Dezimalnummer 192 dar.
+Das Makros [[ESC]] hat die Dezimalnummer 219.
+Diese Werte liegen außerhalb des ASCII Codebereiches für Buchstaben.
+Jedoch können die Werte 192 und 219 als IP-Adressnummern verwendet werden.
+Deshalb muss bei der Übertragung geprüft werden, ob die Werte als Anfang- oder End-Zeichen gültig sind.
+Sollte es vorkommen, dass Daten übertragen werden sollen die ein [[END]]- oder [[ESC]]-Zeichen enthalten, so müssen diese ersetzte werden.
+Für das Ersetzten eines einzelnen [[END]] oder [[ESC]] Zeichen, werden einfach zwei Zeichen versendet. 
+Das [[END]]-Zeichen wird ersetzt durch das senden von [[ESC]] und [[ESC_END]].
+Und [[ESC]] wird ersetzt durch das Senden von [[ESC]] und [[ESC_ESC]].
+Am Ende der Übertragung wird ein [[END]] Zeichen geschickt um die SLIP-Übertragung zu beenden.
+
+Der Syscall [[syscall_delmbuf]] hat die Aufgabe das jeweilige Feld des IP-Buffers [[ipv4_mbuf]] zu löschen.
+
+<<Implementierung von [[syscall_delmbuf]]>>=
+void syscall_delmbuf(struct regs *r){
+  r->eax = delmbuf(r->ebx);
+  return;
+}
+@
+
+Das CPU-Register [[ebx]] hält die Indexnummer des zu löschend IP-Paketes.
+Diese Nummer wird an die Funktion [[delmbuf]] übergeben.
+
+<<Implementierung von delmbuf>>=
+short delmbuf(short index){
+  if (index == ipv4_mbuf_index){
+#ifdef DEBUG
+    printf("Index not deleted: %d\n", index);
+#endif
+    return -1;
+  }
+  int i;
+  for(i=0;i<MAX_IPV4_MBUF;i++){
+    ipv4_mbuf[index][i] = 0;
+  }
+#ifdef DEBUG
+  printf("Index deleted: %d\n", index);
+#endif
+  return 0;
+}
+@
+
+Die Funktion [[delmbuf]] prüft auch wieder ob der Array-Index der Variable [[index]] mit der [[ipv4_mbuf_index]] übereinstimmt.
+Ist dies der Fall, wird der Syscall abgebrochen.
+Ansonsten wird das IP-Paket mit der Indexnummer durch ein einfaches überschreiben des [[ipv4_mbuf[index]]] mit 0 gelöscht.
+%Die Länge des IP-Paketarrays ist in der Variable [[MAX_IPV4_MBUF]] definiert.
+
+Der nachfolgende Syscall [[syscall_mbufindex]] gibt dem Userland die maximale Anzahl an IP-Paketen an, die dass [[ipv4_mbuf]] Arrays speichern kann.
+%Mit [[get_sizeof_mbuf]] wird die Variable [[MAX_IPV4_MBUF_SIZE]] zurückgegeben an [[eax]].
+
+<<Implementierung von [[syscall_mbufsize]]>>=
+void syscall_mbufindex(struct regs *r){
+  r->eax = get_sizeof_mbuf();
+  return;
+}
+unsigned short get_sizeof_mbuf(){
+  return MAX_IPV4_MBUF_SIZE;
+}
+@
+
+Der Syscall [[syscall_gettick]] gibt die aktuelle Kernel-Systemtickvariable zurück.
+Dies dient zur Zeitmessung beim Versenden und Empfangen von ICMP-Paketen.
+
+<<Implementierung von [[syscall_gettick]]>>=
+void syscall_gettick(struct regs *r){
+  r->eax = system_ticks;
+  return;
+}
+@
+
+
+\subsubsection{Interrupts}
+
+Bei jedem Empfang von Daten am UART, wird ein Interrupt ausgelöst.
+Der Interrupt wird vom Interrupt-Handler entgegengenommen und dieser ruft dann die Funktion [[slip_isr]] auf, falls der Interrupt vom [[COM2]] kommt.
+Die Interrupt-Service-Routine ist registriert mit der Funktion [[irq_install_handler]] von der [[ulix.c]].
+Im Ulix-i386 Kernel sind dazu in der Funktion [[main]] folgende zwei Zeilen eingefügt:
+
+<<ulix.c IRQ Install Routine>>=
+extern void slip_isr();
+irq_install_handler (IRQ_COM2, slip_isr);
+@
+
+Die [[slip_isr]] macht nichts weiter, als die Funktion [[slip_recv]] mit den Parametern des aktuellen IP-Paketindex [[ipv4_mbuf_index]] und dem aktuellen IP-Paket Datenindex [[ipv4_mbuf_byte]] aufzurufen. Der dritte Parameter gibt die Anzahl der empfangenden Bytes an.
+
+<<Implementierung von [[slip_isr]]>>=
+void slip_isr(){
+  slip_recv(&ipv4_mbuf[ipv4_mbuf_index][ipv4_mbuf_byte]
+            ,1);
+}
+@
+
+\subsubsection{Speichern von eingehenden IP-Daten}
+
+Der eigentlich SLIP-Empfangsalgorithmus befindet sich in der Funktion [[slip_recv]] und entspricht dem RFC 1055.
+Die Funktion [[slip_recv]] hat zwei Parameter, zum Ersten den Zeiger [[msg]] auf dem aktuellen [[ipv4_mbuf]] Index und als Zweites die Länge [[len]] der einzulesenden Daten.
+Nach der Variablendeklaration beginnt die [[while]]-Schleife anhand der Länge [[len]] zu iterieren.
+Die [[while]] Schleife läuft solange bis die Anzahl der einzulesenden Bytes erreicht wurde.
+In der Variable [[c]] wird das aktuell vorliegende Byte vom UART Puffer geholt und zwischengespeichert.
+Dann folgt die Überprüfung des empfangenen Bytes.
+%Nach jedem eingelesen Byte wird die [[receive]] Variable um eins erhöht.
+
+<<Implementierung von [[slip_recv]]>>=
+void slip_recv(char *msg, int len){
+  <<[[slip_recv]]: Variablendeklaration>>
+  while(len!=0){
+    len--;		
+    c = uart_getc();		
+    receive++;
+    switch(c) {
+      case END:
+        <<[[slip_recv]]: END-Zeichen verarbeiten>>
+      break;
+      case ESC:
+        <<[[slip_recv]]: ESC-Zeichen verarbeiten>>
+      break;
+      case ESC_END:
+        <<[[slip_recv]]: [[ESC_END]]-Zeichen verarbeiten>>
+      case ESC_ESC:
+        <<[[slip_recv]]: [[ESC_ESC]]-Zeichen verarbeiten>>
+      default:
+        <<[[slip_recv]]: Alle anderen Zeichen verarbeiten>>
+      break;
+    }
+  }
+}
+@
+
+Die Variable [[c]] speichert das aktuelle Zeichen, welches am UART Port anliegt.
+Variable [[i]] und [[j]] sind Hilfsvariablen.
+
+<<[[slip_recv]]: Variablendeklaration>>=
+unsigned char c;
+int i,j;
+@
+
+Beim Eintreffen eines [[END]]-Zeichens wird geprüft, ob [[receive]] schon gesetzt ist.
+Falls [[receive]] noch nicht gesetzt ist, wird es gesetzt. 
+Ansonsten handelt es sich um das letzte [[END]] und somit ist das gesamte IP-Paket übertragen worden.
+In dem Fall, dass das letzte [[END]]-Zeichen übertragen wurde, wird nach den Daten-Bytes noch der aktuelle Systemtick gespeichert.
+%Im Debugmodus wird zusätzlich noch eine Ausgabe erzeugt mit dem Inhalt des [[ipv4_mbuf]] Arrays des jeweiligen IP Paketes.
+
+<<[[slip_recv]]: END-Zeichen verarbeiten>>=
+if(receive == 0){
+  receive=1;
+} else {
+
+  for(i=24,j=0;i>=0;i-=8,j++){
+    ipv4_mbuf[ipv4_mbuf_index][ipv4_mbuf_byte+j] = 
+             (system_ticks>>i & 0xFF);
+  }	
+
+#ifdef DEBUG
+  printf("\nINDEX: %d :: ipv4_mbuf: ", ipv4_mbuf_index);
+  for(i=0;i<MAX_IPV4_MBUF;i++){
+    printf(" %d",ipv4_mbuf[ipv4_mbuf_index][i]);
+  }
+  printf("\n");								
+#endif
+
+<<[[slip_recv]]: Bei END Zeichen, zurücksetzten der Variablen>>
+}
+@
+
+Der Systemtick selbst, ist eine Integer-Variable.
+Um das Integer nicht aufwändig in char zu konvertieren, werden einfach nur die Bits davon gespeichert.
+Das Bitshift der [[for]] Schleife erledigt diese Aufgabe.
+Dazu wird viermal ein Bitshift nach rechts um 8 Bits vorgenommen und mittels logischen \DQ{und} auf [[0xFF]] nur die letzten 8 Bits herausgefiltert.
+
+Nach der [[DEBUG]]-Ausgabe folgt die Zurücksetzung einiger Variablen.
+%Die [[ipv4_mbuf_byte]] wird wieder auf 0 gesetzt.
+%Der IP Paket Index [[ipv4_mbuf_index]] wird erhöht, und falls dieser größer gleich der maximalen IP Paketanzahl ist, wieder
+%auf 0 gesetzt.
+Der IP-Paketindex wird erhöht, und bei erreichen der maximalen Array-Länge wieder auf Anfang gestellt.
+
+<<[[slip_recv]]: Bei END Zeichen, zurücksetzten der Variablen>>=
+  ipv4_mbuf_byte=0;
+  ipv4_mbuf_index++;
+  receive = -1;
+  esc_receive = 0;				
+  if(ipv4_mbuf_index >= MAX_IPV4_MBUF_SIZE) {
+    ipv4_mbuf_index = 0;
+  }
+@
+
+Bei dem Empfang eines [[ESC]]-Zeichen wird dies vermerkt.
+
+<<[[slip_recv]]: ESC-Zeichen verarbeiten>>=
+esc_receive = 1;
+*msg = c;
+@
+
+Bei dem Empfang eines [[ESC_END]]-Zeichen wird geprüft, ob vorher schon einmal ein [[ESC]]-Zeichen übertragen wurde, falls dies der Fall ist, wird das eingelesene Zeichen als [[END]]-Zeichen überschrieben und der [[ESC]]-Zeichen-Vermerkt wieder gelöscht.
+
+<<[[slip_recv]]: [[ESC_END]]-Zeichen verarbeiten>>=
+if(esc_receive == 1){
+  c = END;
+  esc_receive = 0;
+}
+@
+
+Bei dem Empfang eines [[ESC_ESC]]-Zeichen, wird auch wieder überprüft, ob das vorherige Zeichen ein [[ESC]]-Zeichen war.
+%Ist dies der Fall, wird [[c]] überschrieben als [[ESC]] Zeichen und Variable [[esc_receive]] wieder zurückgesetzt auf 0.
+Ist dies der Fall, wird das empfangene Zeichen als [[ESC]] ersetzt, und der [[ESC]]-Zeichen-Vermerkt gelöscht.
+
+<<[[slip_recv]]: [[ESC_ESC]]-Zeichen verarbeiten>>=	
+if(esc_receive == 1){
+  c = ESC;
+  esc_receive = 0;
+}
+@
+
+Bei jeden anderen empfangenen Zeichen als [[END]], [[ESC]], [[ESC_END]] oder [[ESC_ESC]], wird die [[default]] Verzweigung vom [[switch]] aufgerufen.
+Sollte zuvor ein [[ESC]] Zeichen empfangen worden sein, wird der [[ESC]]-Zeichen-Vermerkt gelöscht.
+Es folgt noch die Prüfung ob das Ende vom Array [[ipv4_mbuf]] erreicht wurde.
+%Dazu wird die Variable [[receive]] mit der Variable [[MAX_IPV4_MBUF]] verglichen.
+Falls das IP-Array voll ist, wird das Paket im Array [[ipv4_mbuf]] mit einer Ausgabe verworfen.
+Ansonsten wird der IP-Paketindex erhöht und die Schreibposition für das nächste empfangene Zeichen auf Anfang gestellt.
+Nach der Prüfung auf das Ende des Arrays [[ipv4_mbuf]], wird das Byte aus dem UART Puffer gespeichert.
+Die Variable [[ipv4_mbuf_byte]] wird auf das nächste freie Feld im Array [[ipv4_mbuf]] des aktuellen IP-Paket Indexes [[ipv4_mbuf_index]] erhöht.
+
+<<[[slip_recv]]: Alle anderen Zeichen verarbeiten>>=
+if(esc_receive == 1){
+  esc_receive = 0;
+}
+if(receive == MAX_IPV4_MBUF){
+  printf("\nPacket to large for Buffer. Drop packet");
+  for(i=0;i<=MAX_IPV4_MBUF; i++){
+    ipv4_mbuf[ipv4_mbuf_index][i] = 0;
+  }
+  ipv4_mbuf_byte = 0;
+  receive = -1;
+  break;
+}
+if(receive >= 1){
+  *msg = c;
+  ipv4_mbuf_byte++;
+}
+@
+
+\subsection{IPv4/ICMP-Header}
+
+Die Header der Protokolle IP und ICMP werden definiert.
+Für beide Protokolle werden Strukturen verwendet.
+Die benötigten Definitionen befinden sind in der Datei [[ipv4-tools.h]].
+
+\subsubsection{Aufbau des IP-Headers}
+
+Das IPv4-Paket wird als einfache Struktur deklariert und entspricht dem RFC 791 \cite{rfc791}.
+Die einzelnen IPv4-Header-Felder sind wie folgt konfiguriert:
+
+<<IPv4 Paketstruktur>>=
+typedef struct ip_header {
+ #ifdef LITTLE_ENDIAN
+  u_char    HEADER_LENGTH:4,
+            VERSION:4;
+ #endif
+ #ifdef BIG_ENDIAN
+  u_char    VERSION:4,
+            HEADER_LENGTH:4;
+ #endif
+  u_char    TOS;
+  u_short   TOTAL_LENGTH;
+  u_short   IDENTIFICATION;
+ #ifdef LITTLE_ENDIAN
+  u_short   FLAGS:3,
+            FRAGMENT_OFFSET:13;
+ #endif
+ #ifdef BIG_ENDIAN
+  u_short   FRAGMENT_OFFSET:13,
+            FLAGS:3;
+ #endif
+  u_char    TIME_TO_LIVE;
+  u_char    PROTOCOL;
+  u_short   HEADER_CHECKSUM; 
+  u_int     SOURCE_IPADDRESS;
+  u_int     DESTINATION_IPADDRESS;
+  u_int     OPTIONS_AND_PADDING;
+} __attribute__((packed)) IP; 
+@
+
+%Die [[HEADER_LENGTH]] und die [[VERSION]] teilen sich jeweils 4 Bit eines Chartypes (8 Bit).
+Je nach definierten Endiantyp, wird die Anordnung der IP-Header-Felder [[HEADER_LENGTH]] und [[VERSION]] sowie [[FLAGS]] und [[FRAGMENT_OFFSET]] angepasst.
+Dies ist wichtig für den Versand und Empfang von Daten über das Netzwerk.
+Die Festlegung des Endian-Typs ist im Kapitel \DQ{Aufbau der ipv4-tools.h} beschrieben.
+Das Feld [[VERSION]] enthält die IP-Version. Im Feld [[HEADER_LENGTH]] ist die Länge des IP-Headers als Double-Word-Wert angegeben.
+Das Feld [[TOS]] ist für den Wert von Type of Service. Der Wert von Total Length des IP-Pakets wird im Feld [[TOTAL_LENGTH]] gespeichert.
+Der Identification Wert wird in das Feld [[IDENTIFICATION]] geschrieben.
+Die Felder [[FLAGS]] und [[FRAGMENT_OFFSET]] enthalten die Informationen zur Fragmentierung von IP-Paketen.
+Das Feld [[TIME_TO_LIVE]] enthält den Wert von Time-To-Live, sowie das Feld [[PROTOCOL]] die Protokoll Nummer des IP-Pakets.
+Im Feld [[HEADER_CHECKSUM]] ist die Prüfsumme des IP-Headers enthalten.
+Die Felder [[SOURCE_IPADDRESS]] und [[DESTINATION_IPADDRESS]] enthalten die IP-Adressen von Absender und Empfänger.
+Die IP-Header-Felder Option und Padding sind in der Struktur als ein Feld [[OPTIONS_AND_PADDING]] vorhanden.
+Wichtig ist, dass die Struktur zusammenhängend ohne sogenanntes Padding (Leerstellen) im System gespeichert wird.
+Dazu wird das Attribut [[((packed))]] hinter die Struktur geschrieben, damit der C Compiler die Struktur ohne padding erzeugt.
+
+\subsubsection{Aufbau des ICMP-Headers}
+
+Der Aufbau des ICMP-Paket ist sehr einfach gehalten und entspricht dem RFC 792 \cite{rfc792}.
+Die einzelnen ICMP Pakettypen und Kodierungen werden durch Makros definiert.
+Die Makros [[ICMP_REQ_TYPE]] und [[ICMP_REQ_CODE]] werden zusammen verwendet um ein ICMP-Request-Paket zu erzeugen.
+Dass Antwortpaket auf ein ICMP-Request-Paket wird mit den Makros [[ICMP_REPLY_TYPE]] und [[ICMP_REPLY_CODE]] erzeugt.
+
+<<ICMP Paketstruktur>>=
+#define ICMP_REQ_TYPE   8
+#define ICMP_REQ_CODE   0
+#define ICMP_REPLY_TYPE 0
+#define ICMP_REPLY_CODE 0
+@
+
+Die ICMP-Header-Struktur besteht aus nur sechs Datenfeldern und muss auch als zusammenhängendes Datenfeld im Programm gespeichert werden.
+
+<<ICMP Paketstruktur>>=
+typedef struct icmp_header {
+  u_char  TYPE;
+  u_char  CODE;
+  u_short CHECKSUM;
+  u_short ID;
+  u_short SEQ;
+  u_int	  DATA;
+} __attribute__((packed)) ICMP;
+@
+
+Die ICMP-Header-Felder [[TYPE]] und [[CODE]] bestimmen den ICMP-Pakettyp. Diese Felder werden, je nach Pakettyp, mit den oben definierten Makros befüllt.
+Das Feld [[CHECKSUM]] enthält die Prüfsumme des ICMP-Headers vom erzeugten Paket. 
+Die Felder [[ID]] und [[SEQ]] stellen die Identifikations- und Sequenz-Nummer dar, und werden mit fortlaufenden Nummern verwendet, um bei Request und Responce festzustellen welches Antwortpaket zu welcher Anfrage gehört.
+Das Feld [[DATA]] ist flexibel gehalten und kann mehr als 32 Bit groß sein.
+In der Implementierung wird es auf 32 Bit begrenzt.
+
+\subsection{IPv4-Userlandfunktionen}
+
+Ein kurzer Überlick der Implementierungen der Userlandfunktionen.
+Nachdem der IP- und ICMP-Protokollheader definiert wurden, folgen die Definitionen und Deklarationen von Makros, Variablen und Funktionen in der [[ipv4-tools.h]]. Dann folgt die Übersicht aller Funktionen innerhalb der [[ipv4-tools.c]].
+Zuerst werden alle \DQ{lowlevel} Hilfsfunktionen zur Verarbeitungen der Informationen für die IP- und ICMP-Header implementiert.
+Danach folgen die \DQ{Highlevel} Funktionen zur Bearbeitung der IP-Pakete.
+Die \DQ{Highlevel} Funktionen werden zusammen mit dem IP-Daemon Beschrieben um den Zusammenhang besser darzustellen.
+Zum Schluss folgt dann die Implementierung des [[ping]] Programmes.
+
+\subsubsection{Aufbau der ipv4-tools.h}
+
+Die Headerdatei [[ipv4-tools.h]] enthält alle Variablen, Markos und Funktionsdefinitionen welche, in der [[ipv4-tools.c]] verwendet werden.
+%Das Preprozessormakro [[__IPV4_TOOLS__]] wird definiert, um ein erneutes der Datei "ipv4-tools.h" in anderen Dateien zu ermöglichen ohne das der Compiler einen Fehler ausgibt.
+Nach der Preprozessorüberprüfung von [[__IPV4_TOOLS__]] werden die Makros definiert.
+Danach folgen die Strukturen für das IP- und ICMP-Paket und zum Schluss werden alle Funktionen deklariert.
+
+<<ipv4-tools.h>>=  
+#ifndef __IPV4_TOOLS__
+#define __IPV4_TOOLS__
+<<Userland Definitionen>>
+<<Endian Definitionen>>
+<<IP Protokollnummern>>
+<<IPv4 Paketstruktur>>
+<<ICMP Paketstruktur>>
+<<Deklarationen der [[Userland-Funktionen]]>>
+#endif
+@
+
+Die IP- und ICMP-Protokollnummern werden als Makros definiert.
+Es wird die IP-Version 4 verwendet und ICMP mit der Protokollnummer 1 definiert.
+
+<<IP Protokollnummern>>=
+#define IP_VERSION       4
+#define IP_PROTOCOL_ICMP 1
+@
+
+Es folgen die weiteren Definitionen, welche nachfolgend erklärt werden.
+%Die Kurzschreibweise der Datentypen werden definiert.
+
+<<Userland Definitionen>>=
+#define u_char unsigned char
+#define u_short unsigned short
+#define u_int unsigned int
+#define size_t int
+#define NULL ((void*)0)
+#define EMPTY           ""
+#define O_RDONLY         0
+#define SYS_recvmsg		27
+#define SYS_sendmsg		28
+#define SYS_mbufsize	29
+#define SYS_delmbuf 	30
+#define SYS_gettick		31
+#define DEBUG
+#define FILE_HOSTS      "/etc/hosts"
+#define FILE_HOSTNAME   "/etc/myhostname"
+#define MAXLEN_HOSTNAME 64
+char hostname[MAXLEN_HOSTNAME];
+@
+
+Wie im Kernelmodul, werden im Userland auch einige Makros gebraucht und gleich definiert.
+Das Makro [[EMPTY]] dient zur Prüfung auf leere Strings.
+Makro [[O_RDONLY]] definiert den Hexadezimalwert für das Öffnen einer Datei im readonly Modus.
+Die Syscallnummern vom Kernelmodul müssen auch im Userland identisch sein. Deshalb werden diese nochmals definiert.
+[[FILE_HOST]] enthält den fixen Pfad der Hostsdatei.
+Makro [[FILE_HOSTNAME]] gibt die Datei an, worin der Hostname des Systems gespeichert ist.
+Die maximale Länge des Hostnames wird auf 64 Zeichen Begrenzt.
+
+Um die systemspezifische Endian-Einstellung zu setzten, wird das [[ARCH]] Makro gesetzt.
+%Durch die nachfolgende [[if]] Anweisung zum vergleichen des Makros [[ARCH]], wird der Endian bestimmt. 
+Das Ulix-i386 läuft auf einer Intel i386 Architektur, welche Little-Endian verwendet.
+Die Endianess bestimmt die Reihenfolge der Bytes beim Schreiben und Lesen im Computersystem.
+
+<<Endian Definitionen>>=
+#define ARCH_INTEL      1
+#define ARCH_SPARC	    2
+#define ARCH            ARCH_INTEL
+
+#if ARCH == ARCH_INTEL
+#define              LITTLE_ENDIAN
+#else
+#define                 BIG_ENDIAN
+#endif
+@
+
+Es folgen die Definitionen der Funktionen in der Datei [[ipv4-tools.h]].
+
+<<Deklarationen der [[Userland-Funktionen]]>>=
+<<Einbinden von Ulixlib Funktion>>
+
+u_short calc_ip_hl(IP *ptr);
+u_short calc_ip_tl(int len_ip_hl, int proto_hl);
+u_short checksum (u_short count, u_short * ptr);
+void check_checksum(IP *ip_packet, ICMP *icmp_packet);
+int check_ipaddr(char *ipaddr);
+void get_hostname(char *cHostname);
+void set_hostname(char *hostname);
+void get_ip_by_name(char *cIPaddr, char *search);
+void get_name_by_ip(char * , char *);
+void inet_iton(u_int number, char *ptr);
+u_int inet_atoi(char * cIPAddr);
+u_int bswap32(u_int value);
+u_short bswap16(u_short value);
+
+<<IP- und ICMP-Paketfunktionen>>
+@
+
+Die Berechnung der IP-Headerlänge wird in der Funktion [[calc_ip_hl]] implementiert.
+Für die Berechnung der IP-Paket-Gesamtlänge dient die Funktion [[calc_ip_tl]].
+Die Checksummen-Berechnung für das IP- oder ICMP-Paket ist in der Funktion [[checksum]] implementiert.
+Das Prüfen der Checksumme von empfangenen Paketen erledigt die Funktion [[check_checksum]].
+Für die Überprüfung einer gültigen IP-Adresse dient die Funktion [[check_ipaddr]].
+Zur Ermittlung und Einstellung des Hostnames sind die Funktionen [[get_hostname]] und [[set_hostname]] da.
+Die Funktionen [[get_ip_by_name]] und [[get_name_by_ip]] ermitteln die IP bzw. den Hostname anhand der gesuchten IP oder Hostnamen.
+Die Umwandlung der IP-Adresse als String in eine Zahl vom Datentyp Integer und umgekehrt, wird über die Funktionen [[inet_iton]] und [[inet_atoi]] erledigt. Für die Bearbeitung und Konvertierung der Variablen braucht es noch ein paar Hilfsmethoden.
+% Die [[bitswap32]] und [[bitswap8]] drehen den Verlauf der Wert einer Variable um.
+% Einmal für integer und einmal für char.
+Die Funktionen [[bswap32]] und [[bswap16]] ändern die Byteorder des übergebenen Datentypen.
+% Ähnlich der [[bitswap32]] Funktion, nur das hier Byte für Byte getauscht wird, anstatt die einzelnen Bits.
+
+Es folgen weitere Funktionen zur Bearbeitung und Manipulation von IP- und ICMP-Paketen.
+
+<<IP- und ICMP-Paketfunktionen>>=
+int cmd_ping(char *);
+short get_icmp_packet(short index, IP *ip_packet, 
+                      ICMP *icmp_packet, char *timearray);
+void find_packet(short mbuf_size, char *search_ip, 
+                 short search_proto, char *ptr);
+short find_icmp_packet(short index, short type, short code, 
+                       short id, short seq, IP *ip_packet, 
+                       ICMP *icmp_packet, char *timearray);
+void icmp_response(IP *ip_packet, ICMP *icmp_packet);
+void remove_unused_packets(short index);
+short remove_packet(short index);
+int ipd();
+@
+
+Der Shellbefehl [[ping]] ist in der Funktion [[cmd_ping]] realisiert.
+Die Funktion [[get_icmp_packet]] kopiert ein ICMP-Paket aus dem Kernel-Buffer anhand eines übergebenen Indexwertes.
+Die Funktion [[find_packet]] sucht anhand der übergebenen IP-Adresse und des Protokolls im Kernel nach IP-Paketen die dem Suchmuster entsprechen. Ist dies der Fall, wird das übergebene Array mit der Protokollnummer des gefundenen Paketes gespeichert.
+Die Funktion [[find_icmp_packet]] sucht anhand der übergebenen ICMP-Protokollfelder [[type]], [[code]], [[id]] und [[seq]] (Sequence), sowie der IP-Adresse, im Kernel nach dem passenden Paket. Wird ein Paket gefunden, welches zu den Suchmustern passt, werden das IP-Paket, das ICMP-Paket und der Systemtick vom Speicherzeitpunkt in die einzelnen Strukturen [[ip_packet]], [[icmp_packet]] und in das Array [[timearray]] gespeichert.
+Die Funktion [[icmp_response]] erstellt und sendet ein ICMP-Antwortpaket.
+Die Funktion [[remove_unused_packets]] löscht Pakete aus dem Kernel-Buffer welche entweder zu lange gespeichert und nicht gelsöcht wurden, oder wenn nicht verwendetet Pakete noch gespeichert sind.
+Die Funktion [[remove_packet]] löscht ein Paket, anhand des Indexwertes, direkt aus dem Kernel-Buffer.
+Der IP-Daemon, welcher auch für die Beantwortung von ICMP-Request-Paketen zuständig ist, ist in der Funktion [[ipd]] implementiert.
+
+Die Funktion [[printf]] wird benötigt für die Ausgabe von Text auf der Shell-Kommandozeile.
+Die Funktion [[strlen]] und [[strncpy]] sind für die Bearbeitung von Strings und [[open]], [[read]] und [[close]] werden für die Dateibearbeitung benötigt.
+Die 6 Funktionen ([[printf]], [[strlen]], [[strncpy]], [[open]], [[read]], [[close]]) stammen von der \DQ{ulixlib.c} und werden deshalb als extern eingebunden.
+
+<<Einbinden von Ulixlib Funktion>>=
+extern int printf(const char *format, ...);
+extern int strlen(const char *str);
+extern void *strncpy (void *dest, const void *src, 
+                      size_t count);
+extern int open(const char *path, int oflag, ...);
+extern int read(int fildes, void *buf, size_t nbyte);
+extern int close(int fildes);
+@
+
+\subsubsection{Aufbau der ipv4-tools.c}
+
+In der [[ipv4-tools.c]] wird als erstes die Lizenz als Kommentar eingefügt.
+Dann folgt die Einbindung der [[ipv4-tools.h]], mit allen Makros, Variablen und Funktionsdefinitionen.
+Danach sind die einzelnen Funktionen implementiert.
+Die einzelnen Funktionen werden nachfolgend im Detail erklärt.
+
+%%%
+%%% TODO: Überblick basteln.
+%%% 
+
+<<ipv4-tools.c>>=
+<<license>>
+
+#include "ipv4-tools.h"
+
+<<Implementierung von [[calc_ip_hl]]>>
+<<Implementierung von [[calc_ip_tl]]>>
+<<Implementierung von [[get_hostname]]>>
+<<Implementierung von [[get_ip_by_name]]>>
+<<Implementierung von [[set_hostname]]>>
+<<Implementierung von [[inet_atoi]]>>
+<<Implementierung von [[inet_iton]]>>
+<<Implementierung von bswap32>>
+<<Implementierung von checksum>>
+<<Implementierung von bswap16>>
+<<Implementierung von [[check_checksum]]>>
+<<Implementierung von [[check_ipaddr]]>>
+<<Implementierung von IP Daemon>>
+<<Implementierung von [[find_packet]]>>
+<<Implementierung von [[find_icmp_packet]]>>
+<<Implementierung von [[get_icmp_packet]]>>
+<<Implementierung von [[icmp_response]]>>
+<<Implementierung von [[remove_unused_packets]]>>
+<<Implementierung von [[remove_packet]]>>
+<<Implementierung eines ping Programms>>
+@
+
+
+
+%%%
+%%% Test Buffer ausgabe
+%%%
+% < < ipv4-tools.h > > =
+%void list_ipv4buf();
+%void del_ipv4buf();
+%@
+%
+%< < ipv4-tools.c > > =
+%void list_ipv4buf(){
+%	unsigned short mbuf_size;
+%	mbuf_size = syscall2(SYS_mbufsize);
+%
+%	unsigned char BUFFER[255];
+%
+%	short ret;
+%	int i,j;
+%	printf("Buffer: \n");
+%
+%	for(i=0;i<mbuf_size;i++){		
+%		ret = syscall4(SYS_recvmsg, &BUFFER, i, 40);
+%		if(ret == -1){
+%			printf("[%d]: in use ... \n", i);
+%		} else {
+%			printf("[%d]: ", i);
+%			for(j=0;j<40;j++){
+%				printf(" %d", BUFFER[j]);
+%			}
+%			printf("\n");	
+%		}
+%		
+%	}
+%}
+%
+%void del_ipv4buf(){
+%	unsigned short mbuf_size;
+%	mbuf_size = syscall2(SYS_mbufsize);
+%
+%	int i,j;
+%	printf("Clear Buffer: \n");
+%	for(i=0;i<mbuf_size;i++){		
+%		remove_packet(i);
+%	}
+%	printf("done\n");
+%}
+%\@
+
+\subsubsection{Berechnung der IP-Headerlänge}
+
+Die Berechnung der IP-Headerlänge ist wichtig, um zu ermitteln wie groß der IP-Header ist und um zu ermitteln wann das nächste Protokoll anfängt.
+Für die Berechnung der IP-Headerlänge wird die Struktur von IP benötigt.
+Dazu wird die Speicheradresse der Struktur an den Zeiger [[ptr]] als Parameter übergeben.
+Weil die Implementierung auf Padding und andere Optionsfelder verzichtet, wird ein fixer Wert von fünf zurückgegeben.
+Falls jedoch die IP-Felder von [[OPTIONS_AND_PADDING]] gefüllt sind, wird die Größe berechnet.
+Weil [[sizeof]] immer nur die Bytes angibt, und die IP-Header-Länge ein komplettes Feld von 32 Bit angibt, wird die Größe der Struktur durch vier geteilt.
+
+<<Implementierung von [[calc_ip_hl]]>>=
+u_short calc_ip_hl(IP *ptr){
+	if (ptr->OPTIONS_AND_PADDING == 0){
+		return 5;
+	} else {
+		return (sizeof(*ptr)/4);
+	}
+}
+@
+
+\subsubsection{Berechnung der IP-Paketgesamtlänge}
+
+Die Berechnung der Total Length ist in der Funktion [[calc_ip_tl]] implementiert.
+Der minimale IP-Header ist 20 Bytes und ein IP-Paket kann maximal bis zu 64 KB groß sein.
+Die Berechnung ist sehr einfach. Es wird die Länge des IP-Headers inklusive der Länge des zu übertragenen Protokolls addiert.
+%Der Funktion [[calc_ip_tl]] wird der Wert [[IHL]] und \Abbrev{HL}{{H}eader {L}ength} übergeben.
+
+<<Implementierung von [[calc_ip_tl]]>>=
+u_short calc_ip_tl(int len_ip_hl, int proto_hl){
+	return ((len_ip_hl * 4) + proto_hl);
+}
+@
+
+\subsubsection{Berechnung der Prüfsumme}
+
+% RFC: 1071
+% Use "Internet Checksum"
+% http://tools.ietf.org/html/rfc1071
+
+%% Quellen:
+%% http://einstein.informatik.uni-oldenburg.de/rechnernetze/einerkomplement.htm
+%% http://www.thegeekstuff.com/2012/05/ip-header-checksum/
+
+%%%% TODO: Checksum Berechnung Grafisch darstellen.
+Die Prüfsumme wird benötigt für die Prüfung eines gültigen Protokollheaders.
+Die [[checksum]] Berechnung entspricht dem RFC 1071 und ist wie folgt aufgebaut.
+
+<<Implementierung von checksum>>=
+u_short checksum (u_short count, u_short * ptr) {
+  int sum = 0;
+  while (count > 1) {
+    sum += *ptr++;
+    count-=2;
+  }
+  if( count > 0 ) {
+    sum += * (u_char *) ptr;
+  }
+  while (sum >> 16){
+    sum = (sum & 0xFFFF) + (sum >> 16);
+  }
+  return (unsigned short) ~sum;
+}
+@
+
+Es wird der Funktion [[checksum]] die größe des zu prüfenden Feldes an Variable [[count]] übergeben, und das zu prüfende Array selbst als Speicheradresse an den Zeiger [[*ptr]]. Die Variable [[sum]] ist der errechnete Rückgabewert der Funktion.
+Der Zeiger [[*ptr]] zeigt auf ein unsigned short, weil somit die Größe der Felder beim Einlesen auf 16 Bit eingeschränkt wird.
+Die Struktur auf die [[ptr]] zeigt kann damit in 16 Bit Blöcke iteriert werden. 
+Es ist auch wichtig, dass die Strukturen vom IP- und ICMP-Paket keine Füllfelder (Padding) besitzen. Das wurde bei der Deklaration schon verhindert durch das [[packed attribute]] welches der Compiler nutzt, um keine Leer oder Füllfelder zwischen den einzelnen Daten zu schreiben.
+
+Die Prüfsumme selbst ist eine einfache bitweise Berechnung mit Übertrag.
+Das Array [[*ptr]] wird iteriert, und jedes Feld zusammen addiert in die Variable [[sum]].
+Bei einem 32 Bit Datentyp, werden jeweils die beiden 16 Bit Felder miteinander addiert.
+Dies geschieht solange, bis alle Werte addiert wurden.
+Wichtig ist, dass der Datentyp, von der Summe ([[sum]]), einen größeren Wertebereich besitzt als die iterieren Werte ([[ptr]]) selbst.
+Andernfalls verliert man den Übertrag. Deshalb ist die Variable [[sum]] ein integer Datentyp, und die Felder der Struktur ein short Datentyp.
+%Die Schleife zählt [[count]] immer minus zwei, weil die sizeof von der IP Struktur in Byte angeben wird.
+%Es werden jedoch immer zwei Bytes addiert, deshalb wird der [[count]] Wert immer um zwei subtrahiert.
+%Falls die Größe des Feldes [[count]] einen ungerade Wert hat, wird das letzte Feld noch addiert.
+Danach wird der Übertrag noch addiert durch ein Bitshift um 16 Bits nach rechts.
+Das Ganze geschieht zweimal.
+Im Prinzip würde ein einfaches Bitshift auch ausreichen. 
+Aber der Code ist somit theoretisch auch 64 Bit fähig, sofern der integer Datentyp auch 64 Bit groß ist.
+Zum Schluss wird das Ergebnis noch negiert und zurückgegeben.
+
+%	/*	Beispiel übertrag
+%	 *
+%	 *		3 		8			    0
+%	 *	0000001100001000	0000000000000000
+%	 *	^--*addr  		    ^---*addr++	
+%	 *
+%	 *
+%	 * count -2 deshalb, weil jedes 2. Byte gezählt wird.
+%	 *
+%	 * Bei IP mit 5 Byte Header länger ergibt es 20 Bytes, als 10 Additionen maximal
+%	 *
+%	 */
+
+%	/* Beispiel bei: TYPE = 8; Code = 0; Data = 0xFFFF;
+%	 * 
+%	   00000000 00000001  00000011 00000111
+%		 >> 16		      00000000 00000001 +
+%		 >> 16		      00000000 00000000 +
+%						  =================
+%						  10000001100001000 ~
+%						  =================
+%						  01111110011110111
+%	 */
+
+\subsubsection{Validierung einer IP-Adresse}
+
+Beim Einlesen und verarbeiten einer IP-Adresse, muss sichergestellt werden, das die IP-Adresse auch gültig ist.
+Die Überprüfung einer gültigen IP-Adresse ist mit der Funktion [[check_ipaddr]] implementiert.
+Die Funktion wird bei der Ermittlung der IP-Adresse aus der Hostsdatei benötigt.
+Eine IPv4-Adresse besteht aus 4 Nummern mit den Werten von 0 bis 255, die durch 3 Punkte getrennt werden.
+Die Länge einer IP-Adresse beträgt minimale 7 Zeichen und maximal 16 Zeichen.
+Eine Beispiel-IP-Adresse wäre die \DQ{127.0.0.1}. 
+
+Die Funktion [[check_ipaddr]] gibt nur dann den Wert 0 zurück, wenn die IP-Adresse gültig ist.
+Innerhalb der [[do-while]] Schleife wird jedes einzelne Zeichen der übergebenen IP-Adresse geprüft.
+Gültig sind nur Zeichen der Zahlen von 0 bis 9 sowie das \DQ{.} Zeichen und das Array abschließende \DQ{0} Zeichen.
+Bei jeden anderen Zeichen bricht die Funktion ab, und es wird ein negativer Wert zurückgegeben.
+Als erstes wird die Anzahl der schon verarbeiteten Zeichen geprüft.
+Sollten es mehr als 16 Zeichen (einschließlich dem \DQ{0} Zeichen) sein, so kann es sich nicht um eine gültige IPv4-Adresse handeln.
+In dem Fall bricht die Funktion ab.
+Bei vorkommen eines \DQ{.} Zeichens oder von Zahlen zwischen 0 bis 9 erfolgen weitere Verarbeitungen.
+Bei einem \DQ{0} Zeichen wird abschließend geprüft ob vorher die Punktzeichen ermittelt wurden, und die Anzahl der verarbeiteten Zeichen stimmen.
+
+<<Implementierung von [[check_ipaddr]]>>=
+int check_ipaddr(char *ipaddr){
+  <<[[check_ipaddr]]: Variablendeklarationen>>
+  do{
+   	ccount++;
+    if(ccount > 16) {
+      return -1;
+    }
+    if(*ipaddr == '.'){
+      <<[[check_ipaddr]]: Punktzeichen Verarbeitung>>
+    } else if((*ipaddr >= 48) && (*ipaddr <= 57)){	
+      <<[[check_ipaddr]]: Zahlen Verarbeitung>>
+    } else if (*ipaddr == '\0'){
+      if((pcount == 3) && (ccount > 6)){
+        return 0;
+      }
+      break;   
+    } else {
+	  return -2;
+	}
+	lastchar = *ipaddr;
+  } while (*ipaddr++);
+  if((pcount == 3) && (ccount > 6)){
+    return 0;
+  }
+  return -1;
+}
+@
+
+Die Variable [[pcount]] zählt alle vorkommenden Punkte in dem IP-Adressstring.
+Der [[ccount]] zählt alle vorkommenden Zeichen in der IP-Adresse.
+Die Variable [[num]] berechnet den Zahlenwert für jede Stelle in der IP-Adresse.
+Mit der Variable [[lastchar]] wird das vorhergehende Zeichen in der IP-Adresse gespeichert.
+
+<<[[check_ipaddr]]: Variablendeklarationen>>=
+u_short pcount = 0;
+u_short ccount = 0;
+u_short num = 0;
+char lastchar;
+@
+
+Bei vorkommen des Punktzeichens, wird der [[pcount]] Wert erhöht und geprüft.
+Wurden mehr als 3 Punkte ermittelt und ist das vorherige ebenfalls ein Punktzeichen gewesen, so bricht die Funktion ab. 
+%Die Variable [[num]] wird wieder auf 0 gesetzt für die nächste Zahlenstelle.
+
+<<[[check_ipaddr]]: Punktzeichen Verarbeitung>>=
+pcount++;  
+if((pcount > 3) || (lastchar == *ipaddr)){
+  return -1;	
+}
+num = 0;
+@
+
+Wenn das Zeichen in der IP-Adresse eine Zahl ist, so muss diese zum Gesamtwert der Zahlenstelle berechnet werden.
+Die Variable [[num]] wird dazu mit 10 multipliziert und dann mit dem Zahlenwert des Zeichens aus [[*ipaddr]] addiert.
+Wenn der Wert von [[num]] größer als 255 ergibt, wird die Funktion abgebrochen.
+
+<<[[check_ipaddr]]: Zahlen Verarbeitung>>=
+num = (num*10) + (*ipaddr - '0');
+if(num > 255){
+  return -1;  
+}
+@
+
+\subsubsection{Ermittlung des eigenen Hostnames}
+
+Unter Unix, Linux und sogar Windows enthalten das Programm [[hostname]], um den eigenen Hostnamen des laufenden Hostsystems zu erhalten.
+Mit diesem Programm wird der aktuelle Hostname ausgelesen und auf der Textkonsole ausgegeben.
+Dieser Ablauf des Programmes [[hostname]] wurde ähnlich implementiert.
+Unter Ulix reicht es die Datei \DQ{/etc/myhostname} auszuwerten.
+Der Dateiname selbst ist im Makro [[FILE_HOSTNAME]] definiert.
+Diese Datei wird beim Start vom SLIP-Modul eingelesen und als globale Variable [[hostname]] gespeichert. 
+%Die maximale Hostname länge beträgt 64 Zeichen. 
+Die Funktion [[get_hostname]] erwartet eine Speicheradresse eines Arrays.
+Dieses Array, auf das der Zeiger [[*cHostname]] zeigt, wird befüllt mit dem Hostname aus der Datei die im Array [[FILE_HOSTNAME]] gespeichert ist.
+Als erstes wird geprüft, ob die Variable [[hostname]] schon gesetzt ist, und falls ja wird dem Zeiger [[*cHostname]] der aktuelle Wert aus [[hostname]] übertragen und die Funktion beendet. Zum Vergleichen ob der Hostname schon gesetzt ist nicht, wird die Variablen [[hostname]] und das Makro [[EMPTY]] verglichen. 
+%Sollte der Hostname leer sein, so gibt die Funktion [[strcmp]] den Wert 0 zurück.
+
+Die Implementierung der [[get_hostname]] Funktion sieht wie folgt aus.
+
+<<Implementierung von [[get_hostname]]>>=
+void get_hostname(char *cHostname){
+  int len = 0;
+  int fd;
+
+  if (strcmp(&hostname, EMPTY) == 0) {
+    strncpy(cHostname, &hostname, sizeof(hostname));
+    return;
+  }
+
+  <<[[get_hostname]]: Hostname Datei einlesen>>
+  
+  if (strcmp(&hostname, EMPTY) == 1) {
+    strncpy(&hostname, "localhost", 9);
+  }	
+  strncpy(cHostname, &hostname, len);
+}
+@
+
+Wenn [[hostname]] noch nicht gesetzt ist, folgt das Einlesen der Hostsdatei.
+Falls die Datei nicht geöffnet werden kann, so soll das Programm einen Fehler anzeigen.
+%Dies kann geprüft werden, in dem der negativen Rückgabewert von [[open]] aus der [[fd]] Variable verglichen wird.
+Wenn die Datei zum Lesen geöffnet werden kann, so wird diese eingelesen.
+%Nach dem Einlesen wird der File Deskriptor gleich wieder geschlossen.
+Anschließend wird das Array [[hostname]] nach dem letzten Zeichen noch terminiert. 
+
+<<[[get_hostname]]: Hostname Datei einlesen>>=
+fd = open(FILE_HOSTNAME, O_RDONLY);
+if (fd == -1){
+  printf("Failed to open File: %s\n", FILE_HOSTNAME);
+} else {
+  len = read(fd, &hostname, MAXLEN_HOSTNAME);
+  close(fd);
+  hostname[len-1] = '\0';			
+}
+@
+
+%Die Terminierung des [[hostname]] ist notwendig, um das Ende des Arrays zu markieren.
+%Mit einer Iteration des [[hostname]] Arrays sollen Steuerzeichen wie Wagenvorlauf (Carred Return) und neue Zeile (Linefeed) entfernt werden. 
+%Dazu wird geprüft ob Zeichen im Array enthalten sind, die kleiner als dezimal 32 sind. 
+%Denn alle Zeichen in der ASCII Tabelle unterhalb von dezimal 32 sind Steuerzeichen.
+
+%[[get_hostname]]: Hostname Array terminieren =
+%
+%for (len; len<MAXLEN_HOSTNAME; len++) {
+%  if (hostname[len] <= 32) {
+%    hostname[len] = '\0';			
+%    break;
+%  }
+%
+%}  
+%
+
+% Nachteil an der Methode:
+%
+% Sobald die Variable einmal eingelesen wurde, so ist sie gesetzt und wird auch nicht neu gesetzt.
+%
+% Workaround: Timer einbauen die die Datei alle x minuten mit der Kernel Variable vergleicht und anpasst
+%
+
+\subsubsection{Ändern des Hostnames zur Laufzeit}
+
+Um den Hostname eines laufenden Ulix-Systems auch zu verändern, muss nur die Variable [[hostname]] geändert werden.
+Dies wird durch die Funktion [[set_hostname]] erreicht.
+Dieser Funktion wird einfach nur der neue Hostname übergeben.
+Als Parameter erwartet die Funktion [[set_hostname]] eine Speicheradresse zu einem Array.
+%Die Funktion [[strncpy]] reicht aus um den neuen Hostname zu kopieren.
+
+%Weil die Funktion [[strlen]] der "ulixlib.c" nicht String sicher ist, und die Länge des neuen Hostnames somit nicht bekannt ist, muss das gesamte Array iteriert werden.
+%Jedes einzelne Zeichen vom Array wird an den Zeiger [[ptr]] übergeben. Dieser zeigt selbst auf die Variable [[hostname]].
+%Sobald die Maximal erlaubte Hostname Länge erreicht wurde, oder das Array eine '\\0' Terminierung enthält, wird die Schleife beendet. Zum Schluss wird das '\\0' Zeichen noch neu gesetzt am Ende vom neuen Hostname Eintrages.
+
+<<Implementierung von [[set_hostname]]>>=
+void set_hostname(char *cHostname){
+  strncpy(&hostname, cHostname, MAXLEN_HOSTNAME);
+}
+@
+
+%Implementierung von [[set_hostname]] =
+%void set_hostname(char *cHostname){
+%  char *ptr = &hostname;
+%  int i = 0;
+%  while((*cHostname != 0)){
+%    *ptr = *cHostname;
+%    cHostname++;
+%    ptr++;
+%    i++;
+%    if(i>=MAXLEN_HOSTNAME)
+%      break;
+%    }
+%  *ptr = 0;
+%}
+%
+
+\subsubsection{Auflösen der IP vom Hostname}
+
+Die Auflösung eines Hostnames zu der jeweiligen IP-Adresse wird standardmäßig über \Abbrev{DNS}{{D}omain {N}ame {S}ervice} gelöst. Der eigene Hostname des Systems könnte zwar auch über einen DNS aufgelöst werden, dies ist aber nicht möglich, weil es aktuell noch keine Implementation eines DNS für Ulix gibt.
+Im Normalfall wird der eigene Hostname über die lokale Hostsdatei gefunden.
+Der Aufbau der lokalen Hostsdatei ist wie folgt:
+Jede Zeile enthält die IP-Adresse und einen oder mehrere Namen.
+Die Werte sind dabei mit Leerzeichen (sogenannten Whitespaces) getrennt.
+
+Das einlesen und auswerten der Datei wurde wie folgt implementiert:
+Der Funktion [[get_ip_by_name]] wird das Array übergeben in welcher die IP-Adresse gespeichert werden soll.
+Als zweiter Parameter wird der gesuchte Hostname übergeben.
+Es wird zuerst die [[FILE_HOSTS]] im Lese-Modus geöffnet.
+Sollte dies fehlschlagen wird abgebrochen und eine Fehlermeldung angezeigt.
+Danach folgt das Einlesen der IP-Adresse und des Hostnamens.
+Sollte die IP-Adresse des gesuchten Hostnames nicht gefunden werden, so wird die IP-Adresse auf 127.0.0.1 gesetzt.
+
+<<Implementierung von [[get_ip_by_name]]>>=
+void get_ip_by_name(char *ipaddr, char *search){
+  <<[[get_ip_by_name]]: Variablendeklarationen>>
+
+#ifdef DEBUG
+  printf("\nSEARCH: IP for Hostname [%s]\n", search);
+#endif
+
+  int fd = open(FILE_HOSTS, O_RDONLY);
+  if (fd == -1){
+    printf("Failed to open File: %s\n", FILE_HOSTS);
+  } else {
+    while (read(fd, &c, 1) != 0){
+      buf[i] = c;
+      if(((c == 32) || (c == 9)) && (wc == 0)){
+		<<[[get_ip_by_name]]: Prüfen der IP Adresse>>
+      }
+      if (c == 10) {
+		<<[[get_ip_by_name]]: Auslesen des Hostnames>>
+      }
+      i++;
+    }           
+    close(fd);
+  }
+  if(found != 1){
+    strncpy(ipaddr, "127.0.0.1", 10);
+#ifdef DEBUG
+   printf("IP not found for [%s], set IP to %s\n", 
+           search, ipaddr);
+#endif
+  }
+}
+@
+
+Die Variable [[c]] ist das aktuell eingelesene Zeichen.
+Mit [[i]] wird die Position im Datenfeld gespeichert.
+Das Hilfsarray [[buf]] dient zum Zwischenspeichern der eingelesen Daten.
+Im Array [[tmp_ipaddr]] werden die IP-Adressen aus der Hostsdatei zwischengespeichert.
+Die [[wc]] Variable ist der Wortzähler und wird gesetzt, wenn eine IP-Adresse eingelesen wurde und ein Hostname oder Mehrere folgen.
+
+<<[[get_ip_by_name]]: Variablendeklarationen>>=
+char c;
+int i = 0;
+int wc = 0;
+int found;
+short size_ipaddr = 16;
+char buf[1024];
+char tmp_ipaddr[size_ipaddr];
+@
+
+Falls nach der IP-Adresse ein Space- (Dezimal 32), Tabulator- (Dezimal 9) oder Newline- (Dezimal 10) Zeichen folgt, dann wird die eingelesene IP-Adresse geprüft. Dies erledigt die Funktion [[check_ipaddr]].
+%Die minimale IPv4 Adresse als String belegt sieben Zeichen (bsp.: 1.1.1.1).
+%Maximal sind es 15. 
+%Sollte also die lauf Variable [[i]] größer oder kleiner sein, dann ist die IPv4 Adresse definitiv falsch.
+Wenn die Funktion [[check_ipaddr]] 0 zurück gibt, dann ist die IP-Adresse gültig und die IP-Adresse wird zwischengespeichert.
+
+<<[[get_ip_by_name]]: Prüfen der IP Adresse>>=
+buf[i] = '\0';
+if(check_ipaddr(&buf) == 0){
+  strncpy(&tmp_ipaddr, &buf, size_ipaddr);
+} else {
+#ifdef DEBUG
+  printf("String:%s is not a valid ipv4 address\n", buf);
+#endif
+}
+i = -1;
+wc = 1;
+@
+
+Nachdem die IP-Adresse eingelesen wurde, wird beim ersten weiteren \DQ{Space}-Zeichen abgebrochen und das Array [[buf]] mit dem gesuchten Hostname verglichen.
+Wenn der Eintrag aus der Hostsdatei mit dem gesuchten Namen übereinstimmt, wird der Hostname in [[ipaddr]] kopiert.
+Die IP-Adresse zum gesuchten Hostname wurde damit gefunden.
+Die Prüfung auf weitere Hostname-Einträge nach dem ersten gefundenen Namen wurde nicht implementiert.
+Es ist nicht möglich eine Kombination wie: \DQ{192.2.3.1 hostname hostname.domain.de hostname.local} zu verwenden.
+
+<<[[get_ip_by_name]]: Auslesen des Hostnames>>=
+buf[i] = '\0';
+if (wc == 1) {
+  if (strcmp(&buf, search) == 1){
+    strncpy(ipaddr, &tmp_ipaddr, size_ipaddr);
+#ifdef DEBUG
+   printf("IP found for [%s]: %s\n", search, ipaddr);
+#endif
+    found = 1;            
+    break;
+  }
+}
+wc = 0;
+i = -1;
+@
+
+
+%% \subsubsection{Auflösen des Hostnames einer IP Adresse}
+
+
+%% Muss noch eingebaut werden.
+%% Das selbe nur umgedreht, suche den Hostname aus der Hosts anhand der IP Adresse (Noch zu programmieren).
+%
+%ipv4-tools.c: Need to implement =
+%void get_name_by_ip(char *cIPAddr, char *cHostname){
+%
+%	// TODO: Noch einbauen:
+%
+%	char *ip = "0.0.0.0";
+%	strncpy(cIPAddr, ip, 8); 
+%}
+%
+
+%\subsubsection{Konvertieren von Binär zu Dezimal}
+%
+%Für die Umwandlung der IP-Adresse als Binär zu einer Dezimalzahl dient die Funktion [[bintodec]].
+%Diese Konvertierung wird benötigt für die Umwandlung der IP-Adresse als Dezimalzahl zu einem String. 
+%Als Übergabe Parameter wird die Speicheradresse des Arrays übergeben mit den Binärwerten. 
+%Weil die Länge des Array nicht bekannt ist, wird eine Iteration durchgeführt um die Länge zu ermitteln.
+%Die anschließende Konvertierung ist dabei relativ einfach.
+%Es wird jede Stelle des Array iteriert und jeweils $2^(\textrm{n Position von 1})$ berechnet und zum Gesamtwert addiert.
+%Die Iteration des Arrays erfolgt von hinten nach vorne.
+%
+%< < Implementierung von bintodec > > =
+%u_int bintodec(int *ptr){
+%  u_int rvalue = 0;	
+%  int len = 0;
+%  int pos = 0;
+%  int pow = 1;
+%	
+%  while(*ptr != -1){
+%    len++;
+%    ptr++;
+%  }
+%  ptr--;
+%  for(;len>=1;len--){
+%    if(*ptr == 1){
+%      rvalue+=pow;
+%    }
+%    pow*=2;
+%    ptr--;
+%  }
+%  return rvalue;
+%}
+%\@
+
+\subsubsection{Konvertierung der IP-Adresse von String zu Dezimal}
+
+Der Datentyp für die Übertragung der Quell- und Ziel- IP-Adressen im IP-Protokoll ist ein Integer.
+Bei der Erstellung eines IP-Paketes werden aber die IP-Adressen als String angegeben.
+Deshalb muss der IP-Adress-String (bsp.: 192.34.56.32) umgewandelt werden in einen Dezimalzahlenwert.
+Als Parameter wird die IP-Adresse als String der Funktion [[inet_atoi]] übergeben.
+Der Rückgabewert der Funktion ist die IP-Adresse als Dezimalzahl.
+Es wird ein Array verwendet um jedes Oktet einzeln zu separieren und zu konvertieren ([[oktet[]]]).
+Ein Oktet ist der Dezimalzahlwert der Stelle in der IP-Adresse. Eine IP-Adresse hat immer 4 Oktets.
+Die Schleife durchläuft den String und trennt jedes Oktet bei vorliegen des \DQ{.} Separators.
+Bei allen anderen Zeichen, des iterierten Strings, werden die char Datentypen zu einen Integer konvertiert.
+Um den richtigen Dezimalzahlenwert eines Oktets zu berechnen, muss eine Multiplikation mit 10, des vorhanden Wertes zum aktuellen Wert addiert werden.
+Danach werden die Zahlenwerte in den Oktets, durch Bitshift nach links, erhöht.
+Bei dem Beispiel mit der IP-Adresse 192.34.56.32 bedeutet dies, dass der Zahlenwert \DQ{192} im Array [[oktet[0]]] steckt, der Zahlenwert \DQ{34} steckt in [[oktet[1]]] usw.
+Um den integer Datentypwert zu berechnen, kann nicht einfach eine Addition von \DQ{192+32+56+32} gemacht werden.
+Jedes Oktet muss zuerst an der richtigen Position im Bitfeld des integer Datentyps liegen.
+Für das Oktet 1 ([[oktet[0]]]) mit dem Wert \DQ{192} wird daher ein Bitshift um 24 nach links vorgenommen. Jedes weitere Oktet wird um 8 Bits weniger des vorherigen Oktets nach links verschoben.
+Danach folgt die Addition der neuen Werte, welche in der Variable [[rvalue]] gespeichert und zurückgegeben wird.
+
+<<Implementierung von [[inet_atoi]]>>=
+u_int inet_atoi(char *ipaddr){
+  u_int rvalue = 0;	
+  u_char oktet[3];	
+  u_char count = 0;	
+  oktet[count] = 0;
+  while(*ipaddr != '\0'){
+    if(*ipaddr == '.') {
+      count++;
+      oktet[count] = 0;
+      *ipaddr++;
+    }
+    oktet[count] = oktet[count]*10 + (*ipaddr-'0');
+    *ipaddr++;
+  }
+  rvalue = (oktet[0]<<24) + (oktet[1]<<16) + 
+            (oktet[2]<<8) + oktet[3];
+  return rvalue;
+}
+@
+
+\subsubsection{Konvertierung der IP-Adresse von Dezimal zu String}
+
+Die Rückkonvertierung der IP-Adresse als Dezimalzahl zu einem String geschieht in der Funktion [[inet_iton]].
+Als Übergabeparameter wird die IP-Adresse übergeben und auch das Array worin der String gespeichert werden soll.
+Die Umwandlung der IP-Adresse als Dezimalzahl erfolgt in zwei Einzelschritten. 
+Als Erstes wird die Dezimalzahl aufgeteilt in die einzelnen Oktets. Als Zweites folgt die Konvertierung der einzelnen Oktets in den Datentyp \DQ{char}.
+
+Die Variable [[pos]] bestimmt den Index zum Schreiben des Zeichens in dem Array [[ipaddr]], und wird fortlaufend beim Schreiben in das Array erhöht. Die Variable [[oktet]] speichert den Zahlenwert der IP-Adresse pro Oktet.
+Die [[for]] Schleife iteriert 4 mal und extrahiert, mittels einem Bitshift um 8 nach rechts, den jeweiligen Dezimalwert des Oktets durch ein anschließendes Modulo der Variable [[number]].
+Danach folgt die Umwandlung des Zahlenwertes von [[Oktet]] in einen String.
+
+<<Implementierung von [[inet_iton]]>>=
+void inet_iton(u_int number, char *ipaddr){
+  int i;
+  int pos = 0;
+  u_int oktet;
+  for(i=3;i>=0;i--){
+    oktet = (number >> (8*i)) % 256;
+    
+    <<[[inet_iton]]: Umwandlung des Oktets von Dezimal zu String>>
+
+	if(i != 0){
+	  ipaddr[pos++] = '.';
+	}
+  }
+  ipaddr[pos] = '\0';
+}
+@
+
+Die Umwandlung des Zahlenwertes in einen String wird durch die Division und Restwertberechnung des Nummernwertes mit anschließender Addition des '0' Zeichens erreicht.
+Wenn der Zahlenwert einen dreistelligen Zahlenwert hat, so wird die erste Nummer des dreistelligen Wertes extrahiert und in das Array [[ipaddr]] mit der Position am Anfang geschrieben. Das Selbe passiert noch einmal für zweistellige und einstellige Zahlenwerte. 
+
+<<[[inet_iton]]: Umwandlung des Oktets von Dezimal zu String>>=
+if(oktet > 99) {
+  ipaddr[pos++] = (oktet / 100) + '0'; 
+}
+if(oktet > 9) {
+  ipaddr[pos++] = ((oktet / 10) % 10) + '0'; 
+}
+ipaddr[pos++] = (oktet % 10) + '0';
+@
+
+\subsubsection{Ändern der Byteorder}
+
+Jedes Paket, welches über das Netzwerk gesendet wird, unterliegt einer Byteorder.
+Diese Byteorder bestimmt die Reihenfolge der übertragenen Bytes und wird als \DQ{network byte order} \cite{rfc1700} bezeichnet.
+Die \DQ{network byte order} entspricht dem Big-Endian Format.
+Die Byteorder der Daten muss eingehalten werden, damit die Informationen am Zielsystem richtig interpretiert werden.
+Zum Tragen kommt diese Reihenfolge bei allen Datenfeldern die mehr als 1 Byte belegen.
+Einige Felder des IP/ICMP-Headers belegen mehr als 1 Byte. Deshalb müssen alle Felder, die mehr als 1 Byte groß sind, vor dem Versenden und auch nach dem Empfang der Änderung der Byteorder unterzogen werden.
+
+Eine Änderung der Byteorder für einen 32 Bit Integer erledigt die Funktion [[bswap32]].
+Das Prinzip besteht darauf, das durch einfaches Bitshift und einer Bitweisen \DQ{oder} Berechnung die Bytes vertauscht werden.
+Der Algorithmus selbst funktioniert wie folgt.
+Jeweils 8 Bit aus dem Array [[value]] werden solange verschoben und vertauscht, bis die Reihenfolge der Werte im Array umgekehrt wurde.
+
+%Der Funktion [[bswap32]] wird als Parameter ein integer Datentyp übergeben.
+%Dann werden 8 Bit von der Variable [[value]] selbst jeweils um [[j]] Bits nach rechts verschoben und mit einen Bitweisen UND heraus gefiltert. Danach wird [[rvalue]] durch ein Bitweises ODER mit den Werten aus [[tmp]] Berechnet. Die Werte aus [[tmp]] werden dazu um [[j]] Werte nach links verschoben.
+%Die Variable [[i]] wird um jeweils 8 erhöht, und [[j]] um 8 verringert.
+%Bei der ersten Iteration steht also das letzte Byte von [[value]] an der ersten stelle von [[rvalue]]. Beim zweiten Lauf steht das vorletzte Byte aus [[value]] an der zweiten stelle von [[rvalue]] und so weiter.
+
+<<Implementierung von bswap32>>=
+u_int bswap32(u_int value){
+  <<bswap32: Variablendeklarationen>>  
+  for(j=24;j>=0;j-=8){
+    tmp = ((value>>i)& 0xFF);
+    rvalue = rvalue | tmp<<j;
+    i+=8;
+  }
+  return rvalue;
+}
+@
+
+Die Variable [[rvalue]] ist der Rückgabewert, [[i]] und [[j]] sind Laufvariablen.
+
+<<bswap32: Variablendeklarationen>>=
+int rvalue = 0;
+int tmp = 0;
+int i = 0;
+int j;
+@
+
+Das Selbe wird auch nochmal für 16 Bit gebraucht. Es reicht dazu den Startwert von [[j]] anzupassen.
+
+<<Implementierung von bswap16>>=
+u_short bswap16(u_short value){
+  int rvalue;
+  int tmp;
+  int i,j;
+  rvalue = 0;
+  tmp = 0;
+  i = 0;
+  for(j=8;j>=0;j-=8){
+    tmp = ((value>>i)& 0xFF);
+    rvalue = rvalue ^ tmp<<j;
+    i+=8;
+  }
+  return rvalue;
+}
+@
+
+\subsubsection{Überprüfung der Paketprüfsummen}
+
+Um eingehende Netzwerkpakete auf die Gültigkeit zu Prüfen, muss die Prüfsumme ausgewertet werden.
+Dazu wird die Prüfsumme des eingehenden Paketes einfach nochmals berechnet.
+
+Der Funktion [[check_checksum]] wird die Speicheradresse der IP-Paketstruktur und der ICMP-Paketstruktur übergeben.
+Die Originalwerte werden temporär gespeichert.
+Die Werte der Prüfsummen vom IP- und ICMP-Header werden genullt.
+Dann folgt die Änderung der Byteorder für das Total-Length Feld vom IP-Header, um die ICMP-Paketlänge zu berechnen.
+
+Die Länge von IP und ICMP kann jetzt der Funktion [[checksum]] übergeben werden.
+Sollten die Werte der berechneten und der temporär gespeicherten Prüfsummen nicht übereinstimmen, so wird eine Meldung ausgegeben.
+Zum Schluss werden die ursprünglichen Prüfsummenwerte zurückgeschrieben.
+
+<<Implementierung von [[check_checksum]]>>=
+void check_checksum(IP *ip_packet, ICMP *icmp_packet){
+  u_short ip_chksum_orig;
+  u_short ip_chksum;
+  u_short icmp_chksum_orig;
+  u_short icmp_chksum;
+
+  ip_chksum_orig = ip_packet->HEADER_CHECKSUM;
+  icmp_chksum_orig = icmp_packet->CHECKSUM;
+
+  ip_packet->HEADER_CHECKSUM = 0;
+  icmp_packet->CHECKSUM = 0;
+  ip_packet->TOTAL_LENGTH = bswap16(
+                            ip_packet->TOTAL_LENGTH);
+  int icmplen = ip_packet->TOTAL_LENGTH - 
+                (ip_packet->HEADER_LENGTH*4);
+  ip_packet->TOTAL_LENGTH = bswap16(
+                            ip_packet->TOTAL_LENGTH);
+  ip_chksum = checksum((ip_packet->HEADER_LENGTH*4), 
+                      ip_packet);
+  icmp_chksum = checksum(icmplen, icmp_packet);
+  if(ip_chksum != ip_chksum_orig){
+    printf("IP Checksum is wrong: %d, should: %u\n", 
+	        ip_chksum_orig, ip_chksum);
+  };
+  if(icmp_chksum != icmp_chksum_orig){
+    printf("ICMP Checksum is wrong: %d, should: %u\n", 
+            icmp_chksum_orig, icmp_chksum);                  
+  };
+  ip_packet->HEADER_CHECKSUM = ip_chksum_orig;
+  icmp_packet->CHECKSUM = icmp_chksum_orig; 
+}
+@
+
+\subsection{Der IP-Daemon}
+
+Für die Beantwortung von ICMP-Requestpaketen die an das Ulix-System gesendet werden, braucht es eine Möglichkeit auf diese Pakete automatisch zu antworten.
+Diese Aufgabe übernimmt der IP-Daemon. 
+Die Hauptaufgabe des Daemons ist das Beantworten von ICMP-Requestpaketen und das Löschen von veralteten und nicht brauchbaren Paketen aus dem [[ipv4_mbuf]] Array.
+Zuerst wird der Prozess geforkt ([[<<ipd: Process Fork>>]]).
+Danach folgt die [[<<ipd: Variablendeklarationen>>]].
+Bevor allerdings die Endlosschleife startet, wird der eigene Hostname aufgelöst, um dies später nicht jedes mal beim Iterieren neu aufzulösen.
+Bei jedem Durchlauf der [[while]] Schleife, wird das [[packets]] Array mit den IP-Protokollnummern der IP-Pakete aus dem Array [[ipv4_mbuf]] vom Kernel befüllt. 
+Dann folgt die Iteration des Arrays [[packets]]. Bei jeder ICMP-Protokollnummer, im Array [[packets]], wird das IP/ICMP Paket aus dem Array [[ipv4_mbuf]] geholt.
+Sollte im Array [[ipv4_mbuf]] ein gesuchtes ICMP-Requestpaket vorhanden sein, so wird ein ICMP-Responsepaket erzeugt und versendet ([[<<ipd: ICMP Antwortpaket senden>>]]).
+Zum Schluss folgt das Löschen von nicht verwendetet Paketen aus dem Kernel.
+Nicht verwendetet Pakete sind z.B.: Pakete vom Protokoll IPv6.
+Die Implementierung des [[ipd]] sieht wie folgt aus:
+
+<<Implementierung von IP Daemon>>=
+int ipd(){   
+  <<ipd: Process Fork>>
+  <<ipd: Variablendeklarationen>>
+  get_ip_by_name(&my_ip, &hostname);
+
+  int j =0;
+  while(1){
+    find_packet(mbuf_size, &my_ip, IP_PROTOCOL_ICMP, 
+               &packets);		
+
+    for(i=0;i<mbuf_size;i++){
+      if(packets[i] == IP_PROTOCOL_ICMP) {
+        ret = find_icmp_packet(i, ICMP_REQ_TYPE, 
+                               ICMP_REQ_CODE, -1, -1, 
+                               &ip_packet, &icmp_packet,
+                               &timearray);	
+        if(ret == 1){
+		  <<ipd: ICMP Antwortpaket senden>>
+        }
+      }
+      remove_unused_packets(i);
+    }
+  }
+}
+@
+
+Um einen Daemonprozess zu erzeugen sind ein paar Schritte notwendig.
+Zuerst muss der Prozess geforkt werden.
+Weil die zur Programmierung vorliegende Ulix Version 0.8 noch keinen Binary-Loader wie den ELF Loader hat, sind alle Programme als Funktionen in der Shell eingebaut. Deshalb wird die aktuell laufende Shell geforkt.
+Auch eine Übernahme eines Vaterlosen-Prozesses vom Kernel ist nicht möglich.
+Eine Abhilfe bringt das zurückgeben des Vaterprozesses, ohne ein Exit/Kill auf die Prozess-ID zu machen.
+Die Prozess ID bleibt damit erhalten und der Prompt kehrt zur Shell Eingabe zurück.
+Der Prozess des Sohnes läuft im Hintergrund weiter.
+Beim Sohn oder auch Daemon müssen dann nur noch das aktuelle Arbeitsverzeichnis und der Name des Prozesses geändert werden.
+Das Arbeitsverzeichnis des Prozesses wird auf das Wurzelverzeichnis \DQ{/} geändert.
+Der Name des Prozesses wird geändert auf [[IPD]]. 
+% Ein schließen der File Deskriptoren des Sohn Prozesses, wie es in Unix/Linux vorgesehen ist, ist nicht möglich.
+
+<<ipd: Process Fork>>=
+int pid = fork();
+if (pid != 0) {
+  return 0;
+} 
+chdir("/");
+setpsname ("IPD");
+@
+
+Die notwendigen Variablen der Funktion [[ipd]] im Überblick.
+Es wird die [[IP]]- und [[ICMP]]-Struktur benötigt um die Pakete aus dem [[ipv4_mbuf]] zu speichern.
+Für die aktuelle eigene IP-Adresse vom Host wird ein Array [[my_ip]] mit 16 Zeichen benötigt.
+Die Größe es Array [[ipv4_mbuf]] wird in der Variable [[mbuf_size]] über den Syscall [[SYS_mbufsize]] abgefragt und gespeichert.
+Ein Array [[packets]] wird angelegt und sicherheitshalber mit Nullen befüllt.
+Das Array [[timearray]] hat die Aufgabe die vier Bytes des Systemticks vom empfangenen IPv4-Paketes zwischenzuspeichern.
+
+<<ipd: Variablendeklarationen>>=
+IP ip_packet;
+ICMP icmp_packet;
+u_char my_ip[15];
+u_short mbuf_size;
+short i = 0;
+short ret;
+mbuf_size = syscall1(SYS_mbufsize);
+u_char packets[mbuf_size];
+memset(&packets, 0, mbuf_size);
+u_char timearray[4];
+@
+
+Für den Versand des ICMP-Antwortpakets werden drei Aktionen ausgeführt.
+Zuerst wird das ICMP-Requestpaket aus dem [[ipv4_mbuf]] wieder gelöscht.
+Dies kann gemacht werden, weil das Requestpaket nicht mehr gebraucht wird.
+Die IP-Protokollnummer aus dem Array [[packets]] wird wieder zurückgesetzt und es folgt der Versand des ICMP-Antwortpaketes.
+
+<<ipd: ICMP Antwortpaket senden>>=
+#ifdef DEBUG
+        printf("Found req, send response, i: %d\n", i);
+#endif
+remove_packet(i);
+packets[i] = 0;
+icmp_response(&ip_packet, &icmp_packet);
+@
+
+
+Die erste Funktion die innerhalb der Endlosschleife vom IP-Daemon [[ipd]] aufgerufen wird ist die Funktion [[find_packet]].
+Die Funktion [[find_packet]] hat die Aufgabe alle Protokollnummern der im Kernel gespeicherten IP-Pakete zu finden und in das Array [[packets]] zu schreiben.
+Um nicht alle Pakettypen zu ermitteln, werden die Suchparameter übergeben um die Ergebnisse zu filtern.
+%Die Größe des Index vom IP-Buffer als [[mbuf_size]], die gesuchte IP-Adresse [[*search_ip]], das gesuchte IP-Protokoll [[search_proto]] und das Array [[packets]] als Speicheradresse [[ptr]].
+Die Funktion [[find_packet]] ist wie folgt implementiert.
+
+<<Implementierung von [[find_packet]]>>=
+void find_packet(short mbuf_size, char *search_ip, 
+                 short search_proto, char *ptr){
+ <<[[find_packet]]: Variablendeklarationen>>
+ for(i=0;i<mbuf_size;i++){
+  ret = syscall4(SYS_recvmsg, &buffer, i, 10);
+  if(ret == -1){
+   *ptr = 0;
+  } else {
+   if(buffer[9] == search_proto) {
+    <<[[find_packet]]: IP Buffersize ermitteln>>
+    memcpy(&ip_packet, &buffer[0], buffer_size);
+    ip_packet.DESTINATION_IPADDRESS = 
+              bswap32(ip_packet.DESTINATION_IPADDRESS);		
+    inet_iton(ip_packet.DESTINATION_IPADDRESS, dst_ip);
+    if((strcmp(search_ip, dst_ip) == 1) && 
+       (search_proto == ip_packet.PROTOCOL)) {
+     *ptr = ip_packet.PROTOCOL;
+    }
+   }
+  }
+  ptr++;
+ }
+}
+@
+
+Die [[for]]-Schleife von [[find_packet]] iteriert den gesamten Kernel-Buffer.
+%Es werden aber nur die ersten 10 Bytes des IP-Paketes benötigt um das IP-[[PROTOCOL]] zu ermitteln und die Ziel-IP-Addresse zu erhalten.
+%Sollte der Syscall [[SYS_recvmsg]] -1 zurückgeben, so wird der aktuell Wert im Array [[packets]] auf 0 gesetzt ([[ptr]]).
+Sollte der Zugriff auf den Kernel-Buffer nicht funktionieren, wird die IP-Protokollnummer auf 0 gestellt.
+Dieser Fall kann eintreten, wenn der aktuell Index [[ipv4_mbuf_index]] verwendet wird. Dann wird der Zugriff auf das Paket verhindert.
+Danach folgt die Prüfung ob das gesuchte Protokoll [[search_proto]] mit dem IP-Paket übereinstimmt.
+%Der Wert von IP-Protocol ist im Array [[buffer]] Index 9 gespeichert.
+Ist dies der Fall, wird der [[buffer]] in das [[ip_packet]] kopiert. Es folgt die Byteorder-Änderung und das Umwandeln der Dezimalzahl in einen String durch [[inet_iton]].
+Jetzt kann die gesuchte IP-Adresse [[search_ip]] mit der IP-Adresse aus dem Paket verglichen werden.
+Stimmen die Werte überein, dann wird die IP-Protokollnummer in das Array [[packets]] gespeichert.
+Am Schluss jeder Iteration des Indexes, wird der [[packets]] Array-Zeiger auf das nächste Feld verschoben.
+   
+Die eigene Host-IP wird in [[dst_ip]] gespeichert.
+Die Variable [[buffer_size]] wird zur Berechnung der Gesamtlänge des IP-Paketes genutzt.
+Im Array [[buffer]] wird das IP-Paket aus dem Kernel geladen und gespeichert.
+Die [[IP]]-Struktur [[ip_packet]] wird noch benötigt.
+Die Variablen [[ret]], [[i]] und [[j]] sind lauf Variablen.
+
+<<[[find_packet]]: Variablendeklarationen>>=
+char *dst_ip[15];
+u_char buffer_size;
+u_char buffer[255];
+IP ip_packet;
+short ret;	
+int i,j;
+@
+
+Die Größe zum Speichern des IP-Paketes aus dem Kernel [[ipv4_mbuf]] muss zuerst berechnet werden, um nicht zu viele oder zu wenige Informationen zu erhalten.
+Um die Größe des IP-Paketes zu ermitteln, wird die IHL aus dem Paket extrahiert.
+%Der IP-Header-Length Wert steht in den ersten 4 Bits des ersten Bytes vom IP-Paket. 
+%Daher wird ein Bitweises UND mit 4 Bits auf [[buffer]] angewendet, um den Wert für IP-Header-Length zu erhalten.
+Danach enthält [[buffer_size]] die genaue Größe des IP-Paketes und kann jetzt das gesamte IP-Paket aus dem Kernel kopieren.
+
+<<[[find_packet]]: IP Buffersize ermitteln>>=
+buffer_size = ((buffer[0] & 0xF) * 4);
+ret = syscall4(SYS_recvmsg, &buffer, i, buffer_size);
+if(ret == -1){
+  break;
+}
+@
+
+Nachdem das Array [[packets]] alle aktuellen IP-Protokollnummern des Kernel-Buffers kennt, müssen die Pakete noch analysiert werden.
+Dazu wird nach ICMP-Requestpaketen gesucht, die als Ziel-IP-Adresse die eigene IP-Adresse des Hosts haben.
+Die Suchparameter ICMP [[type]], ICMP [[code]], ICMP [[id]] und ICMP [[seq]] sind notwendig, um das richtige ICMP-Responsepakete.
+%Die Funktion [[find_icmp_packet]] hat die Aufgabe ein ICMP-Paket anhand der Suchparameter ICMP [[type]], ICMP [[code]], ICMP [[id]] und ICMP [[seq]] das jeweilige ICMP-Pakete zu finden und aus dem Kernel zu kopieren.
+%Zuerst wird die Funktion [[get_icmp_packet]] aufgerufen um das IP/ICMP Paket aus dem Kernel in [[ip_packet]] und [[icmp_packet]] zu speichern.
+Im [[rvalue]] wird gespeichert, ob der Kopiervorgang erfolgreich war oder nicht.
+Sollte die Funktion [[get_icmp_packet]] nicht erfolgreich sein, wird dies gleich wieder an die Funktion [[ipd]] zurückgegeben.
+Bei Erfolg wird das ICMP-Paket auf die Suchkriterien geprüft ([[<<[[find_icmp_packet]]: Prüfen des ICMP Paketes>>]]).
+
+<<Implementierung von [[find_icmp_packet]]>>=
+short find_icmp_packet(short index, short type, short code, 
+                       short id, short seq, IP *ip_packet, 
+                       ICMP *icmp_packet, char *timearray){
+  short rvalue = 0;
+  rvalue = get_icmp_packet(index, ip_packet, icmp_packet, 
+                          timearray);
+  if(rvalue == -1){
+    return rvalue;
+  }
+  <<[[find_icmp_packet]]: Prüfen des ICMP Paketes>>
+  return rvalue;
+}
+@
+
+Die Prüfung des ICMP-Paketes ist relativ einfach. Es muss nur geprüft werden, ob die 4 ICMP-Felder (ID, Sequenznummer, Code, Type) übereinstimmen mit den Suchparametern.
+Der [[ipd]] sucht nur nach ICMP-Requestpaketen die den Type [[ICMP_REQ_TYPE]] und Code [[ICMP_REQ_CODE]] haben.
+
+<<[[find_icmp_packet]]: Prüfen des ICMP Paketes>>=
+if((type == icmp_packet->TYPE) && 
+  (code == icmp_packet->CODE)){
+  if((id == -1) && (seq == -1)) {
+    rvalue = 1;
+  } else {
+    if((id == icmp_packet->ID) && 
+      (seq == icmp_packet->SEQ)){
+      rvalue = 1;
+    }
+  }
+}
+@
+
+Innerhalb der Funktion [[find_icmp_packet]] wird die Funktion [[get_icmp_packet]] aufgerufen.
+Die Funktion [[get_icmp_packet]] hat die Aufgabe das IP/ICMP-Paket aus dem Kernel zu kopieren.
+Dafür ist der Index des IP-Pakets von Array [[ipv4_mbuf]] notwendig.
+Dieser [[index]] wurde der [[find_icmp_packet]] schon übergeben und wird einfach weitergereicht.
+Ebenso weitergereicht werden die IP- und ICMP-Strukturzeiger und das Array [[timearray]] für den Systemtick .
+Nach der Variablendeklaration werden zuerst 4 Bytes aus dem Array [[ipv4_mbuf]] geholt.
+Danach folgt wieder die Ermittlung der Größe des Paketes [[<<[[get_icmp_packet]]: ICMP Buffersize ermitteln>>]].
+Nun müssen nur noch das IP-, ICMP-Paket in die Strukturen [[ip_packet]] und [[icmp_packet]] kopiert werden.
+
+<<Implementierung von [[get_icmp_packet]]>>=
+short get_icmp_packet(short index, IP *ip_packet, 
+                      ICMP *icmp_packet, char *timearray){
+  <<[[get_icmp_packet]]: Variablendeklarationen>>
+  rvalue = syscall4(SYS_recvmsg, &buffer, index, 4);
+  if(rvalue == -1){
+    return rvalue;
+  }
+  <<[[get_icmp_packet]]: ICMP Buffersize ermitteln>>
+  memcpy(ip_packet, &buffer[0], iplen);	
+  memcpy(icmp_packet, &buffer[iplen], icmplen);
+  memcpy(timearray, &buffer[buffer_size], 4);
+  return rvalue;
+}
+@
+
+Zu den Variablen der Funktion [[get_icmp_packet]] im Überblick.
+Der Wert von IP-Header-Length  wird in die Variable [[iplen]] und der ICMP-Header-Length in Variable [[icmplen]] gespeichert.
+Die Variable [[buffer_size]] speichert die Gesamtgröße des IP-Pakets.
+Im Array [[buffer]] selbst wird wieder das IP/ICMP-Paket zwischen gespeichert.
+
+<<[[get_icmp_packet]]: Variablendeklarationen>>=
+int rvalue = 0;
+u_char iplen;
+u_short icmplen;
+int buffer_size;
+u_char buffer[255];
+@
+
+Es folgt die Berechnung der Paketgrößen.
+Zuerst wird die Gesamtlänge des IP-Paketes ermitteln.
+% Dazu wird zuerst die Total-Length an [[buffer_size]] aus dem [[buffer]] übergeben.
+%Das Bitshift von [[buffer_size]] um 8 Bits nach Links inklusive der Addition des [[buffer[3]]] Wertes muss gemacht werden, weil das [[buffer]] ein char Array ist, der Total-Length Wert aber 16 Bit lang ist.
+Die Länge des ICMP-Paketes ergibt sich aus der IP-Total-Length minus der IP-Header-Length.
+Sobald die Länge errechnet wurde, wird das gesamte Paket kopiert.
+%Für den Wert Variable [[iplen]] muss der Wert des ersten Felds des IP-Pakets geteilt werden.
+%Denn in den ersten 8 Bit stecken die IP-Version und IP-Header-Length.
+%Deshalb wird durch ein Bitweises UND mit 4 Bit der IHL Wert extrahiert und mit 4 Multipliziert.
+%Der Wert von IHL wird mit 4 Multipliziert um die Gesamtgröße des reinen IP-Pakets (ohne das ICMP-Paket) in Byte zu erhalten.
+
+<<[[get_icmp_packet]]: ICMP Buffersize ermitteln>>=
+buffer_size = buffer[2];
+buffer_size = (buffer_size<<8) + buffer[3];
+iplen = ((buffer[0] & 0xF) * 4);
+icmplen	= (buffer_size - iplen);
+
+rvalue = syscall4(SYS_recvmsg, &buffer, index, 
+                 (buffer_size + 4));
+if(rvalue == -1){
+  return rvalue;
+}
+@
+
+Es folgt die Versendung des ICMP-Antwortpaketes.
+Die Funktion [[icmp_response]] erstellt anhand des ICMP-Requestpaketes ein Antwortpaket.
+Dazu werden die IP [[ip_packet]] und ICMP [[icmp_packet]] Strukturen übergeben.
+Beide Strukturen enthalten schon die Daten der gefundenen IP/ICMP-Pakete.
+Vor der Erstellung des Antwortpaketes wird die ursprüngliche Quell-IP-Adresse noch temporär zwischengespeichert.
+Nach der [[<<[[icmp_response]]: Erstellen des Antwortpaketes>>]] wird der Versand des Paketes eingeleitet.
+Dazu werden die Strukturen [[ip_packet]] und [[icmp_packet]] über das Buffer Array kopiert und versendet. 
+%Anschließend wird der Syscall [[SYS_sendmsg]] aufgerufen mit der Adresse vom Array [[buffer]] inklusive der Größe des befüllten Arrays.
+
+<<Implementierung von [[icmp_response]]>>=
+void icmp_response(IP *ip_packet, ICMP *icmp_packet){
+  u_int tmp;
+  tmp = ip_packet->SOURCE_IPADDRESS;
+  int ret = 0;
+  <<[[icmp_response]]: Erstellen des Antwortpaketes>>
+  memcpy(&buffer, ip_packet, iplen);	
+  memcpy(&buffer[iplen], icmp_packet, icmplen);
+  ret = syscall3(SYS_sendmsg, &buffer, buffer_size);
+}
+@
+
+Bei dem Erzeugen des Antwortpaketes muss im Prinzip nur die Absender- und die Empfänger-IP getauscht werden und die Felder ICMP-Code und Type umgeändert werden. Zusätzlich muss aber noch die Prüfsumme neu errechnet werden.
+%Dazu werden [[ip_packet->HEADER_CHECKSUM]] und [[icmp_packet->CHECKSUM]] zurückgesetzt auf Null.
+Bei dem Feld [[ip_packet->TOTAL_LENGTH]] muss die Byteorder vor und nach dem Berechnen der Prüfsumme getauscht werden.
+Alle anderen Felder die größer als ein Byte sind, werden nicht der Byteorderänderung unterzogen, da diese schon in der \DQ{network byte order} vorliegen.
+
+<<[[icmp_response]]: Erstellen des Antwortpaketes>>=
+ip_packet->SOURCE_IPADDRESS = 
+           ip_packet->DESTINATION_IPADDRESS;
+ip_packet->DESTINATION_IPADDRESS = tmp;
+
+ip_packet->TOTAL_LENGTH = bswap16(
+                          ip_packet->TOTAL_LENGTH);
+u_short buffer_size = ip_packet->TOTAL_LENGTH;
+u_char buffer[buffer_size];
+
+icmp_packet->TYPE = ICMP_REPLY_TYPE;
+icmp_packet->CODE = ICMP_REPLY_CODE;
+
+ip_packet->HEADER_CHECKSUM = 0;
+icmp_packet->CHECKSUM = 0;
+int iplen = (ip_packet->HEADER_LENGTH * 4);
+int icmplen = (ip_packet->TOTAL_LENGTH - iplen);
+ip_packet->TOTAL_LENGTH = bswap16(ip_packet->TOTAL_LENGTH);
+ip_packet->HEADER_CHECKSUM = checksum(iplen, ip_packet);
+icmp_packet->CHECKSUM = checksum(icmplen, icmp_packet);
+@
+
+Nach dem Versand des ICMP-Antwortpakets erfolgt die Löschung von nicht mehr benötigten oder ungültigen IP-Paketen aus dem Kernel-Buffer.
+Diese Aufgabe hat die Funktion [[remove_unused_packets]].
+Es werden zum Einen alle Pakete gelöscht die älter als 5 Sekunden sind. Dieser Zeitwert wird mit der [[max_ip_timeout]] Variable initialisiert.
+Innerhalb dieser Zeit sollte der jeweilige Prozess der ein Paket abfragt, dieses auch gelöscht haben.
+Zum Zweiten werden Pakete gelöscht die nicht dem IPv4-Protokoll entsprechen.
+
+Als Erstes wird die [[<<[[remove_unused_packets]]: Variablendeklarationen>>]] aufgerufen.
+%Dann wird die Variable [[buffer]] mit 4 Bytes des IP-Paketes befüllt.
+Die IP-Version wird in der Variable [[iptype]] gespeichert und dann überprüft.
+Sollte keine IP-Version vorliegen, wird abgebrochen und die Funktion beendet.
+In dem Fall geht das Programm davon aus das, dass kein Paket im Speicher vorliegt.
+Bei IP-Version 4 muss zuerst wieder das gesamte Paket geladen werden um den Wert des Systemticks zu erhalten.
+Danach kann der Timeout errechnet werden, und falls dieser erreicht oder überschritten wird, wird das IP-Paket gelöscht.
+Es gibt noch keine Zeitberechnungsfunktion wie [[ftime]] oder ähnliche in der vorliegen Ulix Version 0.8.
+Das Timeout kann aber mittels Systemticks berechnet werden.
+
+<<Implementierung von [[remove_unused_packets]]>>=
+void remove_unused_packets(short index){
+  <<[[remove_unused_packets]]: Variablendeklarationen>>
+  ret = syscall4(SYS_recvmsg, &buffer, index, 4);
+  if(ret == -1){
+    return;
+  }
+  u_char iptype = (buffer[0]>>4);
+  switch (iptype){
+    case 0:
+     break;
+    case 4:
+     <<[[remove_unused_packets]]: IP-Packetssize ermitteln>> 
+     <<[[remove_unused_packets]]: Systemtick zurück berechnen>> 
+     <<[[remove_unused_packets]]: IP-Paket timeout überprüfen>> 
+     break;		
+    default:
+     remove_packet(index);
+     break;	
+  }
+}
+@
+
+Zu den Variablen der Funktion [[remove_unused_packets]].
+Das Timeout wird mit der [[max_ip_timeout]] auf die gewünschte Anzahl der Systemticks gestellt.
+Die Variable [[packet_time]] speichert den Systemtick des IP Pakets zur Ankunftszeit und ist im [[ipv4_mbuf]] Array für jedes Paket gespeichert. Der aktuelle Systemtick wird in [[measure_time]] gespeichert.
+Die Total-Length der IP-Pakete wird in [[iptl]] gespeichert.
+Die Variablen [[buffer]] und [[buffer_size]] werden zum kopieren der IP-Pakete genutzt.
+
+<<[[remove_unused_packets]]: Variablendeklarationen>>=
+int max_ip_timeout = 1000;		// ~ 5 Sekunden
+int packet_time;
+int measure_time;
+u_char iptl;
+int buffer_size;
+u_char buffer[255];
+short ret;
+int i;
+@
+
+Um den Systemtick des IP-Paketes zu erhalten, muss das Programm wissen, an welcher Stelle im [[ipv4_mbuf]] Array sich die Systemticks befinden. Der Systemtick beim Empfang eines Pakets wird in der Funktion [[slip_recv]] direkt nach dem IP-Paket gespeichert und belegt 4 Bytes. Deshalb wird die [[buffer_size]] noch zusätzlich um 4 Bytes erweitert zum Wert von Total-Length.
+Die Berechnung der IP-Paketgröße erfolgt wieder über die Total-Length.
+ 
+<<[[remove_unused_packets]]: IP-Packetssize ermitteln>>=
+iptl = buffer[2];
+iptl<<8;
+iptl += buffer[3];
+buffer_size = iptl + 4;
+ret = syscall4(SYS_recvmsg, &buffer, index, buffer_size);
+if(ret == -1){
+  break;
+}
+@
+
+Die Berechnung des Systemticks vom IP-Paket ist recht einfach.
+Der Systemtick wurde mittels Bitshift in das [[ipv4_mbuf]] Array geschrieben.
+Jetzt muss dieser Vorgang nur umgekehrt werden.
+%Es wird 4 mal ein Bitshift nach links, inklusive der Addition des nächsten Wertes, vorgenommen.
+
+<<[[remove_unused_packets]]: Systemtick zurück berechnen>>=
+packet_time = 0;
+for(i=0;i<4;i++){
+  packet_time = packet_time<<8;
+  packet_time += buffer[iptl+i];
+}
+@
+
+Zur Prüfung des Timeouts muss der aktuelle Systemtick vom Kernel bezogen werden.
+Danach kann über eine Subtraktion der Messzeit und Paketzeit, verglichen werden ob die Differenz größer ist als der maximale Timeoutwert.
+Ist dies nicht der Fall, wird die Funktion beendet. Sollte die Paketzeit 0 sein, so wird ebenfalls abgebrochen.
+In diesem Fall könnte die Speicherung des Systemticks im Kernel noch nicht ganz vollzogen sein.
+
+<<[[remove_unused_packets]]: IP-Paket timeout überprüfen>>=   
+measure_time = syscall1(SYS_gettick);
+if((measure_time-packet_time) > max_ip_timeout){
+  if(packet_time == 0){
+    break;
+  }
+#ifdef DEBUG
+  printf("\nMessung: %d, Paket:%d, Diff:%d \n", 
+        measure_time, packet_time, 
+        (measure_time-packet_time) );
+#endif
+  remove_packet(index);
+}
+@
+
+Das Entfernen eines IP-Pakets aus dem Kernel wird per Syscall erreicht.
+Dazu muss nur der aktuelle Indexwert des IP-Pakets dem Syscall [[SYS_delmbuf]] übergeben werden.
+
+<<Implementierung von [[remove_packet]]>>=
+short remove_packet(short index){
+  return syscall2(SYS_delmbuf,index);
+}
+@
+
+%
+%Beispiel Zeitberechnung
+%system\_ticks++;    // one more timer interrupt
+%// system\_time = (int) (system\_ticks/18.222);    // original timer freq: 18.222 Hz
+%system\_time = (int) (system\_ticks/100);    // new timer freq: 100 Hz
+%
+%if (system\_ticks % 100 == 0) {          // Every 100 clocks (approx. 1 second) 
+%  hour = (system\_time/60/60)%24;        // display the time
+%  min = (system\_time/60)%60;
+%  sec = system\_time%60;
+%  sprintf ((char*)\&buf, "%02d:%02d:%02d", hour, min, sec);
+%  \_set\_statusline ((char*)\&buf, 72);
+%\}
+%
+
+\subsection{Das Ping-Programm}
+
+Das Ping-Programm dient im wesentlichen dem Test, ob ein Computer oder ein System unter der IP-Adresse erreichbar ist. 
+Für das Ping-Programm werden zwei verschiedene ICMP-Pakettypen gebraucht.
+Ein ICMP-Request- und ein ICMP-Response-Paket. Das ICMP-Request-Paket wird vom Sender erstellt und an das Zielsystem versendet.
+Das ICMP-Response wird wiederum vom Empfänger erzeugt und an den Sender zurückgesendet, sobald ein ICMP-Request vorliegt.
+Das Ping-Programm wird als einfaches Kommando in die Ulix-Shell [[sh.c]] als Builtin-Kommando hinzugefügt.
+
+<<Ulix sh.c Zeile 11: Shell Kommandos>>=
+#define SHELL_COMMANDS "help, ps, fork, ls, cat, head, cp, 
+                        diff, sh, hexdump, kill, loop, 
+                        test, brk, cd, ln, rm, pwd, touch, 
+                        read, edit, exit, hostname, ipd, 
+                        ping"
+@
+
+Damit der Aufruf der Funktion [[cmd_ping]] aus der Shell klappt, muss die [[switch]] Fallunterscheidung der Variable [[cmd]] in der Funktion [[run_command]] noch um die folgenden drei Codezeilen erweitert werden:
+
+<<Ulix sh.c Zeile 693: Shell Kommandos>>=
+  else if ( strcmp ((char*)cmd, "ping") ) {
+	cmd_ping(argv[1]);
+  }
+@
+
+Die nachfolgende Funktion [[cmd_ping]] nimmt die IP-Adresse des Empfängersystems als Parameter [[destination_ip]] entgegen.
+Sollte die IP-Adresse leer sein, wird die Funktion mit einem Fehlerhinweis auf der Konsole beendet.
+Auch bei einer ungültigen IP-Adresse bricht die Funktion ab.
+Danach folgen die Variablendeklaration und die Erstellung der IP- und ICMP-Strukturen.
+Sobald die Strukturen erstellt und befüllt sind, wird das ICMP-Paket versendet.
+Nach dem Versand des Paketes über den Kernel, wird in der [[while]] Schleife das ICMP-Responsepaket abgefragt, welches zum versendeten ICMP-Request passt. Und falls ein ICMP-Responsepaket vorliegt, wird die Zeitdifferenz von Versand und Empfang angezeigt.
+Falls kein Paket innerhalb des eingestellten Timeoutwertes vorliegt, soll eine Meldung auf der Textkonsole angezeigt werden.
+
+<<Implementierung eines ping Programms>>=
+int cmd_ping(char *destination_ip){
+  if(strcmp(&destination_ip, EMPTY) == 1){
+    printf("Please usage: ping [ipv4 address]\n");
+    return -1;
+  }
+  if(check_ipaddr(destination_ip) != 0){
+    printf("%s is not a valid IPv4 address\n", 
+           destination_ip);
+    return -1;
+  }
+  <<[[cmd_ping]]: Variablendeklaration>>
+  <<[[cmd_ping]]: IP Paketstruktur erstellen>>
+  <<[[cmd_ping]]: ICMP Paketstruktur erstellen>>
+  <<[[cmd_ping]]: Debug Ausgabe Paketstruktur>>
+  <<[[cmd_ping]]: IP/ICMP Prüfsummen berechnen>>
+  <<[[cmd_ping]]: ICMP Paketversenden>>
+  <<[[cmd_ping]]: Debug Ausgabe nach dem Versand>>
+  
+  printf("\nPING %s: 1 data byte at tick %d: \n", 
+         destination_ip, my_time);
+  ret = 0;	
+  while(ret == 0){
+   find_packet(mbuf_size, &src_ip_addr, IP_PROTOCOL_ICMP, 
+              &packets);
+    for(i=0;i<mbuf_size;i++){
+     if(packets[i] == IP_PROTOCOL_ICMP){
+      ret = find_icmp_packet(i, ICMP_REPLY_TYPE, 
+                            ICMP_REPLY_CODE, icmp.ID, 
+                            icmp.SEQ, &ip_packet, &icmp, 
+                            &timearray);
+      if(ret == 1){
+       <<[[cmd_ping]]: ICMP Antwortpaket prüfen>>
+       printf("1 byte from %s: seq=%d ttl=%d ticks=%d\n", 
+               destination_ip, icmp.SEQ, 
+               ip_packet.TIME_TO_LIVE, 
+               (packet_time-my_time));
+       return 0;
+      }
+     }
+    }
+
+	<<[[cmd_ping]]: Timeout>>
+  }
+  return 0;
+}
+@
+
+Die [[while]]-Schleife sucht bei jedem Durchlauf die Pakete vom Kernel nach passenden ICMP-Response-Paketen ab.
+Sollte ein ICMP-Paket gefunden werden, wird das Paket aus dem Kernel kopiert.
+Danach folgen die Auswertung des ICMP Paketes und die Ausgabe des Zeitunterschiedes von ICMP-Request und ICMP-Response auf der Konsole.
+%Die Funktion [[find_packet]] wird aufgerufen und das Array [[packets]] mit den Protokollnummern der Pakete aus dem Array [[ipv4_mbuf]] befüllt. Die Größe des Arrays [[ipv4_mbuf]] muss der Funktion [[find_packet]] mit übergeben werden, ebenso wie die eigene IP-Adresse und die ICMP-Protokollnummer.
+%Nachdem das Array [[packets]] befüllt ist, folgt die Iteration.
+%Bei jedem Wert von [[packets]] der die Protokollnummer vom [[IP_PROTOCOL_ICMP]] enthält, wird die Funktion [[find_icmp_packet]] aufgerufen.
+%Die Funktion [[find_icmp_packet]] sucht im Array [[ipv4_mbuf]] nach dem ICMP-Paket anhand der übergebenen Suchparameter.
+%Übergeben wird der aktuelle [[packets]] Index [[i]], der ICMP-Type, Code, ID, Sequenznummer, die Speicheradressen der IP- und ICMP-Paket und das Array [[timearray]] für den Systemtick.
+%Die IP- und ICMP-Strukturen werden einfach nochmal genommen und mit dem Daten des Response-Paketes aus dem [[ipv4_mbuf]] befüllt.
+%Bei einem Sucherfolg von [[find_icmp_packet]] wird die Variable [[ret]] mit 1 beschrieben und es folgt die Überprüfung des ICMP-Response-Paketes. Danach wird eine Ausgabe erzeugt mit der Differenz der Tick-werte von Versand und Empfang.
+
+Die Variablen [[packet_time]] und [[measure_time]] werden zur Zeitmessung genutzt.
+Der ICMP [[timeout]] wird initialisiert mit dem Wert 3 und definiert damit 3 Sekunden. 
+Die Variable [[mbuf_size]] speichert die Größe des Arrays [[ipv4_mbuf]] aus dem Kernel.
+%Durch den syscall [[SYS_mbufsize]] wird der Wert gleich Initialisiert.
+Das Array [[packets]] speichert die Protokoll-ID vom IP-Paket.
+%Das Array [[packets]] wird am Anfang mit Nullen befüllt über die Funktion [[memset]].
+Das [[timearray]] enthält den Systemtick vom IP-Paket aus dem Array [[ipv4_mbuf]].
+In die Variable [[my_time]] wird der aktuelle Systemtick zur Zeitmessung gespeichert.
+Die eigene IP-Adresse vom System wird in das Array [[src_ip_addr]] gespeichert.
+
+<<[[cmd_ping]]: Variablendeklaration>>=
+int packet_time, measure_time, my_time, i, x;
+int timeout = 3;
+int ret = 0;	
+char src_ip_addr[16];
+u_short mbuf_size;
+mbuf_size = syscall1(SYS_mbufsize);
+u_char packets[mbuf_size];
+u_char timearray[4];
+memset(&packets, 0, mbuf_size);
+@
+
+Zum Erstellen des IP-Pakets für den ICMP-Request wird die Struktur [[IP]] genutzt. % und als [[ip_packet]] deklariert.
+Dann werden die IP-Headerfelder befüllt.
+%Die Felder [[TOS]], [[IDENTIFICATION]], [[FLAGS]] und [[FRAGMENT_OFFSET]] werden in der Implementation nicht berücksichtigt und spielen nur bei Fragmentierung und Weiterleitung der Pakete bei einem Router eine Rolle.
+%Der [[TTL]] Wert wird fest auf 1 gestellt. Minimum ist 0, aber viele Betriebssysteme verwenden 64 oder 128 als [[TTL]] Wert.
+Die IP-Adresse vom Absender wird anhand des eigenen Hostnamens ermittelt und in [[src_ip_addr]] gespeichert. 
+%Die [[HEADER_LENGTH]] wird berechnet in dem die Speicheradresse der IP-Struktur [[ip_packet]] an die Funktion [[calc_ip_hl]] übergeben wird.
+
+<<[[cmd_ping]]: IP Paketstruktur erstellen>>=
+IP ip_packet;
+ip_packet.VERSION = IP_VERSION;
+ip_packet.TOS = 0;
+ip_packet.IDENTIFICATION = 0;
+ip_packet.FLAGS = 0;	
+ip_packet.FRAGMENT_OFFSET = 0;	
+ip_packet.TIME_TO_LIVE = 1;
+ip_packet.PROTOCOL = IP_PROTOCOL_ICMP;
+ip_packet.HEADER_CHECKSUM = 0; 
+ip_packet.OPTIONS_AND_PADDING = 0;
+get_ip_by_name (&src_ip_addr, &hostname);
+ip_packet.SOURCE_IPADDRESS = inet_atoi(&src_ip_addr);
+ip_packet.DESTINATION_IPADDRESS = inet_atoi(destination_ip);
+ip_packet.HEADER_LENGTH = calc_ip_hl(&ip_packet);
+ip_packet.VERSION = IP_VERSION;
+ip_packet.TOS = 0;
+ip_packet.IDENTIFICATION = 0;
+ip_packet.FLAGS = 0;	
+ip_packet.FRAGMENT_OFFSET = 0;	
+ip_packet.TIME_TO_LIVE = 64;
+ip_packet.PROTOCOL = IP_PROTOCOL_ICMP;
+ip_packet.HEADER_CHECKSUM = 0; 
+ip_packet.OPTIONS_AND_PADDING = 0;
+@
+
+Es folgt die Erstellung des ICMP-Requestpakets.
+Das ICMP-Paket wird deklariert als [[icmp]] von der Struktur [[ICMP]].
+Die ICMP [[TYPE]] und [[CODE]] Felder werden gesetzt mit den Informationen für ein ICMP-Requestpaketes.
+Die Variable [[ID]] und Sequenznummer [[SEQ]] werden fix vergeben. 
+Da nur ein Paket versendet wird, ist die Erhöhung der Sequenznummer nicht notwendig. 
+Die Information im ICMP-Paket selbst, besteht nur aus einem Buchstaben.
+
+<<[[cmd_ping]]: ICMP Paketstruktur erstellen>>=
+ICMP icmp;
+icmp.TYPE = ICMP_REQ_TYPE;
+icmp.CODE = ICMP_REQ_CODE;	
+icmp.CHECKSUM = 0;
+icmp.ID = 1;		// 12297 ID: 0x3009
+icmp.SEQ = 100;
+icmp.DATA = 65;
+ip_packet.TOTAL_LENGTH = calc_ip_tl(ip_packet.HEADER_LENGTH, 
+                                   sizeof(icmp));
+@
+
+Nachdem alle Felder der IP- und ICMP-Header befüllt sind, werden nachfolgend die Prüfsummen für die Header berechnet.
+Dann folgt die Änderung der Byteorder von Quell- und Ziel-IP-Adresse, sowie der Total-Length.
+  
+<<[[cmd_ping]]: IP/ICMP Prüfsummen berechnen>>=
+ip_packet.SOURCE_IPADDRESS = 
+          bswap32(ip_packet.SOURCE_IPADDRESS);
+ip_packet.DESTINATION_IPADDRESS = 
+          bswap32(ip_packet.DESTINATION_IPADDRESS);
+ip_packet.TOTAL_LENGTH = 
+          bswap16(ip_packet.TOTAL_LENGTH);
+ip_packet.HEADER_CHECKSUM = checksum(sizeof(ip_packet), 
+                                    &ip_packet);
+icmp.CHECKSUM = checksum(sizeof(icmp), &icmp);
+@
+
+Nachdem das IP/ICMP-Paket erstellt wurde, wird das fertige ICMP-Requestpaket versendet.
+Falls beim Versenden des Pakets über den Syscall [[SYS_sendmsg]] ein Fehler auftritt, so wird eine Fehlermeldung auf der Konsole ausgegeben.
+Nach dem erfolgenden Versand wird nur noch er aktuelle Systemtick des Kernels für die später folgende Messung gespeichert.
+
+%Die Variable [[buffer_size]] wird initialisiert mit der Gesamtlänge von IP-Header und ICMP-Header.
+%Es wird ein Array [[buf]] angelegt mit der Größe von [[buffer_size]].
+%Nun wird die IP-Struktur in den [[buf]] kopiert mittels der [[memcpy]] Funktion. 
+%Nach dem IP-Paket wird das ICMP-Paket in das Array [[buf]] kopiert.
+%Das Array [[buf]] wird nun durch den Syscall [[SYS_sendmsg]] an den Kernel übertragen, welcher das Paket über SLIP versendet.
+%Falls der Syscall fehlschlägt, wird eine Nachricht angezeigt und die Funktion [[cmd_ping]] beendet.
+%Nachdem das fertige ICMP-Paket vesendet wurde, wird der aktuelle Systemtick vom Kernel geholt. 
+%Dieser Systemtick [[my_time]] dient zur Zeitmessung bei Empfang des ICMP-Response-Paket.
+
+<<[[cmd_ping]]: ICMP Paketversenden>>=
+short buffer_size = (ip_packet.HEADER_LENGTH*4) + 
+                    sizeof(icmp);
+u_char buf[buffer_size];
+memcpy(&buf, &ip_packet, (ip_packet.HEADER_LENGTH*4));		
+memcpy(&buf[(ip_packet.HEADER_LENGTH*4)], &icmp, 
+            sizeof(icmp));
+
+ret = syscall3(SYS_sendmsg, &buf, buffer_size);
+if (ret != 0) {
+  printf("Failed to send packet over SLIP");
+  return -1;
+}
+my_time = syscall1(SYS_gettick);
+@
+
+Es folgt der Ablauf für den Fall, dass ein ICMP-Responsepaket empfangen wurde.
+Der Systemtick des ICMP-Response-Paketes wird zurück berechnet und gespeichert. 
+Sollte der Systemtickwert vom Paket 0 ergeben, so wird sofort abgebrochen.
+Dann wurde vermutlich der Systemtick nicht richtig gespeichert.
+Ansonsten wird das empfangene Paket auf Übertragungsfehler geprüft und danach wieder aus dem Kernel-Buffer gelöscht.
+Die Funktion wird nach der Anzeige der Zeitdifferenz erfolgreich beendet.
+
+<<[[cmd_ping]]: ICMP Antwortpaket prüfen>>=
+ packet_time = 0;
+ for(x=0;x<4;x++){
+  packet_time = packet_time<<8;
+  packet_time += timearray[x];
+ }
+ if(packet_time == 0){
+  break;
+ }
+check_checksum(&ip_packet, &icmp);
+remove_packet(i);
+packets[i] = 0;
+@
+
+Der Timeout beim Warten auf das ICMP-Responsepaket muss eingehalten werden.
+Dazu wird die Zeitmessung über die Differenz der Systemticks genutzt.
+Es soll auch eine Meldung auf der Textkonsole angezeigt werden, falls der Timeout eintritt.
+	
+<<[[cmd_ping]]: Timeout>>=
+measure_time = syscall1(SYS_gettick);
+if(((measure_time-my_time)/100) > timeout){
+  printf("Timeout reached\n");
+  printf("1 packets transmitted, 0 packets received, \
+100.0%% packet loss\n");
+  ret = 1;
+}
+@
+
+Wenn das Makro-[[DEBUG]] deklariert ist, so werden einige Informationen zu den IP- und ICMP-Header ausgegeben.
+
+<<[[cmd_ping]]: Debug Ausgabe Paketstruktur>>=
+#ifdef DEBUG
+  printf("IP Version: %d\n", ip_packet.VERSION);
+  printf("IP Header Laenge: %d\n", ip_packet.HEADER_LENGTH);
+  printf("src_ip_addr: %s\n", src_ip_addr);
+  printf("dst_ip_addr: %s\n", destination_ip);	
+  printf("IP Source: %u\n", ip_packet.SOURCE_IPADDRESS);
+  printf("IP Dest: %u\n", ip_packet.DESTINATION_IPADDRESS);
+  printf("OPT / PADDING: %u\n", 
+        ip_packet.OPTIONS_AND_PADDING);	
+  printf("IP Total Length: %d\n", ip_packet.TOTAL_LENGTH);
+  printf("Buffersize IP (inc. pad): %d\n", 
+        sizeof(ip_packet));
+  printf("ICMP Type: %u\n",icmp.TYPE); 
+  printf("ICMP Code: %u\n",icmp.CODE);
+  printf("ICMP ID: %u\n",icmp.ID);
+  printf("ICMP Seq: %u\n",icmp.SEQ);
+  printf("ICMP Data: %u\n",icmp.DATA);
+  printf("Buffersize ICMP: %d\n", sizeof(icmp));
+#endif
+@
+
+Nach dem Versand des ICMP-Request-Paketes können die Bytes des Paketes angezeigt werden, falls das Makro-[[DEBUG]] deklariert ist.
+
+<<[[cmd_ping]]: Debug Ausgabe nach dem Versand>>=
+#ifdef DEBUG
+  printf("IP ChkSum: %u\n",ip_packet.HEADER_CHECKSUM);
+  printf("ICMP ChkSum: %u\n",icmp.CHECKSUM);
+  printf("\nSend Buffer: ");
+  for (i=0;i<buffer_size;i++){
+    printf("%d ", buf[i]);
+  }
+  printf("\n");
+#endif
+@
+
+\newpage
+\section{Tests}
+
+Um zu prüfen ob, das implementierte SLIP-Modul funktioniert, werden mehrere ICMP-\DQ{ping}-Tests erstellt.
+Es soll geprüft werden, ob die IP- und ICMP-Pakete richtig erstellt werden, und bei dem Zielsystem ankommen.
+Das Zielsystem wird die Pakete ablehnen, wenn die Pakete fehlerhaft sind.
+Sollten die IP/ICMP-Prüfsummen zum Beispiel nicht stimmen, wird das Zielsystem die Pakete verwerfen, ohne ein Antwort-Paket zu generieren. 
+Es werden insgesamt zwei Tests gemacht.
+Der erste Test soll einen Ping von einem Ulix-System zu einem anderen Betriebssystem senden.
+Als Ergebnis wird erwartet, dass der ICMP-Request vom Zielsystem beantwortet wird und das SLIP-Modul in Ulix das Antwortpaket empfängt und auswertet.
+Beim Zweiten Test wird ein Ping von einem anderen Betriebssystem an Ulix gesendet.
+Damit wird der IP-Daemon vom SLIP-Modul getestet. Sobald der ICMP-Request beim Ulix-System ankommt, soll der IP-Daemon das Request-Paket analysieren und ein Response-Paket erzeugen. Das Response-Paket soll nur dann erzeugt werden, wenn das Request-Paket an die richtige IP-Adresse versendet wurde.
+Das Ergebnis bei zweiten Test soll sein, dass das Response-Paket vom Sender richtig empfangen wurde und dass das [[ping]]-Programm den erfolgreichen Empfang anzeigt.
+%%% TODO: Wireshark & tcpdump Webseiten als Quelle
+Zur Überprüfung der übertragenen Datenpakete werden die Programme \DQ{wireshark} \cite{wir14} und \DQ{tcpdump} verwendet.
+Als Test-IP-Adressen werden 192.168.0.1 für die Ulix-VM und 192.168.0.2 für die zweite VM genommen.
+
+\subsection{Ping Test aus der Ulix VM}
+
+Für den Ping-Test aus einem Ulix-System zu einem anderen System werden zwei Maschinen verwendet.
+Die erste Maschine ist das Ulix-System selbst. Die zweite Maschine ist ein weiteres Unix-System. In diesem Fall ein OpenBSD welches in einer VirtualBox VM läuft.
+Für die virtuelle serielle Leitung zwischen den beiden virtuellen Maschinen, dienen zwei Socket-Dateien welche, mit dem Programm \DQ{socat} verbunden werden.
+Zuerst wird das Ulix-System gestartet.
+
+\begin{figure}[H]
+\lstset{language=sh,breaklines=true,captionpos=b,caption={Start der Ulix VM},label=Start der Ulix VM}
+\begin{lstlisting}[frame=single] 
+qemu-system-i386 -m 64 -fda ulixboot.img -fdb minixdata.img -serial file:/dev/null \
+                 -serial unix:/tmp/serial_machine1,server,nowait &
+\end{lstlisting}
+\end{figure}
+
+Die Einrichtung einer zweiten VM mittels VirtualBox wird nicht beschrieben.
+Es wird auf die Dokumentation von VirtualBox \cite{vbox14} für die Einrichtung einer VM verwiesen.
+Zum Installieren und Konfigurieren des OpenBSD Betriebssystems wird auch hier auf die Dokumentation \cite{obsd14} verwiesen.
+Die VirtualBox VM muss vor dem Start noch auf die Benutzung einer virtuellen seriellen Schnittstelle eingestellt werden. 
+Dazu wird der VM der virtuelle serielle Port 1 aktiviert. Der Portmodus steht auf Host-Pipe, welcher als \DQ{uartmode1 server} definiert wird.
+Die Host-Pipe Datei muss angegeben werden und ist in dem Beispiel als Datei [[/tmp/serial_machine2]] definiert.
+Durch den Portmodus \DQ{Host-Pipe} wird auf dem Host eine Socket-Datei erzeugt, welche von beiden virtuellen Maschinen benutzt werden kann.
+Der Aufruf des Befehls für die Einstellung der seriellen Schnittstelle von der zweiten VM erfolgt über den Befehl: [[VBoxManage modifyvm machine2 --uartmode1 server /tmp/serial_machine2]].
+
+Zum Starten der VirtualBox-VM reicht das folgende Kommando \DQ{VBoxSDL --startvm machine2}
+Die VM startet dann in einer grafischen Konsole.
+Es ist auch möglich, die VM ohne grafische Ausgabe und ohne jegliche Konsole zu starten.
+
+Nachdem beide VMs laufen, müssen nur noch die beiden Unix-Socket-Dateien verbunden werden.
+Dazu wird das \DQ{socat} Programm mit dem Befehl [[socat unix-connect:/tmp/serial_machine1 unix:/tmp/serial_machine2]] genutzt.
+
+In der OpenBSD VM wird die serielle Schnittstelle mit dem [[sl0]]-Interface verbunden.
+Danach wird die IP-Adresse der OpenBSD VM und die IP-Adresse der Ulix-VM auf dem Interface-[[sl0]] konfiguriert.
+Für die Einrichtung des Interfaces sind Root-Rechte notwendig.
+
+\begin{figure}[H]
+\lstset{language=sh,captionpos=b,caption={Einstellen des SLIP Interfaces auf der OpenBSD-VM},label=Einstellen des SLIP Interfaces auf der OpenBSD-VM}
+\begin{lstlisting}[frame=single] 
+ifconfig sl0 192.168.0.2 192.168.0.1 -link2
+slattach tty00
+\end{lstlisting}
+\end{figure}
+
+In der Ulix-VM wird die eigene IP-Adresse angepasst. 
+Der Hostname wird auf [[machine1]] gesetzt.
+Die IP vom Hostname [[machine1]] ist die 192.168.0.1, welche wiederum in der Datei \DQ{/etc/hosts} definiert ist.
+Danach folgt der Ping von der Ulix-VM zur OpenBSD-VM.
+
+\begin{figure}[H]
+\lstset{language=sh,captionpos=b,caption={Test-Ping von Ulix},label=Test-Ping von Ulix}
+\begin{lstlisting}[frame=single] 
+hostname machine1
+ping 192.168.0.2
+\end{lstlisting}
+\end{figure}
+
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test1-1.png}
+        }
+        \caption[Test1-1]{tcpdump des Ping-Tests auf der OpenBSD-VM}
+        \label{Test1-1}
+\end{figure}
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test1-2.png}
+        }
+        \caption[Test1-2]{Ulix-Konsolenausgabe des Ping-Tests}
+        \label{Test1-2}
+\end{figure}
+
+Der Ping von der Ulix-VM an die OpenBSD-VM zeigt, dass das ICMP-Requestpaket übertragen und ein Response-Paket empfangen wurde.
+Auf der OpenBSD-VM wurde ein tcpdump gestartet, der auf dem Interface \DQ{sl0} lauscht.
+Wie in Abbildung \ref{Test1-1} zu sehen ist, wurde auch hier ein ICMP-Request-Paket empfangen und danach das ICMP-Response-Paket an die Ulix-VM gesendet.
+
+\subsection{IP-Daemon Test}
+
+Für den IP-Daemon-Test können die selben VMs genutzt werden wie im ersten Test.
+Diesmal wird der Ping vom OpenBSD-System aus versendet.
+Als Ergebnis sollte die Ulix-VM das ICMP-Request-Paket erhalten und im Puffer speichern.
+Der IP-Daemon sollte daraufhin das ICMP-Request-Paket im Puffer finden und dann ein ICMP-Response-Paket versenden.
+
+Für den Test muss in der Ulix-VM der IP-Daemon gestartet werden.
+Dies erfolgt über ein einfaches Kommando mittels [[ipd]].
+Der IPD wird die IP-Adresse vom Hostname festellen (Abbildung \ref{Test2-1}).
+
+Um den Netzwerkverkehr im Nachhinein  auswerten zu können, wird in der OpenBSD-VM ein Netzwerk-Trace aktiviert.
+Das Starten des Netzwerk-Traces erfolgt mit dem Befehl [[tcpdump -i sl0 -w /tmp/trace.pcap &]].
+
+Beim Ping von der OpenBSD-VM muss die Paketegröße angepasst werden.
+Der Puffer in der Ulix-VM ist auf 40 Bytes eingestellt und, ein normales ICMP-Paket wird mit 56 Bytes versendet.
+Auch die Anzahl der zu testenden ICMP-Pakete wird auf 1 gestellt.
+Der Ping erfolgt mit dem Befehl [[ping -s 1 -c 1 192.168.0.1]]
+
+Das ICMP-Response-Paket vom Ulix-System sollte innerhalb weniger Millisekunden erstellt und an die OpenBSD-VM gesendet werden.
+Nach dem Ping kann der Trace mit [[kill \%1]] wieder abgeschalten werden.
+Die Analyse erfolgt durch das grafische Programm \DQ{wireshark} auf dem Hostsystem.
+Das Tracefile wird dazu aus der VM kopiert und anschließend in Wireshark geöffnet.
+
+In Abbildung \ref{Test2-4} kann man den Netzwerk-Trace im Wireshark sehen.
+Beide Pakete wurden erfolgreich übertragen.
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test2-1.png}
+        }
+        \caption[Test2-1]{Konsolenausgabe beim Starten des IP-Daemons auf der Ulix-VM}
+        \label{Test2-1}
+\end{figure}
+
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test2-2.png}
+        }
+        \caption[Test2-2]{Konsolenausgabe des Ping-Tests in der OpenBSD-VM}
+        \label{Test2-2}
+\end{figure}
+
+
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test2-3.png}
+        }
+        \caption[Test2-3]{Konsolenausgabe des empfangenen ICMP-Paketes in der Ulix-VM}
+        \label{Test2-3}
+\end{figure}
+
+\begin{figure}[H]
+        \centering
+        \fbox{
+                \includegraphics[width = 11cm]{pictures/test2-4.png}
+        }
+        \caption[Test2-4]{Anzeige des Paketmitschnitt in Wireshark}
+        \label{Test2-4}
+\end{figure}
+
+\newpage
+\section{Lizenz}
+
+Als Lizenz für das SLIP-Modul wurde die BSD 4 Clause [[licence]] gewählt.
+
+<<license>>=
+/*
+Copyright (c) C.Dornig
+
+The Regents of the University of California. 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with 
+or without modification, are permitted provided that the 
+following conditions are met:
+
+1. Redistributions of source code must retain the above 
+copyright notice, this list of conditions and 
+the following disclaimer.
+2. Redistributions in binary form must reproduce the above 
+copyright notice, this list of conditions and the following 
+disclaimer in the documentation and/or other materials 
+provided with the distribution.
+3. All advertising materials mentioning features or use 
+of this software must display the following 
+acknowledgement: "This product includes software developed 
+by the University of California, Berkeley and 
+its contributors."
+4. Neither the name of the University nor the names 
+of its contributors may be used to endorse or promote 
+products derived from this software without specific prior 
+written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS 
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, 
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS 
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; 
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+@

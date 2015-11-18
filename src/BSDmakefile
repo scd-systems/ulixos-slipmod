@@ -1,0 +1,16 @@
+PARA:=$@
+
+all:
+	gmake $(PARA)
+
+pdf:
+	gmake $(PARA)
+
+image:	
+	gmake $(PARA)
+
+qemu-run:	
+	gmake $(PARA)
+
+clean:
+	gmake $(PARA)

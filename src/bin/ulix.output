@@ -1,0 +1,1867 @@
+xv6...
+Serial port active
+Serial port 2 active
+Kernel page directory setup.
+Ulix-i386 0.08                           Build: Thu Jul 18 18:02:00 CEST 2013
+Physical RAM (64 MB) mapped to 0xD0000000-0xD3FFFFFF.
+Initialized ten terminals (press [Alt-1] to [Alt-0])
+nulled buffer cache; size: 66304
+*DEBUG: &fdc_oc_lock->l = c0201f4c
+DEBUG: &fdc_rw_lock->l = c0201f58
+FDC: fda is 1.44M, fdb is 1.44M
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+FDC: interrupt
+initial_stack = 0xc0224244
+Starting five shells on tty0..tty4. Type exit to quit.
+
+mx_open: entered
+pathname_to_ino: entered
+DEBUG: searching for subpath sh in inode 1
+read_write_dir_entry: entered
+read_write_dir_entry: before read_inode()
+read_write_inode: entered
+get_imap_bit: entered
+get_imap_bit: before readblock()
+readblock: arg1 address: c021b070
+readblock: arg2 address: c021b074
+readblock(2): entered
+*DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+get_imap_bit: after readblock()
+read_write_inode: after get_imap_bit()
+readblock: arg1 address: c021b4a0
+readblock: arg2 address: c021b4a4
+readblock(4): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+read_write_dir_entry: after read_inode()
+readblock: arg1 address: c021b900
+readblock: arg2 address: c021b904
+readblock(34): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+pathname_to_ino: after read_dir_entry()
+read_write_dir_entry: entered
+read_write_dir_entry: before read_inode()
+read_write_inode: entered
+get_imap_bit: entered
+get_imap_bit: before readblock()
+readblock: arg1 address: c021b070
+readblock: arg2 address: c021b074
+readblock(2): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+get_imap_bit: after readblock()
+read_write_inode: after get_imap_bit()
+readblock: arg1 address: c021b4a0
+readblock: arg2 address: c021b4a4
+readblock(4): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+read_write_dir_entry: after read_inode()
+readblock: arg1 address: c021b900
+readblock: arg2 address: c021b904
+readblock(34): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+pathname_to_ino: after read_dir_entry()
+read_write_dir_entry: entered
+read_write_dir_entry: before read_inode()
+read_write_inode: entered
+get_imap_bit: entered
+get_imap_bit: before readblock()
+readblock: arg1 address: c021b070
+readblock: arg2 address: c021b074
+readblock(2): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+get_imap_bit: after readblock()
+read_write_inode: after get_imap_bit()
+readblock: arg1 address: c021b4a0
+readblock: arg2 address: c021b4a4
+readblock(4): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+read_write_dir_entry: after read_inode()
+readblock: arg1 address: c021b900
+readblock: arg2 address: c021b904
+readblock(34): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+pathname_to_ino: after read_dir_entry()
+DEBUG: subpath = sh, inode = 2
+DEBUG: returning inode no 2
+DEBUG: ext_ino = 2
+mx_open: after pathname_to_ino()
+read_write_inode: entered
+get_imap_bit: entered
+get_imap_bit: before readblock()
+readblock: arg1 address: c021b800
+readblock: arg2 address: c021b804
+readblock(2): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+get_imap_bit: after readblock()
+read_write_inode: after get_imap_bit()
+readblock: arg1 address: c021bc30
+readblock: arg2 address: c021bc34
+readblock(4): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: mx_read: 32768 bytes
+
+DIRECT: 35
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(35): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 36
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(36): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 37
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(37): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 38
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(38): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 39
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(39): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 40
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(40): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+DIRECT: 41
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(41): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 43
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(43): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 44
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(44): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 45
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(45): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 46
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(46): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 47
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(47): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 48
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(48): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 49
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(49): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 50
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(50): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+
+INDIRECTIONS IN: 42, readblock: arg1 address: c021b850
+readblock: arg2 address: c021b854
+readblock(42): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+INDIRECT: 51
+readblock: arg1 address: c021bc80
+readblock: arg2 address: c021bc84
+readblock(51): entered
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+DEBUG: memcpy() called in line 14511
+BEFORE request_new_page
+AFTER request_new_page
+NOTICE:  activate_address_space (1) called!
+ENTER <create new page table>
+asid loop: asid = 0
+asid loop: asid = 1
+asid loop: asid = 2
+asid loop: asid = 3
+asid loop: asid = 4
+asid loop: asid = 5
+asid loop: asid = 6
+asid loop: asid = 7
+asid loop: asid = 8
+asid loop: asid = 9
+asid loop: asid = 10
+asid loop: asid = 11
+asid loop: asid = 12
+asid loop: asid = 13
+asid loop: asid = 14
+asid loop: asid = 15
+asid loop: asid = 16
+asid loop: asid = 17
+asid loop: asid = 18
+asid loop: asid = 19
+asid loop: asid = 20
+asid loop: asid = 21
+asid loop: asid = 22
+asid loop: asid = 23
+asid loop: asid = 24
+asid loop: asid = 25
+asid loop: asid = 26
+asid loop: asid = 27
+asid loop: asid = 28
+asid loop: asid = 29
+asid loop: asid = 30
+asid loop: asid = 31
+asid loop: asid = 32
+asid loop: asid = 33
+asid loop: asid = 34
+asid loop: asid = 35
+asid loop: asid = 36
+asid loop: asid = 37
+asid loop: asid = 38
+asid loop: asid = 39
+asid loop: asid = 40
+asid loop: asid = 41
+asid loop: asid = 42
+asid loop: asid = 43
+asid loop: asid = 44
+asid loop: asid = 45
+asid loop: asid = 46
+asid loop: asid = 47
+asid loop: asid = 48
+asid loop: asid = 49
+asid loop: asid = 50
+asid loop: asid = 51
+asid loop: asid = 52
+asid loop: asid = 53
+asid loop: asid = 54
+asid loop: asid = 55
+asid loop: asid = 56
+asid loop: asid = 57
+asid loop: asid = 58
+asid loop: asid = 59
+asid loop: asid = 60
+asid loop: asid = 61
+asid loop: asid = 62
+asid loop: asid = 63
+asid loop: asid = 64
+asid loop: asid = 65
+asid loop: asid = 66
+asid loop: asid = 67
+asid loop: asid = 68
+asid loop: asid = 69
+asid loop: asid = 70
+asid loop: asid = 71
+asid loop: asid = 72
+asid loop: asid = 73
+asid loop: asid = 74
+asid loop: asid = 75
+asid loop: asid = 76
+asid loop: asid = 77
+asid loop: asid = 78
+asid loop: asid = 79
+asid loop: asid = 80
+asid loop: asid = 81
+asid loop: asid = 82
+asid loop: asid = 83
+asid loop: asid = 84
+asid loop: asid = 85
+asid loop: asid = 86
+asid loop: asid = 87
+asid loop: asid = 88
+asid loop: asid = 89
+asid loop: asid = 90
+asid loop: asid = 91
+asid loop: asid = 92
+asid loop: asid = 93
+asid loop: asid = 94
+asid loop: asid = 95
+asid loop: asid = 96
+asid loop: asid = 97
+asid loop: asid = 98
+asid loop: asid = 99
+asid loop: asid = 100
+asid loop: asid = 101
+asid loop: asid = 102
+asid loop: asid = 103
+asid loop: asid = 104
+asid loop: asid = 105
+asid loop: asid = 106
+asid loop: asid = 107
+asid loop: asid = 108
+asid loop: asid = 109
+asid loop: asid = 110
+asid loop: asid = 111
+asid loop: asid = 112
+asid loop: asid = 113
+asid loop: asid = 114
+asid loop: asid = 115
+asid loop: asid = 116
+asid loop: asid = 117
+asid loop: asid = 118
+asid loop: asid = 119
+asid loop: asid = 120
+asid loop: asid = 121
+asid loop: asid = 122
+asid loop: asid = 123
+asid loop: asid = 124
+asid loop: asid = 125
+asid loop: asid = 126
+asid loop: asid = 127
+asid loop: asid = 128
+asid loop: asid = 129
+asid loop: asid = 130
+asid loop: asid = 131
+asid loop: asid = 132
+asid loop: asid = 133
+asid loop: asid = 134
+asid loop: asid = 135
+asid loop: asid = 136
+asid loop: asid = 137
+asid loop: asid = 138
+asid loop: asid = 139
+asid loop: asid = 140
+asid loop: asid = 141
+asid loop: asid = 142
+asid loop: asid = 143
+asid loop: asid = 144
+asid loop: asid = 145
+asid loop: asid = 146
+asid loop: asid = 147
+asid loop: asid = 148
+asid loop: asid = 149
+asid loop: asid = 150
+asid loop: asid = 151
+asid loop: asid = 152
+asid loop: asid = 153
+asid loop: asid = 154
+asid loop: asid = 155
+asid loop: asid = 156
+asid loop: asid = 157
+asid loop: asid = 158
+asid loop: asid = 159
+asid loop: asid = 160
+asid loop: asid = 161
+asid loop: asid = 162
+asid loop: asid = 163
+asid loop: asid = 164
+asid loop: asid = 165
+asid loop: asid = 166
+asid loop: asid = 167
+asid loop: asid = 168
+asid loop: asid = 169
+asid loop: asid = 170
+asid loop: asid = 171
+asid loop: asid = 172
+asid loop: asid = 173
+asid loop: asid = 174
+asid loop: asid = 175
+asid loop: asid = 176
+asid loop: asid = 177
+asid loop: asid = 178
+asid loop: asid = 179
+asid loop: asid = 180
+asid loop: asid = 181
+asid loop: asid = 182
+asid loop: asid = 183
+asid loop: asid = 184
+asid loop: asid = 185
+asid loop: asid = 186
+asid loop: asid = 187
+asid loop: asid = 188
+asid loop: asid = 189
+asid loop: asid = 190
+asid loop: asid = 191
+asid loop: asid = 192
+asid loop: asid = 193
+asid loop: asid = 194
+asid loop: asid = 195
+asid loop: asid = 196
+asid loop: asid = 197
+asid loop: asid = 198
+asid loop: asid = 199
+asid loop: asid = 200
+asid loop: asid = 201
+asid loop: asid = 202
+asid loop: asid = 203
+asid loop: asid = 204
+asid loop: asid = 205
+asid loop: asid = 206
+asid loop: asid = 207
+asid loop: asid = 208
+asid loop: asid = 209
+asid loop: asid = 210
+asid loop: asid = 211
+asid loop: asid = 212
+asid loop: asid = 213
+asid loop: asid = 214
+asid loop: asid = 215
+asid loop: asid = 216
+asid loop: asid = 217
+asid loop: asid = 218
+asid loop: asid = 219
+asid loop: asid = 220
+asid loop: asid = 221
+asid loop: asid = 222
+asid loop: asid = 223
+asid loop: asid = 224
+asid loop: asid = 225
+asid loop: asid = 226
+asid loop: asid = 227
+asid loop: asid = 228
+asid loop: asid = 229
+asid loop: asid = 230
+asid loop: asid = 231
+asid loop: asid = 232
+asid loop: asid = 233
+asid loop: asid = 234
+asid loop: asid = 235
+asid loop: asid = 236
+asid loop: asid = 237
+asid loop: asid = 238
+asid loop: asid = 239
+asid loop: asid = 240
+asid loop: asid = 241
+asid loop: asid = 242
+asid loop: asid = 243
+asid loop: asid = 244
+asid loop: asid = 245
+asid loop: asid = 246
+asid loop: asid = 247
+asid loop: asid = 248
+asid loop: asid = 249
+asid loop: asid = 250
+asid loop: asid = 251
+asid loop: asid = 252
+asid loop: asid = 253
+asid loop: asid = 254
+asid loop: asid = 255
+asid loop: asid = 256
+asid loop: asid = 257
+asid loop: asid = 258
+asid loop: asid = 259
+asid loop: asid = 260
+asid loop: asid = 261
+asid loop: asid = 262
+asid loop: asid = 263
+asid loop: asid = 264
+asid loop: asid = 265
+asid loop: asid = 266
+asid loop: asid = 267
+asid loop: asid = 268
+asid loop: asid = 269
+asid loop: asid = 270
+asid loop: asid = 271
+asid loop: asid = 272
+asid loop: asid = 273
+asid loop: asid = 274
+asid loop: asid = 275
+asid loop: asid = 276
+asid loop: asid = 277
+asid loop: asid = 278
+asid loop: asid = 279
+asid loop: asid = 280
+asid loop: asid = 281
+asid loop: asid = 282
+asid loop: asid = 283
+asid loop: asid = 284
+asid loop: asid = 285
+asid loop: asid = 286
+asid loop: asid = 287
+asid loop: asid = 288
+asid loop: asid = 289
+asid loop: asid = 290
+asid loop: asid = 291
+asid loop: asid = 292
+asid loop: asid = 293
+asid loop: asid = 294
+asid loop: asid = 295
+asid loop: asid = 296
+asid loop: asid = 297
+asid loop: asid = 298
+asid loop: asid = 299
+asid loop: asid = 300
+asid loop: asid = 301
+asid loop: asid = 302
+asid loop: asid = 303
+asid loop: asid = 304
+asid loop: asid = 305
+asid loop: asid = 306
+asid loop: asid = 307
+asid loop: asid = 308
+asid loop: asid = 309
+asid loop: asid = 310
+asid loop: asid = 311
+asid loop: asid = 312
+asid loop: asid = 313
+asid loop: asid = 314
+asid loop: asid = 315
+asid loop: asid = 316
+asid loop: asid = 317
+asid loop: asid = 318
+asid loop: asid = 319
+asid loop: asid = 320
+asid loop: asid = 321
+asid loop: asid = 322
+asid loop: asid = 323
+asid loop: asid = 324
+asid loop: asid = 325
+asid loop: asid = 326
+asid loop: asid = 327
+asid loop: asid = 328
+asid loop: asid = 329
+asid loop: asid = 330
+asid loop: asid = 331
+asid loop: asid = 332
+asid loop: asid = 333
+asid loop: asid = 334
+asid loop: asid = 335
+asid loop: asid = 336
+asid loop: asid = 337
+asid loop: asid = 338
+asid loop: asid = 339
+asid loop: asid = 340
+asid loop: asid = 341
+asid loop: asid = 342
+asid loop: asid = 343
+asid loop: asid = 344
+asid loop: asid = 345
+asid loop: asid = 346
+asid loop: asid = 347
+asid loop: asid = 348
+asid loop: asid = 349
+asid loop: asid = 350
+asid loop: asid = 351
+asid loop: asid = 352
+asid loop: asid = 353
+asid loop: asid = 354
+asid loop: asid = 355
+asid loop: asid = 356
+asid loop: asid = 357
+asid loop: asid = 358
+asid loop: asid = 359
+asid loop: asid = 360
+asid loop: asid = 361
+asid loop: asid = 362
+asid loop: asid = 363
+asid loop: asid = 364
+asid loop: asid = 365
+asid loop: asid = 366
+asid loop: asid = 367
+asid loop: asid = 368
+asid loop: asid = 369
+asid loop: asid = 370
+asid loop: asid = 371
+asid loop: asid = 372
+asid loop: asid = 373
+asid loop: asid = 374
+asid loop: asid = 375
+asid loop: asid = 376
+asid loop: asid = 377
+asid loop: asid = 378
+asid loop: asid = 379
+asid loop: asid = 380
+asid loop: asid = 381
+asid loop: asid = 382
+asid loop: asid = 383
+asid loop: asid = 384
+asid loop: asid = 385
+asid loop: asid = 386
+asid loop: asid = 387
+asid loop: asid = 388
+asid loop: asid = 389
+asid loop: asid = 390
+asid loop: asid = 391
+asid loop: asid = 392
+asid loop: asid = 393
+asid loop: asid = 394
+asid loop: asid = 395
+asid loop: asid = 396
+asid loop: asid = 397
+asid loop: asid = 398
+asid loop: asid = 399
+asid loop: asid = 400
+asid loop: asid = 401
+asid loop: asid = 402
+asid loop: asid = 403
+asid loop: asid = 404
+asid loop: asid = 405
+asid loop: asid = 406
+asid loop: asid = 407
+asid loop: asid = 408
+asid loop: asid = 409
+asid loop: asid = 410
+asid loop: asid = 411
+asid loop: asid = 412
+asid loop: asid = 413
+asid loop: asid = 414
+asid loop: asid = 415
+asid loop: asid = 416
+asid loop: asid = 417
+asid loop: asid = 418
+asid loop: asid = 419
+asid loop: asid = 420
+asid loop: asid = 421
+asid loop: asid = 422
+asid loop: asid = 423
+asid loop: asid = 424
+asid loop: asid = 425
+asid loop: asid = 426
+asid loop: asid = 427
+asid loop: asid = 428
+asid loop: asid = 429
+asid loop: asid = 430
+asid loop: asid = 431
+asid loop: asid = 432
+asid loop: asid = 433
+asid loop: asid = 434
+asid loop: asid = 435
+asid loop: asid = 436
+asid loop: asid = 437
+asid loop: asid = 438
+asid loop: asid = 439
+asid loop: asid = 440
+asid loop: asid = 441
+asid loop: asid = 442
+asid loop: asid = 443
+asid loop: asid = 444
+asid loop: asid = 445
+asid loop: asid = 446
+asid loop: asid = 447
+asid loop: asid = 448
+asid loop: asid = 449
+asid loop: asid = 450
+asid loop: asid = 451
+asid loop: asid = 452
+asid loop: asid = 453
+asid loop: asid = 454
+asid loop: asid = 455
+asid loop: asid = 456
+asid loop: asid = 457
+asid loop: asid = 458
+asid loop: asid = 459
+asid loop: asid = 460
+asid loop: asid = 461
+asid loop: asid = 462
+asid loop: asid = 463
+asid loop: asid = 464
+asid loop: asid = 465
+asid loop: asid = 466
+asid loop: asid = 467
+asid loop: asid = 468
+asid loop: asid = 469
+asid loop: asid = 470
+asid loop: asid = 471
+asid loop: asid = 472
+asid loop: asid = 473
+asid loop: asid = 474
+asid loop: asid = 475
+asid loop: asid = 476
+asid loop: asid = 477
+asid loop: asid = 478
+asid loop: asid = 479
+asid loop: asid = 480
+asid loop: asid = 481
+asid loop: asid = 482
+asid loop: asid = 483
+asid loop: asid = 484
+asid loop: asid = 485
+asid loop: asid = 486
+asid loop: asid = 487
+asid loop: asid = 488
+asid loop: asid = 489
+asid loop: asid = 490
+asid loop: asid = 491
+asid loop: asid = 492
+asid loop: asid = 493
+asid loop: asid = 494
+asid loop: asid = 495
+asid loop: asid = 496
+asid loop: asid = 497
+asid loop: asid = 498
+asid loop: asid = 499
+asid loop: asid = 500
+asid loop: asid = 501
+asid loop: asid = 502
+asid loop: asid = 503
+asid loop: asid = 504
+asid loop: asid = 505
+asid loop: asid = 506
+asid loop: asid = 507
+asid loop: asid = 508
+asid loop: asid = 509
+asid loop: asid = 510
+asid loop: asid = 511
+asid loop: asid = 512
+asid loop: asid = 513
+asid loop: asid = 514
+asid loop: asid = 515
+asid loop: asid = 516
+asid loop: asid = 517
+asid loop: asid = 518
+asid loop: asid = 519
+asid loop: asid = 520
+asid loop: asid = 521
+asid loop: asid = 522
+asid loop: asid = 523
+asid loop: asid = 524
+asid loop: asid = 525
+asid loop: asid = 526
+asid loop: asid = 527
+asid loop: asid = 528
+asid loop: asid = 529
+asid loop: asid = 530
+asid loop: asid = 531
+asid loop: asid = 532
+asid loop: asid = 533
+asid loop: asid = 534
+asid loop: asid = 535
+asid loop: asid = 536
+asid loop: asid = 537
+asid loop: asid = 538
+asid loop: asid = 539
+asid loop: asid = 540
+asid loop: asid = 541
+asid loop: asid = 542
+asid loop: asid = 543
+asid loop: asid = 544
+asid loop: asid = 545
+asid loop: asid = 546
+asid loop: asid = 547
+asid loop: asid = 548
+asid loop: asid = 549
+asid loop: asid = 550
+asid loop: asid = 551
+asid loop: asid = 552
+asid loop: asid = 553
+asid loop: asid = 554
+asid loop: asid = 555
+asid loop: asid = 556
+asid loop: asid = 557
+asid loop: asid = 558
+asid loop: asid = 559
+asid loop: asid = 560
+asid loop: asid = 561
+asid loop: asid = 562
+asid loop: asid = 563
+asid loop: asid = 564
+asid loop: asid = 565
+asid loop: asid = 566
+asid loop: asid = 567
+asid loop: asid = 568
+asid loop: asid = 569
+asid loop: asid = 570
+asid loop: asid = 571
+asid loop: asid = 572
+asid loop: asid = 573
+asid loop: asid = 574
+asid loop: asid = 575
+asid loop: asid = 576
+asid loop: asid = 577
+asid loop: asid = 578
+asid loop: asid = 579
+asid loop: asid = 580
+asid loop: asid = 581
+asid loop: asid = 582
+asid loop: asid = 583
+asid loop: asid = 584
+asid loop: asid = 585
+asid loop: asid = 586
+asid loop: asid = 587
+asid loop: asid = 588
+asid loop: asid = 589
+asid loop: asid = 590
+asid loop: asid = 591
+asid loop: asid = 592
+asid loop: asid = 593
+asid loop: asid = 594
+asid loop: asid = 595
+asid loop: asid = 596
+asid loop: asid = 597
+asid loop: asid = 598
+asid loop: asid = 599
+asid loop: asid = 600
+asid loop: asid = 601
+asid loop: asid = 602
+asid loop: asid = 603
+asid loop: asid = 604
+asid loop: asid = 605
+asid loop: asid = 606
+asid loop: asid = 607
+asid loop: asid = 608
+asid loop: asid = 609
+asid loop: asid = 610
+asid loop: asid = 611
+asid loop: asid = 612
+asid loop: asid = 613
+asid loop: asid = 614
+asid loop: asid = 615
+asid loop: asid = 616
+asid loop: asid = 617
+asid loop: asid = 618
+asid loop: asid = 619
+asid loop: asid = 620
+asid loop: asid = 621
+asid loop: asid = 622
+asid loop: asid = 623
+asid loop: asid = 624
+asid loop: asid = 625
+asid loop: asid = 626
+asid loop: asid = 627
+asid loop: asid = 628
+asid loop: asid = 629
+asid loop: asid = 630
+asid loop: asid = 631
+asid loop: asid = 632
+asid loop: asid = 633
+asid loop: asid = 634
+asid loop: asid = 635
+asid loop: asid = 636
+asid loop: asid = 637
+asid loop: asid = 638
+asid loop: asid = 639
+asid loop: asid = 640
+asid loop: asid = 641
+asid loop: asid = 642
+asid loop: asid = 643
+asid loop: asid = 644
+asid loop: asid = 645
+asid loop: asid = 646
+asid loop: asid = 647
+asid loop: asid = 648
+asid loop: asid = 649
+asid loop: asid = 650
+asid loop: asid = 651
+asid loop: asid = 652
+asid loop: asid = 653
+asid loop: asid = 654
+asid loop: asid = 655
+asid loop: asid = 656
+asid loop: asid = 657
+asid loop: asid = 658
+asid loop: asid = 659
+asid loop: asid = 660
+asid loop: asid = 661
+asid loop: asid = 662
+asid loop: asid = 663
+asid loop: asid = 664
+asid loop: asid = 665
+asid loop: asid = 666
+asid loop: asid = 667
+asid loop: asid = 668
+asid loop: asid = 669
+asid loop: asid = 670
+asid loop: asid = 671
+asid loop: asid = 672
+asid loop: asid = 673
+asid loop: asid = 674
+asid loop: asid = 675
+asid loop: asid = 676
+asid loop: asid = 677
+asid loop: asid = 678
+asid loop: asid = 679
+asid loop: asid = 680
+asid loop: asid = 681
+asid loop: asid = 682
+asid loop: asid = 683
+asid loop: asid = 684
+asid loop: asid = 685
+asid loop: asid = 686
+asid loop: asid = 687
+asid loop: asid = 688
+asid loop: asid = 689
+asid loop: asid = 690
+asid loop: asid = 691
+asid loop: asid = 692
+asid loop: asid = 693
+asid loop: asid = 694
+asid loop: asid = 695
+asid loop: asid = 696
+asid loop: asid = 697
+asid loop: asid = 698
+asid loop: asid = 699
+asid loop: asid = 700
+asid loop: asid = 701
+asid loop: asid = 702
+asid loop: asid = 703
+asid loop: asid = 704
+asid loop: asid = 705
+asid loop: asid = 706
+asid loop: asid = 707
+asid loop: asid = 708
+asid loop: asid = 709
+asid loop: asid = 710
+asid loop: asid = 711
+asid loop: asid = 712
+asid loop: asid = 713
+asid loop: asid = 714
+asid loop: asid = 715
+asid loop: asid = 716
+asid loop: asid = 717
+asid loop: asid = 718
+asid loop: asid = 719
+asid loop: asid = 720
+asid loop: asid = 721
+asid loop: asid = 722
+asid loop: asid = 723
+asid loop: asid = 724
+asid loop: asid = 725
+asid loop: asid = 726
+asid loop: asid = 727
+asid loop: asid = 728
+asid loop: asid = 729
+asid loop: asid = 730
+asid loop: asid = 731
+asid loop: asid = 732
+asid loop: asid = 733
+asid loop: asid = 734
+asid loop: asid = 735
+asid loop: asid = 736
+asid loop: asid = 737
+asid loop: asid = 738
+asid loop: asid = 739
+asid loop: asid = 740
+asid loop: asid = 741
+asid loop: asid = 742
+asid loop: asid = 743
+asid loop: asid = 744
+asid loop: asid = 745
+asid loop: asid = 746
+asid loop: asid = 747
+asid loop: asid = 748
+asid loop: asid = 749
+asid loop: asid = 750
+asid loop: asid = 751
+asid loop: asid = 752
+asid loop: asid = 753
+asid loop: asid = 754
+asid loop: asid = 755
+asid loop: asid = 756
+asid loop: asid = 757
+asid loop: asid = 758
+asid loop: asid = 759
+asid loop: asid = 760
+asid loop: asid = 761
+asid loop: asid = 762
+asid loop: asid = 763
+asid loop: asid = 764
+asid loop: asid = 765
+asid loop: asid = 766
+asid loop: asid = 767
+asid loop: asid = 768
+asid loop: asid = 769
+asid loop: asid = 770
+asid loop: asid = 771
+asid loop: asid = 772
+asid loop: asid = 773
+asid loop: asid = 774
+asid loop: asid = 775
+asid loop: asid = 776
+asid loop: asid = 777
+asid loop: asid = 778
+asid loop: asid = 779
+asid loop: asid = 780
+asid loop: asid = 781
+asid loop: asid = 782
+asid loop: asid = 783
+asid loop: asid = 784
+asid loop: asid = 785
+asid loop: asid = 786
+asid loop: asid = 787
+asid loop: asid = 788
+asid loop: asid = 789
+asid loop: asid = 790
+asid loop: asid = 791
+asid loop: asid = 792
+asid loop: asid = 793
+asid loop: asid = 794
+asid loop: asid = 795
+asid loop: asid = 796
+asid loop: asid = 797
+asid loop: asid = 798
+asid loop: asid = 799
+asid loop: asid = 800
+asid loop: asid = 801
+asid loop: asid = 802
+asid loop: asid = 803
+asid loop: asid = 804
+asid loop: asid = 805
+asid loop: asid = 806
+asid loop: asid = 807
+asid loop: asid = 808
+asid loop: asid = 809
+asid loop: asid = 810
+asid loop: asid = 811
+asid loop: asid = 812
+asid loop: asid = 813
+asid loop: asid = 814
+asid loop: asid = 815
+asid loop: asid = 816
+asid loop: asid = 817
+asid loop: asid = 818
+asid loop: asid = 819
+asid loop: asid = 820
+asid loop: asid = 821
+asid loop: asid = 822
+asid loop: asid = 823
+asid loop: asid = 824
+asid loop: asid = 825
+asid loop: asid = 826
+asid loop: asid = 827
+asid loop: asid = 828
+asid loop: asid = 829
+asid loop: asid = 830
+asid loop: asid = 831
+asid loop: asid = 832
+asid loop: asid = 833
+asid loop: asid = 834
+asid loop: asid = 835
+asid loop: asid = 836
+asid loop: asid = 837
+asid loop: asid = 838
+asid loop: asid = 839
+asid loop: asid = 840
+asid loop: asid = 841
+asid loop: asid = 842
+asid loop: asid = 843
+asid loop: asid = 844
+asid loop: asid = 845
+asid loop: asid = 846
+asid loop: asid = 847
+asid loop: asid = 848
+asid loop: asid = 849
+asid loop: asid = 850
+asid loop: asid = 851
+asid loop: asid = 852
+asid loop: asid = 853
+asid loop: asid = 854
+asid loop: asid = 855
+asid loop: asid = 856
+asid loop: asid = 857
+asid loop: asid = 858
+asid loop: asid = 859
+asid loop: asid = 860
+asid loop: asid = 861
+asid loop: asid = 862
+asid loop: asid = 863
+asid loop: asid = 864
+asid loop: asid = 865
+asid loop: asid = 866
+asid loop: asid = 867
+asid loop: asid = 868
+asid loop: asid = 869
+asid loop: asid = 870
+asid loop: asid = 871
+asid loop: asid = 872
+asid loop: asid = 873
+asid loop: asid = 874
+asid loop: asid = 875
+asid loop: asid = 876
+asid loop: asid = 877
+asid loop: asid = 878
+asid loop: asid = 879
+asid loop: asid = 880
+asid loop: asid = 881
+asid loop: asid = 882
+asid loop: asid = 883
+asid loop: asid = 884
+asid loop: asid = 885
+asid loop: asid = 886
+asid loop: asid = 887
+asid loop: asid = 888
+asid loop: asid = 889
+asid loop: asid = 890
+asid loop: asid = 891
+asid loop: asid = 892
+asid loop: asid = 893
+asid loop: asid = 894
+asid loop: asid = 895
+asid loop: asid = 896
+asid loop: asid = 897
+asid loop: asid = 898
+asid loop: asid = 899
+asid loop: asid = 900
+asid loop: asid = 901
+asid loop: asid = 902
+asid loop: asid = 903
+asid loop: asid = 904
+asid loop: asid = 905
+asid loop: asid = 906
+asid loop: asid = 907
+asid loop: asid = 908
+asid loop: asid = 909
+asid loop: asid = 910
+asid loop: asid = 911
+asid loop: asid = 912
+asid loop: asid = 913
+asid loop: asid = 914
+asid loop: asid = 915
+asid loop: asid = 916
+asid loop: asid = 917
+asid loop: asid = 918
+asid loop: asid = 919
+asid loop: asid = 920
+asid loop: asid = 921
+asid loop: asid = 922
+asid loop: asid = 923
+asid loop: asid = 924
+asid loop: asid = 925
+asid loop: asid = 926
+asid loop: asid = 927
+asid loop: asid = 928
+asid loop: asid = 929
+asid loop: asid = 930
+asid loop: asid = 931
+asid loop: asid = 932
+asid loop: asid = 933
+asid loop: asid = 934
+asid loop: asid = 935
+asid loop: asid = 936
+asid loop: asid = 937
+asid loop: asid = 938
+asid loop: asid = 939
+asid loop: asid = 940
+asid loop: asid = 941
+asid loop: asid = 942
+asid loop: asid = 943
+asid loop: asid = 944
+asid loop: asid = 945
+asid loop: asid = 946
+asid loop: asid = 947
+asid loop: asid = 948
+asid loop: asid = 949
+asid loop: asid = 950
+asid loop: asid = 951
+asid loop: asid = 952
+asid loop: asid = 953
+asid loop: asid = 954
+asid loop: asid = 955
+asid loop: asid = 956
+asid loop: asid = 957
+asid loop: asid = 958
+asid loop: asid = 959
+asid loop: asid = 960
+asid loop: asid = 961
+asid loop: asid = 962
+asid loop: asid = 963
+asid loop: asid = 964
+asid loop: asid = 965
+asid loop: asid = 966
+asid loop: asid = 967
+asid loop: asid = 968
+asid loop: asid = 969
+asid loop: asid = 970
+asid loop: asid = 971
+asid loop: asid = 972
+asid loop: asid = 973
+asid loop: asid = 974
+asid loop: asid = 975
+asid loop: asid = 976
+asid loop: asid = 977
+asid loop: asid = 978
+asid loop: asid = 979
+asid loop: asid = 980
+asid loop: asid = 981
+asid loop: asid = 982
+asid loop: asid = 983
+asid loop: asid = 984
+asid loop: asid = 985
+asid loop: asid = 986
+asid loop: asid = 987
+asid loop: asid = 988
+asid loop: asid = 989
+asid loop: asid = 990
+asid loop: asid = 991
+asid loop: asid = 992
+asid loop: asid = 993
+asid loop: asid = 994
+asid loop: asid = 995
+asid loop: asid = 996
+asid loop: asid = 997
+asid loop: asid = 998
+asid loop: asid = 999
+asid loop: asid = 1000
+asid loop: asid = 1001
+asid loop: asid = 1002
+asid loop: asid = 1003
+asid loop: asid = 1004
+asid loop: asid = 1005
+asid loop: asid = 1006
+asid loop: asid = 1007
+asid loop: asid = 1008
+asid loop: asid = 1009
+asid loop: asid = 1010
+asid loop: asid = 1011
+asid loop: asid = 1012
+asid loop: asid = 1013
+asid loop: asid = 1014
+asid loop: asid = 1015
+asid loop: asid = 1016
+asid loop: asid = 1017
+asid loop: asid = 1018
+asid loop: asid = 1019
+asid loop: asid = 1020
+asid loop: asid = 1021
+asid loop: asid = 1022
+asid loop: asid = 1023
+LEAVE <create new page table>
+DEBUG. start_from_disk, kstack   = 0xbfffc000
+DEBUG. start_from_disk, tss.esp0 = 0xc0000000
+NOTICE:  activate_address_space (1) called!
+FDC: interrupt
+ULIX fork
+BEFORE request_new_page
+in ulix_fork: request_new_frame() = 1048
+AFTER request_new_page
+in ulix_fork: request_new_frame() = 1049
+in ulix_fork: request_new_frame() = 1050
+in ulix_fork: request_new_frame() = 1051
+in ulix_fork: request_new_frame() = 1052
+in ulix_fork: request_new_frame() = 1053
+in ulix_fork: request_new_frame() = 1054
+ulix_fork: memcpy(d041b000,d0412000,4000)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1055
+in ulix_fork: request_new_frame() = 1056
+ulix_fork: memcpy begin, frameid=1056, pt->pds[j].frame_addr=1026, (i,j)=(0,0)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1057
+ulix_fork: memcpy begin, frameid=1057, pt->pds[j].frame_addr=1027, (i,j)=(0,1)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1058
+ulix_fork: memcpy begin, frameid=1058, pt->pds[j].frame_addr=1028, (i,j)=(0,2)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1059
+ulix_fork: memcpy begin, frameid=1059, pt->pds[j].frame_addr=1029, (i,j)=(0,3)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1060
+ulix_fork: memcpy begin, frameid=1060, pt->pds[j].frame_addr=1030, (i,j)=(0,4)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1061
+ulix_fork: memcpy begin, frameid=1061, pt->pds[j].frame_addr=1031, (i,j)=(0,5)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1062
+ulix_fork: memcpy begin, frameid=1062, pt->pds[j].frame_addr=1032, (i,j)=(0,6)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1063
+ulix_fork: memcpy begin, frameid=1063, pt->pds[j].frame_addr=1033, (i,j)=(0,7)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1064
+ulix_fork: memcpy begin, frameid=1064, pt->pds[j].frame_addr=1034, (i,j)=(0,8)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1065
+ulix_fork: memcpy begin, frameid=1065, pt->pds[j].frame_addr=1035, (i,j)=(0,9)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1066
+ulix_fork: memcpy begin, frameid=1066, pt->pds[j].frame_addr=1036, (i,j)=(0,10)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1067
+ulix_fork: memcpy begin, frameid=1067, pt->pds[j].frame_addr=1037, (i,j)=(0,11)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1068
+ulix_fork: memcpy begin, frameid=1068, pt->pds[j].frame_addr=1038, (i,j)=(0,12)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1069
+ulix_fork: memcpy begin, frameid=1069, pt->pds[j].frame_addr=1039, (i,j)=(0,13)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1070
+ulix_fork: memcpy begin, frameid=1070, pt->pds[j].frame_addr=1040, (i,j)=(0,14)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1071
+ulix_fork: memcpy begin, frameid=1071, pt->pds[j].frame_addr=1041, (i,j)=(0,15)
+ulix_fork: memcpy done
+ULIX new_fork, return
+AFTER GET_EIP: current_task = 1, ppid = 1
+EBP = bfffff58
+&ppid = bffffe80
+DEBUG: Writing eip  = c01055ec to thread table
+DEBUG: Writing esp0 = bffffe70 to thread table
+DEBUG: Writing ebp  = bfffff58 to thread table
+fork going to return 2
+*This process is new!
+current_task = 2
+AFTER GET_EIP: current_task = 2, ppid = 1
+EBP = bfffff58
+&ppid = bffffe80
+fork going to return 0 
+DEBUG: syscall_handler: returning from fork syscall
+ULIX fork
+BEFORE request_new_page
+in ulix_fork: request_new_frame() = 1072
+AFTER request_new_page
+in ulix_fork: request_new_frame() = 1073
+in ulix_fork: request_new_frame() = 1074
+in ulix_fork: request_new_frame() = 1075
+in ulix_fork: request_new_frame() = 1076
+in ulix_fork: request_new_frame() = 1077
+in ulix_fork: request_new_frame() = 1078
+ulix_fork: memcpy(d0433000,d041b000,4000)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1079
+in ulix_fork: request_new_frame() = 1080
+ulix_fork: memcpy begin, frameid=1080, pt->pds[j].frame_addr=1056, (i,j)=(0,0)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1081
+ulix_fork: memcpy begin, frameid=1081, pt->pds[j].frame_addr=1057, (i,j)=(0,1)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1082
+ulix_fork: memcpy begin, frameid=1082, pt->pds[j].frame_addr=1058, (i,j)=(0,2)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1083
+ulix_fork: memcpy begin, frameid=1083, pt->pds[j].frame_addr=1059, (i,j)=(0,3)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1084
+ulix_fork: memcpy begin, frameid=1084, pt->pds[j].frame_addr=1060, (i,j)=(0,4)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1085
+ulix_fork: memcpy begin, frameid=1085, pt->pds[j].frame_addr=1061, (i,j)=(0,5)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1086
+ulix_fork: memcpy begin, frameid=1086, pt->pds[j].frame_addr=1062, (i,j)=(0,6)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1087
+ulix_fork: memcpy begin, frameid=1087, pt->pds[j].frame_addr=1063, (i,j)=(0,7)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1088
+ulix_fork: memcpy begin, frameid=1088, pt->pds[j].frame_addr=1064, (i,j)=(0,8)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1089
+ulix_fork: memcpy begin, frameid=1089, pt->pds[j].frame_addr=1065, (i,j)=(0,9)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1090
+ulix_fork: memcpy begin, frameid=1090, pt->pds[j].frame_addr=1066, (i,j)=(0,10)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1091
+ulix_fork: memcpy begin, frameid=1091, pt->pds[j].frame_addr=1067, (i,j)=(0,11)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1092
+ulix_fork: memcpy begin, frameid=1092, pt->pds[j].frame_addr=1068, (i,j)=(0,12)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1093
+ulix_fork: memcpy begin, frameid=1093, pt->pds[j].frame_addr=1069, (i,j)=(0,13)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1094
+ulix_fork: memcpy begin, frameid=1094, pt->pds[j].frame_addr=1070, (i,j)=(0,14)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1095
+ulix_fork: memcpy begin, frameid=1095, pt->pds[j].frame_addr=1071, (i,j)=(0,15)
+ulix_fork: memcpy done
+ULIX new_fork, return
+AFTER GET_EIP: current_task = 2, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+DEBUG: Writing eip  = c01055ec to thread table
+DEBUG: Writing esp0 = bffffe70 to thread table
+DEBUG: Writing ebp  = bfffff58 to thread table
+fork going to return 3
+DEBUG: syscall_handler: returning from fork syscall
+ULIX fork
+BEFORE request_new_page
+in ulix_fork: request_new_frame() = 1096
+AFTER request_new_page
+in ulix_fork: request_new_frame() = 1097
+in ulix_fork: request_new_frame() = 1098
+in ulix_fork: request_new_frame() = 1099
+in ulix_fork: request_new_frame() = 1100
+in ulix_fork: request_new_frame() = 1101
+in ulix_fork: request_new_frame() = 1102
+ulix_fork: memcpy(d044b000,d041b000,4000)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1103
+in ulix_fork: request_new_frame() = 1104
+ulix_fork: memcpy begin, frameid=1104, pt->pds[j].frame_addr=1056, (i,j)=(0,0)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1105
+ulix_fork: memcpy begin, frameid=1105, pt->pds[j].frame_addr=1057, (i,j)=(0,1)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1106
+ulix_fork: memcpy begin, frameid=1106, pt->pds[j].frame_addr=1058, (i,j)=(0,2)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1107
+ulix_fork: memcpy begin, frameid=1107, pt->pds[j].frame_addr=1059, (i,j)=(0,3)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1108
+ulix_fork: memcpy begin, frameid=1108, pt->pds[j].frame_addr=1060, (i,j)=(0,4)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1109
+ulix_fork: memcpy begin, frameid=1109, pt->pds[j].frame_addr=1061, (i,j)=(0,5)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1110
+ulix_fork: memcpy begin, frameid=1110, pt->pds[j].frame_addr=1062, (i,j)=(0,6)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1111
+ulix_fork: memcpy begin, frameid=1111, pt->pds[j].frame_addr=1063, (i,j)=(0,7)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1112
+ulix_fork: memcpy begin, frameid=1112, pt->pds[j].frame_addr=1064, (i,j)=(0,8)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1113
+ulix_fork: memcpy begin, frameid=1113, pt->pds[j].frame_addr=1065, (i,j)=(0,9)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1114
+ulix_fork: memcpy begin, frameid=1114, pt->pds[j].frame_addr=1066, (i,j)=(0,10)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1115
+ulix_fork: memcpy begin, frameid=1115, pt->pds[j].frame_addr=1067, (i,j)=(0,11)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1116
+ulix_fork: memcpy begin, frameid=1116, pt->pds[j].frame_addr=1068, (i,j)=(0,12)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1117
+ulix_fork: memcpy begin, frameid=1117, pt->pds[j].frame_addr=1069, (i,j)=(0,13)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1118
+ulix_fork: memcpy begin, frameid=1118, pt->pds[j].frame_addr=1070, (i,j)=(0,14)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1119
+ulix_fork: memcpy begin, frameid=1119, pt->pds[j].frame_addr=1071, (i,j)=(0,15)
+ulix_fork: memcpy done
+ULIX new_fork, return
+AFTER GET_EIP: current_task = 2, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+DEBUG: Writing eip  = c01055ec to thread table
+DEBUG: Writing esp0 = bffffe70 to thread table
+DEBUG: Writing ebp  = bfffff58 to thread table
+fork going to return 4
+*This process is new!
+current_task = 3
+AFTER GET_EIP: current_task = 3, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+fork going to return 0 
+DEBUG: syscall_handler: returning from fork syscall
+DEBUG: current_task = 3
+DEBUG: terminal     = 1
+Ulix Usermode Shell. Commands: help, ps, fork, ls, cat, head, cp, diff, sh,     hexdump, kill, loop, test, brk, cd, ln, rm, pwd, touch, exit
+Press [Shift+Esc] to launch kernel mode shell (reboot to get back here)
+esser@ulix[3]:/$ entering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*DEBUG: syscall_handler: returning from fork syscall
+ULIX fork
+BEFORE request_new_page
+in ulix_fork: request_new_frame() = 1120
+AFTER request_new_page
+in ulix_fork: request_new_frame() = 1121
+in ulix_fork: request_new_frame() = 1122
+in ulix_fork: request_new_frame() = 1123
+in ulix_fork: request_new_frame() = 1124
+in ulix_fork: request_new_frame() = 1125
+in ulix_fork: request_new_frame() = 1126
+ulix_fork: memcpy(d0463000,d041b000,4000)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1127
+in ulix_fork: request_new_frame() = 1128
+ulix_fork: memcpy begin, frameid=1128, pt->pds[j].frame_addr=1056, (i,j)=(0,0)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1129
+ulix_fork: memcpy begin, frameid=1129, pt->pds[j].frame_addr=1057, (i,j)=(0,1)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1130
+ulix_fork: memcpy begin, frameid=1130, pt->pds[j].frame_addr=1058, (i,j)=(0,2)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1131
+ulix_fork: memcpy begin, frameid=1131, pt->pds[j].frame_addr=1059, (i,j)=(0,3)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1132
+ulix_fork: memcpy begin, frameid=1132, pt->pds[j].frame_addr=1060, (i,j)=(0,4)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1133
+ulix_fork: memcpy begin, frameid=1133, pt->pds[j].frame_addr=1061, (i,j)=(0,5)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1134
+ulix_fork: memcpy begin, frameid=1134, pt->pds[j].frame_addr=1062, (i,j)=(0,6)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1135
+ulix_fork: memcpy begin, frameid=1135, pt->pds[j].frame_addr=1063, (i,j)=(0,7)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1136
+ulix_fork: memcpy begin, frameid=1136, pt->pds[j].frame_addr=1064, (i,j)=(0,8)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1137
+ulix_fork: memcpy begin, frameid=1137, pt->pds[j].frame_addr=1065, (i,j)=(0,9)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1138
+ulix_fork: memcpy begin, frameid=1138, pt->pds[j].frame_addr=1066, (i,j)=(0,10)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1139
+ulix_fork: memcpy begin, frameid=1139, pt->pds[j].frame_addr=1067, (i,j)=(0,11)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1140
+ulix_fork: memcpy begin, frameid=1140, pt->pds[j].frame_addr=1068, (i,j)=(0,12)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1141
+ulix_fork: memcpy begin, frameid=1141, pt->pds[j].frame_addr=1069, (i,j)=(0,13)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1142
+ulix_fork: memcpy begin, frameid=1142, pt->pds[j].frame_addr=1070, (i,j)=(0,14)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1143
+ulix_fork: memcpy begin, frameid=1143, pt->pds[j].frame_addr=1071, (i,j)=(0,15)
+ulix_fork: memcpy done
+ULIX new_fork, return
+AFTER GET_EIP: current_task = 2, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+DEBUG: Writing eip  = c01055ec to thread table
+DEBUG: Writing esp0 = bffffe70 to thread table
+DEBUG: Writing ebp  = bfffff58 to thread table
+fork going to return 5
+*This process is new!
+current_task = 4
+AFTER GET_EIP: current_task = 4, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+fork going to return 0 
+DEBUG: syscall_handler: returning from fork syscall
+DEBUG: current_task = 4
+DEBUG: terminal     = 2
+Ulix Usermode Shell. Commands: help, ps, fork, ls, cat, head, cp, diff, sh,     hexdump, kill, loop, test, brk, cd, ln, rm, pwd, touch, exit
+Press [Shift+Esc] to launch kernel mode shell (reboot to get back here)
+esser@ulix[4]:/$ entering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*DEBUG: syscall_handler: returning from fork syscall
+ULIX fork
+BEFORE request_new_page
+in ulix_fork: request_new_frame() = 1144
+AFTER request_new_page
+in ulix_fork: request_new_frame() = 1145
+in ulix_fork: request_new_frame() = 1146
+in ulix_fork: request_new_frame() = 1147
+in ulix_fork: request_new_frame() = 1148
+in ulix_fork: request_new_frame() = 1149
+in ulix_fork: request_new_frame() = 1150
+ulix_fork: memcpy(d047b000,d041b000,4000)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1151
+in ulix_fork: request_new_frame() = 1152
+ulix_fork: memcpy begin, frameid=1152, pt->pds[j].frame_addr=1056, (i,j)=(0,0)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1153
+ulix_fork: memcpy begin, frameid=1153, pt->pds[j].frame_addr=1057, (i,j)=(0,1)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1154
+ulix_fork: memcpy begin, frameid=1154, pt->pds[j].frame_addr=1058, (i,j)=(0,2)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1155
+ulix_fork: memcpy begin, frameid=1155, pt->pds[j].frame_addr=1059, (i,j)=(0,3)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1156
+ulix_fork: memcpy begin, frameid=1156, pt->pds[j].frame_addr=1060, (i,j)=(0,4)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1157
+ulix_fork: memcpy begin, frameid=1157, pt->pds[j].frame_addr=1061, (i,j)=(0,5)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1158
+ulix_fork: memcpy begin, frameid=1158, pt->pds[j].frame_addr=1062, (i,j)=(0,6)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1159
+ulix_fork: memcpy begin, frameid=1159, pt->pds[j].frame_addr=1063, (i,j)=(0,7)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1160
+ulix_fork: memcpy begin, frameid=1160, pt->pds[j].frame_addr=1064, (i,j)=(0,8)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1161
+ulix_fork: memcpy begin, frameid=1161, pt->pds[j].frame_addr=1065, (i,j)=(0,9)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1162
+ulix_fork: memcpy begin, frameid=1162, pt->pds[j].frame_addr=1066, (i,j)=(0,10)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1163
+ulix_fork: memcpy begin, frameid=1163, pt->pds[j].frame_addr=1067, (i,j)=(0,11)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1164
+ulix_fork: memcpy begin, frameid=1164, pt->pds[j].frame_addr=1068, (i,j)=(0,12)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1165
+ulix_fork: memcpy begin, frameid=1165, pt->pds[j].frame_addr=1069, (i,j)=(0,13)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1166
+ulix_fork: memcpy begin, frameid=1166, pt->pds[j].frame_addr=1070, (i,j)=(0,14)
+ulix_fork: memcpy done
+in ulix_fork: request_new_frame() = 1167
+ulix_fork: memcpy begin, frameid=1167, pt->pds[j].frame_addr=1071, (i,j)=(0,15)
+ulix_fork: memcpy done
+ULIX new_fork, return
+AFTER GET_EIP: current_task = 2, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+DEBUG: Writing eip  = c01055ec to thread table
+DEBUG: Writing esp0 = bffffe70 to thread table
+DEBUG: Writing ebp  = bfffff58 to thread table
+fork going to return 6
+*This process is new!
+current_task = 5
+AFTER GET_EIP: current_task = 5, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+fork going to return 0 
+DEBUG: syscall_handler: returning from fork syscall
+DEBUG: current_task = 5
+DEBUG: terminal     = 3
+Ulix Usermode Shell. Commands: help, ps, fork, ls, cat, head, cp, diff, sh,     hexdump, kill, loop, test, brk, cd, ln, rm, pwd, touch, exit
+Press [Shift+Esc] to launch kernel mode shell (reboot to get back here)
+esser@ulix[5]:/$ entering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*DEBUG: syscall_handler: returning from fork syscall
+Ulix Usermode Shell. Commands: help, ps, fork, ls, cat, head, cp, diff, sh,     hexdump, kill, loop, test, brk, cd, ln, rm, pwd, touch, exit
+Press [Shift+Esc] to launch kernel mode shell (reboot to get back here)
+esser@ulix[2]:/$ entering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*This process is new!
+current_task = 6
+AFTER GET_EIP: current_task = 6, ppid = 2
+EBP = bfffff58
+&ppid = bffffe80
+fork going to return 0 
+DEBUG: syscall_handler: returning from fork syscall
+DEBUG: current_task = 6
+DEBUG: terminal     = 4
+Ulix Usermode Shell. Commands: help, ps, fork, ls, cat, head, cp, diff, sh,     hexdump, kill, loop, test, brk, cd, ln, rm, pwd, touch, exit
+Press [Shift+Esc] to launch kernel mode shell (reboot to get back here)
+esser@ulix[6]:/$ entering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*DEBUG: syscall_handler: returning from fork syscall
+*******************************************KEYCODE: 38
+*inside syscall_yield: back from scheduler ()
+lentering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+****KEYCODE: 31
+*inside syscall_yield: back from scheduler ()
+sentering syscall_yield
+r->esp = bfffff4c  r->eip = c0102287
+*******KEYCODE: 28
+*inside syscall_yield: back from scheduler ()
+
+pathname_to_ino: entered
+directory / is in inode 1
+read_write_inode: entered
+get_imap_bit: entered
+get_imap_bit: before readblock()
+readblock: arg1 address: bffff5e0
+readblock: arg2 address: bffff5e4
+readblock(2): entered
+ENTER LOCK()
+fdc_sleep going to call yield()
+FDC: interrupt
+entering syscall_yield
+r->esp = bffff4ec  r->eip = c0108b8c
+*inside syscall_yield: back from scheduler ()
+fdc_sleep going to call yield()
+FDC: interrupt
+entering syscall_yield
+r->esp = bffff4dc  r->eip = c0108b8c
+*inside syscall_yield: back from scheduler ()
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+UNLOCK
+ENTER LOCK()
+fdc_sleep going to call yield()
+FDC: interrupt
+entering syscall_yield
+r->esp = bffff4dc  r->eip = c0108b8c
+*inside syscall_yield: back from scheduler ()
+DEBUG: fdc_read_sector: accessing FDC buffer
+DEBUG: memcpy() called in line 16611
+UNLOCK
+DEBUG: buffer_write (0,2,bffff5fc) entered
+DEBUG: in buffer_write, pos = -1, memcpy (c01d1414,bffff5fc,400)
+get_imap_bit: after readblock()
+read_write_inode: after get_imap_bit()
+readblock: arg1 address: bffffa10
+readblock: arg2 address: bffffa14
+readblock(4): entered
+ENTER LOCK()
+fdc_sleep going to call yield()
+FDC: interrupt
+General Protection Fault Exception. System Halted!
+address = 0xc0108b8a. current_task = 2. current_as = 2.
+Halting system.
+eax: 00000042  ebx: 00000000  ecx: 00000002  edx: 60ff00e9 
+eip: c0108b8a  esp: bffff90c  int:       13  err:     1026 
+ebp: bffff928  cs: 8  ds: 16  es: 16  fs: 16  ss:0 
+
+Ulix Shell. Commands: help, exit, test, pfault, div0, mem, stat, uname, hexdump, clear, gf, gp, rp, gp1k, bdump, check, malloc, time, cloneas x, listas, testas, init, exec, testdisk, enable, longhelp, ls, ps
+Press [Esc] to display page table.
+Press [Shift+Esc] to relaunch shell when in user mode.
+Press [Shift+n] to switch to address space n (0..9).
+esser@ulix:~$ ************************************************************************

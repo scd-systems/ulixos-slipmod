@@ -1,0 +1,751 @@
+\documentclass{article}
+
+\usepackage[usenames]{color}
+\usepackage{hyperref}
+\usepackage{noweb}
+\usepackage[latin1]{inputenc}
+\usepackage{url,graphicx,boxedminipage,a4wide}
+\noweboptions{smallcode,english}
+\usepackage{listings}
+\usepackage{type1cm} % beliebig skalierbare Fonts, z. B. \fontsize{3.32}{4}
+
+\def\nwendcode{\endtrivlist \endgroup}
+\let\nwdocspar=\par
+
+\usepackage{makeidx}
+\makeindex
+
+\begin{document}
+
+\section{Ulix User-Mode Library}
+
+The library code consists of two files: [[ulixlib.c]] contains
+the implementations of the library functions, whereas
+[[ulixlib.h]] provides declarations which have to be included
+both in [[ulixlib.c]] and any program that wants to use the
+library functions.
+
+
+\subsection{Features of the Library}
+
+Bla
+
+
+\subsection{Compiling a Program}
+
+In order to compile a program, the following make script can
+be used // REPLACE THIS WITH A PROPER MAKEFILE //:
+
+<<compiling a program>>=
+CCOPTIONS="-nostdlib -ffreestanding -fforce-addr -fomit-frame-pointer \
+-fno-function-cse -nostartfiles -mtune=i386 -momit-leaf-frame-pointer"
+CCASMOPTIONS="-fverbose-asm -masm=intel"
+CCTESTOPTIONS=""
+LDOPTIONS="-static --cref -s --pie"
+# LDADDRESSOPTS="-Tbss 0 -Tdata 0 -Ttext 0"
+
+/usr/cross/bin/i586-elf-gcc $CCOPTIONS $CCTESTOPTIONS -c testprog.c
+/usr/cross/bin/i586-elf-gcc $CCOPTIONS $CCTESTOPTIONS $CCASMOPTIONS -S testprog.c
+/usr/cross/bin/i586-elf-gcc $CCOPTIONS $CCTESTOPTIONS -c ulixlib.c
+/usr/cross/bin/i586-elf-gcc $CCOPTIONS $CCTESTOPTIONS $CCASMOPTIONS -S ulixlib.c
+# /usr/cross/bin/i586-elf-ld --oformat=binary -emain -o testprog testprog.o ulixlib.o
+
+# link it with linked script "linked.ld"
+/usr/cross/bin/i586-elf-ld $LDOPTIONS -T linker.ld -o testprog testprog.o ulixlib.o
+@
+
+and the necessary linker script is
+
+<<linker.ld>>=
+OUTPUT_FORMAT("binary")
+ENTRY(main)
+phys = 0x00000000;
+virt = 0x00000000;
+SECTIONS {
+  . = phys;
+  
+  .setup : AT(phys) {
+    *(.setup)
+  }
+
+  .text : AT(code - virt) {
+    code = .;
+    *(.text)
+    *(.rodata*)
+    . = ALIGN(4096);
+  }
+
+  .data : AT(data - virt) {
+    data = .;
+    *(.data)
+    . = ALIGN(4096);
+  }
+
+  .bss : AT(bss - virt) {
+    bss = .;
+    *(COMMON*)
+    *(.bss*)
+    . = ALIGN(4096);
+  }
+  end = .;
+@
+
+
+<<ulixlib.h>>=
+/* This is UlixLib
+ *
+ * To compile a Ulix program, include "ulixlib.h" and
+ * call gcc with arguments ...
+ */
+
+#define size_t int
+#define off_t int
+
+// simple string stuff
+int printf(const char *format, ...);
+int sprintf(char *out, const char *format, ...);
+
+// file functions
+int open(const char *path, int oflag, ...);
+int lseek(int fildes, off_t offset, int whence);
+int write(int fildes, const void *buf, size_t nbyte);
+int read(int fildes, void *buf, size_t nbyte);
+int close(int fildes);
+void ls();
+char *getcwd (char *buf, int size);
+int chdir (const char *path);
+int link(const char *path1, const char *path2);
+int symlink(const char *path1, const char *path2);
+int unlink (const char *path);
+
+// fork, waitpid and exit
+void exit(int exitcode);
+int waitpid(int pid, int *status, int options);
+void yield ();
+@
+
+
+<<ulixlib.c>>=
+/* This is UlixLib
+ *
+ * To compile a Ulix program, include "ulixlib.h" and
+ * call gcc with arguments ...
+ */
+#include "ulixlib.h"
+@
+
+
+\subsection{Helper Functions}
+
+<<ulixlib.h>>=
+void *memset(void *dest, char val, size_t count);
+unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count);
+@
+
+<<ulixlib.c>>=
+void *memset(void *dest, char val, size_t count) {
+  char *temp = (char *)dest;
+  for( ; count != 0; count--) *temp++ = val;
+  return dest;
+}
+
+unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count) {
+  unsigned short *temp = (unsigned short *)dest;
+  for( ; count != 0; count--) *temp++ = val;
+  return dest;
+}
+@
+
+
+
+\subsection{System Calls}
+
+UlixLib lets applications access kernel functions via
+system calls (through [[int 0x80]], like Linux). For those
+system calls which are available in Ulix, we try to maintain
+Linux compatibility, so we use the same numbers as Linux
+does.
+
+
+\subsubsection{System Call Numbers}
+
+
+Since we need not know the system call numbers inside
+user mode applications, we do not define these numbers
+in the header file, but in the implementation file:
+
+<<ulixlib.c>>=
+// syscalls
+#define __NR_exit              1
+#define __NR_read              3
+#define __NR_write             4
+#define __NR_open              5
+#define __NR_close             6
+#define __NR_waitpid           7
+#define __NR_link              9
+#define __NR_unlink           10
+#define __NR_chdir            12
+#define __NR_kill             37
+#define __NR_signal           48
+#define __NR_lseek            19
+#define __NR_getpid           20
+#define __NR_brk              45
+#define __NR_symlink          83
+#define __NR_getcwd          183
+
+#define __NR_yield            66
+
+#define __NR_setterm      0x2001
+
+#define __NR_getpsinfo    0x5101
+#define __NR_ls           0x5102
+#define __NR_setpsname    0x5103
+@
+
+Some other defines go into the header file:
+
+<<ulixlib.h>>=
+// types
+#define size_t int
+#define off_t int
+
+// sizes
+#define SECSIZE 512
+
+// lseek defines
+#define SEEK_SET  0   /* set file offset to offset */
+#define SEEK_CUR  1   /* set file offset to current plus offset */
+#define SEEK_END  2   /* set file offset to EOF plus offset */
+@
+
+
+\subsubsection{Wrappers for System Calls}
+
+System calls differ in the number of arguments. Since C provides
+no internal commands for accessing CPU registers and issuing
+[[int]] calls, we need inline assembler code. We provide four
+generic system call functions [[syscall1]], [[syscall2]], 
+[[syscall3]], and [[syscall4]] which allow making system calls 
+with no, one, two or three arguments:
+
+<<ulixlib.c>>=
+inline int syscall4 (int eax, int ebx, int ecx, int edx) {
+  int result;
+  asm ( "int $0x80" : "=a" (result) : 
+        "a" (eax), "b" (ebx), "c" (ecx), "d" (edx) );
+  return result ;
+}
+
+inline int syscall3 (int eax, int ebx, int ecx) {
+  int result;
+  asm ( "int $0x80" : "=a" (result) : 
+        "a" (eax), "b" (ebx), "c" (ecx) );
+  return result ;
+}
+
+inline int syscall2 (int eax, int ebx) {
+  int result;
+  asm ( "int $0x80" : "=a" (result) : 
+        "a" (eax), "b" (ebx) );
+  return result ;
+}
+
+inline int syscall1 (int eax) {
+  int result;
+  asm ( "int $0x80" : "=a" (result) : 
+        "a" (eax) );
+  return result ;
+}
+@
+
+
+Bla
+
+\subsection{Functions}
+
+\subsubsection{Functions for Memory Management}
+
+<<ulixlib.h>>=
+void *sbrk (int incr);
+@
+
+<<ulixlib.c>>=
+void *sbrk (int incr) {
+  return (void*)syscall2 (__NR_brk, incr);
+}
+@
+
+\subsubsection{Functions for Terminal I/O}
+
+<<ulixlib.h>>=
+#define __NR_clrscr        0x6001
+#define __NR_get_xy        0x6002
+#define __NR_set_xy        0x6003
+#define __NR_read_screen   0x6004
+#define __NR_write_screen  0x6005
+
+#define KEY_UP     191
+#define KEY_DOWN   192
+#define KEY_LEFT   193
+#define KEY_RIGHT  194
+
+void clrscr ();
+void get_xy (char *x, char *y);
+void set_xy (char x, char y);
+
+void read_screen (char *buf);
+void write_screen (char *buf);
+@
+
+<<ulixlib.c>>=
+int ulixlib_printstring (char* str) {
+  // simple print string function, using system call 0x1001
+  while (*str != 0) {
+    asm ( " \
+      .intel_syntax noprefix; \
+      mov ebx, %0; \
+      mov eax, 0x1001; \
+      int 0x80; \
+      .att_syntax; " : : "r"((unsigned int) *str) : "eax", "ebx");
+    str++;
+  }
+  return 0;
+}
+
+int ulixlib_printchar (unsigned char c) {
+  // simple print character function, using system call 0x1001
+  asm ( " \
+    .intel_syntax noprefix; \
+    mov ebx, %0; \
+    mov eax, 0x1001; \
+    int 0x80; \
+    .att_syntax; " : : "r"((unsigned int) c) : "eax", "ebx");
+  return 0;
+}
+
+void setterm (int vt) {
+  syscall2 (__NR_setterm, (unsigned int) vt);
+};
+
+void clrscr () {
+  syscall1 (__NR_clrscr);
+}
+
+void get_xy (char *x, char *y) {
+  syscall3 (__NR_get_xy, (int)x, (int)y);
+}
+
+void set_xy (char x, char y) {
+  syscall3 (__NR_set_xy, (int)x, (int)y);
+}
+
+void read_screen (char *buf) {
+  syscall2 (__NR_read_screen, (unsigned int) buf);
+}
+
+void write_screen (char *buf) {
+  syscall2 (__NR_write_screen, (unsigned int) buf);
+}
+@
+
+Here's a simple [[scroll]] function which scrolls the user
+mode part of the screen (lines 1--24) one line ``up''
+(that means: the first lines disappears, and all other lines
+move up one line, leaving one blank line at the bottom)
+
+<<ulixlib.h>>=
+void scroll_up ();
+void scroll_down ();
+@
+
+<<ulixlib.c>>=
+void scroll_up () {
+  char buffer[80*25*2];  // we reserve space for 25 (!) lines
+  unsigned blank = 0x20 + (0x0f<<8); // blank character
+  read_screen ((char*)buffer);
+  memsetw ((unsigned short*)((char*)buffer + 80*24*2), blank, 80);
+  write_screen ((char*)buffer + 160);
+}
+
+void scroll_down () {
+  char buffer[80*25*2];  // we reserve space for 25 (!) lines
+  unsigned blank = 0x20 + (0x0f<<8); // blank character
+  read_screen ((char*)buffer + 160);
+  memsetw ((unsigned short*)((char*)buffer), blank, 80);
+  write_screen ((char*)buffer);
+}
+@
+
+
+We then include [[printf.c]] which contains a simple
+implementation of the [[printf]] function, taken from
+SOURCE. It was only modified to use the 
+[[ulixlib_printchar]] function for printing single characters.
+
+<<ulixlib.c>>=
+// this provides a printf() implementation, using ulixlib_printchar
+#include "printf.c"
+@
+
+and for input:
+
+<<ulixlib.c>>=
+void readline (char *s, int nbyte) {
+  syscall3 (0x1111, (unsigned int)s, nbyte);
+}
+
+/* usermode readline, using syscall */
+void ureadline ( char *s, int maxlength ) {
+  unsigned char c = 0;
+  unsigned int u;
+  int pos=0;
+  for (;;) {
+    start:
+    // read one character from the keyboard
+    __asm__ ("\
+      .intel_syntax noprefix; \
+      mov eax, 0x1002; \
+      int 0x80; \
+      mov %0, ebx; \
+      .att_syntax"
+      :
+      "=r"(u)
+    );
+    c = (char)u;
+    if (c==0) {
+      // yield ();   // no new character, switch to other process
+      goto start;
+    }
+    
+    if (c>190)       // cursor and other keys
+      goto start;
+
+    if (c==27) {
+      printf ("\nEsc\n");
+      goto start;
+    }
+
+    if ((c == 0x08) && (pos>0)) {
+      // backspace
+      pos--;
+      ulixlib_printchar (c); ulixlib_printchar (' '); ulixlib_printchar (c);
+    } else if ( c == '\n' ) {
+      // newline: end of input
+      ulixlib_printchar ('\n');
+      s[pos] = (char) 0;
+      return;
+    } else if ( (c != 0x08) && (pos < maxlength) ) {
+      // other character
+      ulixlib_printchar (c);
+      s[pos++] = c;
+    };
+  };
+};
+@
+
+<<ulixlib.h>>=
+void ureadline ( char *s, int maxlength );
+@
+
+<<ulixlib.c>>=
+unsigned char ureadchar () {
+  unsigned int u;
+  __asm__ ("\
+    .intel_syntax noprefix; \
+    mov eax, 0x1002; \
+    int 0x80; \
+    mov %0, ebx; \
+    .att_syntax"
+    :
+    "=r"(u)
+  );
+  return (unsigned char)u;
+};
+@
+
+<<ulixlib.h>>=
+unsigned char ureadchar ();
+@
+
+
+Here are our current functions for disk access: These should
+be removed, and only open, read etc. should be used.
+
+<<ulixlib.c>>=
+void ulixlib_read_sector (int secno, char* buf) {
+  // read sector, using system call 0x4001
+  // ebx: sector number
+  // ecx: address of buffer
+  asm ( " \
+    .intel_syntax noprefix; \
+    mov ecx, %1; \
+    mov ebx, %0; \
+    mov eax, 0x7001; \
+    int 0x80; \
+    .att_syntax; " : : 
+    "r"(secno), "r"((unsigned int) buf) : "eax", "ebx");
+  return;
+}
+@
+
+
+\subsubsection{Functions for File Access}
+
+Here we define the functions [[open]], [[close]], [[lseek]],
+[[read]], [[write]], [[getcwd]], and [[chdir]]:
+
+<<ulixlib.c>>=
+int open(const char *path, int oflag, ...) {
+  return syscall3 (__NR_open, (unsigned int) path, oflag);
+};
+
+int lseek(int fildes, off_t offset, int whence) {
+  return syscall4 (__NR_lseek, fildes, offset, whence);
+}
+
+int read (int fd, void *buf, size_t nbyte) {
+  return syscall4 (__NR_read, fd, (unsigned int) buf, nbyte);
+};
+
+int write (int fd, const void *buf, size_t nbyte) {
+  return syscall4 (__NR_write, fd, (unsigned int) buf, nbyte);
+};
+
+int close(int fildes) {
+  return syscall2 (__NR_close, fildes);
+}
+
+void ls (char *path) {
+  syscall2 (__NR_ls, (unsigned int) path);
+};
+
+char *getcwd (char *buf, int size) {
+  syscall3 (__NR_getcwd, (unsigned int) buf, size);
+}
+
+int chdir (const char *path) {
+  return syscall2 (__NR_chdir, (unsigned int) path);
+}
+
+int link(const char *path1, const char *path2) {
+  return syscall3 (__NR_link, (unsigned int) path1, (unsigned int) path2);
+}
+
+int symlink(const char *path1, const char *path2) {
+  return syscall3 (__NR_symlink, (unsigned int) path1, (unsigned int) path2);
+}
+
+int unlink (const char *path) {
+  return syscall2 (__NR_unlink, (unsigned int) path);
+}
+@
+
+
+\subsubsection{Functions for Signal Handling}
+
+<<ulixlib.h>>=
+typedef void (*sighandler_t)(int);
+#define SIG_DFL ((sighandler_t)0)     /* default signal handling */
+#define SIG_IGN ((sighandler_t)1)     /* ignore signal */
+#define SIG_ERR ((sighandler_t)-1)    /* error code */
+
+int kill (int pid, int signo);
+sighandler_t signal (int sig, sighandler_t func);
+@
+
+<<ulixlib.c>>=
+int kill (int pid, int signo) {
+  return syscall3 (__NR_kill, pid, signo);
+}
+
+sighandler_t signal (int sig, sighandler_t func) {
+  return (sighandler_t)syscall3 (__NR_signal,
+    sig, (unsigned int)func);
+}  
+@
+
+
+\subsubsection{Functions for Process Control} 
+
+Functions [[fork]], [[exec]], [[exit]], [[yield]], and [[getpid]]:
+
+<<ulixlib.c>>=
+int fork() {
+  int retval;
+  asm ( " \
+    .intel_syntax noprefix; \
+    mov eax, 2; \
+    int 0x80; \
+    mov %0, ebx; \
+    .att_syntax; " : "=r"(retval) :
+    : "eax", "ebx");
+  return retval;
+}
+
+int waitpid(int pid, int *status, int options) {
+  return syscall4 (__NR_waitpid, pid, (uint)status, options);
+}
+
+void exit(int exitcode) {
+  syscall2 (__NR_exit, exitcode);
+}
+
+inline void yield () {
+  syscall1 (__NR_yield);
+}
+
+int getpid() {
+  return syscall1 (__NR_getpid);
+}
+@
+
+The following code lets user mode programs access the
+process list:
+
+<<ulixlib.h>>=
+#define TSTATE_READY     1
+#define TSTATE_FORK      3
+#define TSTATE_EXIT      4
+#define TSTATE_WAITFOR   5
+#define TSTATE_ZOMBIE    6
+#define TSTATE_WAITKEY   7   // wait for key press event
+#define TSTATE_WAITFLP   8   // wait for floppy
+
+
+// char* state_names[6];
+@
+
+<<ulixlib.c>>=
+@
+
+<<ulixlib.h>>=
+#define CMDLINE_LENGTH 50   // how long can a process name be?
+typedef unsigned int uint;
+struct regs {
+  uint gs, fs, es, ds;
+  uint edi, esi, ebp, esp, ebx, edx, ecx, eax;
+  uint int_no, err_code;
+  uint eip, cs, eflags, useresp, ss;
+};
+#define boolean unsigned int
+#define GPR_REGISTERS 6   //       REMOVE THIS!!!!
+typedef unsigned int thread_id;
+typedef uint addr_space_id;
+
+typedef struct {
+  thread_id tid;
+  thread_id ppid;   // parent process
+  unsigned int context[GPR_REGISTERS]; // general purpose registers
+  // unsigned int esp; // user stack pointer  ((brauch ich den???)
+  unsigned int esp0;
+  unsigned int eip; // program counter
+  unsigned int ebp; // base pointer
+  char* kstack;
+  addr_space_id addr_space;
+  int state;
+  struct regs regs;  // for the new implementation!!!!!!
+  char cmdline[CMDLINE_LENGTH];
+  int exitcode;
+  int waitfor;
+  int terminal;
+  thread_id next; // id of the ``next'' thread
+  thread_id prev; // id of the ``previous'' thread
+  boolean used;
+  short int fixstack;
+  boolean new;  // was this process freshly forked?
+  char cwd[256];
+  sighandler_t sighandlers[32];
+  unsigned long sig_pending;
+  unsigned long sig_blocked;
+} TCB;
+@
+
+<<ulixlib.c>>=
+uint getpsinfo (int pid, TCB* tcb) {
+  return syscall3 (__NR_getpsinfo, pid, (uint)tcb);
+}
+
+uint setpsname (char* psname) {
+  return syscall2 (__NR_setpsname, (uint)psname);
+}
+
+@
+
+\subsection{strcpy, strcmp etc.}
+
+<<ulixlib.c>>=
+#define true 1
+#define false 0
+int strcmp (const char *str1, const char *str2) {
+  int endoftest = false;
+  int pos = 0;
+  int result;
+  while (! endoftest) {
+    if ( str1[pos] != str2[pos] ) {
+      result = false; 
+      endoftest = true;
+    };
+    if ( (str1[pos] == (char)0) && (str2[pos] == (char)0) ) {
+      result = true;
+      endoftest = true;
+    };
+    pos++;
+  };
+  return result;
+}
+
+int atoi (char* s) {
+  int res = 0;
+  while ( ('0' <= *s) && (*s <= '9') ) {
+    res = res*10 + (*s-'0');
+    s++;
+  }
+  return res;
+};
+
+int strlen (const char* str) {
+  int len;
+  while (*str++ != 0) 
+    len++;
+  return len;
+}
+
+void *strncpy (void *dest, const void *src, size_t count) {
+  // like memcpy, but copies only until first \0 character
+  const char *sp = (const char *)src;
+  char *dp = (char *)dest;
+  for (; count != 0; count--) {
+    *dp = *sp;
+    if (*dp == 0) break;
+    dp++; sp++;
+  }
+  return dest;
+}
+
+void *memcpy (void *dest, const void *src, size_t count) {
+  // debug_printf ("DEBUG: memcpy (%x,%x,%x)\n", dest, src, count);
+  const char *sp = (const char *)src;
+  char *dp = (char *)dest;
+  for (; count != 0; count--) 
+    *dp++ = *sp++;
+  return dest;
+}
+
+char *strcpy(char *dest, const char* src) {
+  char *ret = dest;
+  while (*dest++ = *src++ != '\0') ;
+  return ret;
+}
+@
+
+<<ulixlib.h>>=
+int strcmp (const char *str1, const char *str2);
+int atoi (char* s);
+int strlen (const char* str);
+void *strncpy (void *dest, const void *src, size_t count);
+void *memcpy (void *dest, const void *src, size_t count);
+char *strcpy(char *dest, const char* src);
+@
+
+
+\end{document}

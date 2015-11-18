@@ -1,0 +1,27 @@
+iname.o iname.o: iname.c minix_fs.h /usr/include/stdio.h \
+  /usr/include/sys/cdefs.h /usr/include/sys/_null.h \
+  /usr/include/sys/_types.h /usr/include/machine/_types.h protos.h \
+  bitops.h /usr/include/string.h /usr/include/strings.h \
+  /usr/include/xlocale/_string.h
+
+minix_fs.h:
+
+/usr/include/stdio.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_null.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/machine/_types.h:
+
+protos.h:
+
+bitops.h:
+
+/usr/include/string.h:
+
+/usr/include/strings.h:
+
+/usr/include/xlocale/_string.h:

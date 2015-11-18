@@ -1,0 +1,5 @@
+timeout 3
+
+title	ULIX-i386  (c) 2008-2013 Felix Freiling & Hans-Georg Esser
+	root (fd0)
+	kernel /ulix.bin
