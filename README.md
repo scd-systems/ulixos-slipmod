@@ -1,4 +1,4 @@
-SLIP Module for the Ulix OS
+SLIP Modul for the Ulix OS
 =====================
 
 The aim of this project is to descibe a simple network stack by using the literate programming method.
