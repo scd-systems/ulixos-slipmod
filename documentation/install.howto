@@ -1,23 +1,28 @@
 Requirements:
 ====================
-- gcc
-- tetex
+- noweb
+- texlive
+- gcc >= 4.4 or LLVM/CLang
+- tex-formats
 - qemu
 - mfstool (FreeBSD only)
 - mtools
+- gmake (FreeBSD)
+- python
+- nasm
 
 * FreeBSD *
 --------------------
 
 Install required packages:
 
-sudo pkg install gcc48 mtools qemu socat tetex-base 
+sudo pkg install mtools qemu-devel socat texlive-base gmake noweb tex-formats python tex-dvipsk nasm
 
-Compile mfstool (if needed, a pre compiled binary are already in the lib directory)
+Compile mfstool (if needed, a pre compiled binary are already in the bin directory)
 cd src/mfstool-0.5
 ./configure
 make
-cp mfstool ../lib
+cp mfstool ../bin
 
 * Linux *
 --------------------
@@ -25,10 +30,10 @@ cp mfstool ../lib
 Install required packages for your distro
 
 Debian: 
-apt-get install gcc socat qemu tetex-base
+apt-get install noweb texlive-lang-german texlive-lang-english texlive-latex-extra qemu nasm socat
 
 Fedora/RedHat/CentOS:
-yum install gcc socat qemu tetex-base
+yum install noweb texlive-lang-german texlive-lang-english texlive-latex-extra qemu nasm socat
 
 * Get the Code *
 --------------------

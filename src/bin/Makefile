@@ -22,7 +22,7 @@ ifeq ($(UNAME),Linux)
 CC=gcc
 LDFLAGS=-m elf_i386
 ASMFLAGS=-f elf
-qemu=qemu
+qemu=qemu-system-i386
 endif
 
 ifeq ($(UNAME),FreeBSD)

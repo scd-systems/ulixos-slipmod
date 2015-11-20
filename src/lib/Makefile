@@ -12,7 +12,7 @@ endif
 TEXSRC_MODULE_FILE=../slip-mod_$(language).nw
 
 ifeq ($(UNAME),Linux) 
-CC=gcc-4.4
+CC=gcc
 LDOPTIONS=-m elf_i386 -static -s --pie
 endif
 
