@@ -1,24 +1,26 @@
 SLIP Module for the Ulix OS
 =====================
 
-The main goal of this project is to descibe a simple network stack with the literate programming methode.
-This project results out of a bachelor thesis.
-The slip module is an implementation of a small network stack which supports ip over serial line.
-It support the icmp protocol for request/response packets only.
+The aim of this project is to descibe a simple network stack by using the literate programming method.
+This project originated from a bachelor thesis.
+The slip modul is an implementation of a small network stack which supports ip protocol over a serial line.
+It support the icmp protocol for request/response packets.
 
-Howto Start
+How to Start
 ---------------------
-1.) Download the code
+1. Install git client
+
+2. Download the code:
 git clone https://github.com/scd-systems/ulixos-slipmod.git
 
-2.) Create the documentation
+3. Create the documentation:
 cd src
 make pdf
 
-3.) Open the src/doc/Slip-Mod.pdf
+4. Open the src/doc/Slip-Mod.pdf
 
-4.) Modify/Extend/Change the source
-Use a tex/latex editor of your choice
+5. Modify/Extend/Change the source.
+Use your favorite tex/latex editor.
 Open the src/slip-mod_<language>.nw file  (language = german, english)
 If you are done, re-create the documentation the code or both:
 
@@ -38,5 +40,5 @@ Mfstool version 0.5 are subject under the GPL Version 3 License
 
 Ulix OS
 ---------------------
-The Ulix OS is a teaching OS based on C by using the Literate Programming method.
+The Ulix OS is a teaching OS based on C by using the literate programming method.
 http://www.ulixos.org
