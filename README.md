@@ -11,11 +11,15 @@ How to Start
 1. Install git client
 
 2. Download the code:
+```bash
 git clone https://github.com/scd-systems/ulixos-slipmod.git
+```
 
 3. Create the documentation:
-cd src
+```bash
+cd src;
 make pdf
+```
 
 4. Open the src/doc/Slip-Mod.pdf
 
@@ -24,9 +28,11 @@ Use your favorite tex/latex editor.
 Open the src/slip-mod_<language>.nw file  (language = german, english)
 If you are done, re-create the documentation the code or both:
 
-cd src
-make pdf
+```bash
+cd src;
+make pdf;
 make qemu-run		# for test the code directly with two running and connected qemu instances
+```
 
 Installation
 ---------------------
