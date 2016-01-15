@@ -8,25 +8,27 @@ It support the icmp protocol for request/response packets.
 
 How to Start
 ---------------------
-1. Install git client
+1\. Install git client
 
-2. Download the code:
+2\. Download the code:
+
 ```bash
 git clone https://github.com/scd-systems/ulixos-slipmod.git
 ```
 
-3. Create the documentation:
+3\. Create the documentation:
+
 ```bash
 cd src;
 make pdf
 ```
 
-4. Open the src/doc/Slip-Mod.pdf
+4\. Open and read the src/doc/Slip-Mod.pdf
 
-5. Modify/Extend/Change the source.
+5\. Modify/Extend/Change the source.
 Use your favorite tex/latex editor.
-Open the src/slip-mod_<language>.nw file  (language = german, english)
-If you are done, re-create the documentation the code or both:
+Open the `src/slip-mod_\<language\>.nw` file  (language = german, english).
+If you are done, re-create the documentation, the code or both:
 
 ```bash
 cd src;
@@ -41,8 +43,8 @@ Please read documentations/install.howto
 Copyright
 ---------------------
 For copyright information to this Project (ulixos-slipmod), please see the file LICENSE in this directory.
-Ulix and all related and used files are subject under the GPL Version 3 License
-Mfstool version 0.5 are subject under the GPL Version 3 License
+Ulix and all related and used files are subject under the GPL Version 3 License.
+Mfstool version 0.5 are subject under the GPL Version 3 License.
 
 Ulix OS
 ---------------------
